@@ -1,6 +1,6 @@
 import { api } from "@/lib/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Cookies from "js-cookie"; // ✅ import with capital C
+import Cookies from "js-cookie";
 
 // Types
 interface User {
