@@ -16,6 +16,7 @@ export const useESimActions = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     // Redux state
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { eSims, loading, error } = useSelector((state: any) => state.eSim);
 
     // Thunk wrappers

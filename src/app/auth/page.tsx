@@ -20,6 +20,7 @@ const LoginSchema = Yup.object().shape({
 
 export default function AuthPage() {
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const handleSubmit = async (values: { username: string; password: string }) => {
@@ -30,6 +31,7 @@ export default function AuthPage() {
     }
 
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await api({
         method: "POST",
         url: "/admin/login",

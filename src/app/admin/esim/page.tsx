@@ -8,11 +8,16 @@ import { createESim, deleteESim, fetchESims } from "@/store/slice/eSimSlice";
 import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 import ESimCard from "@/components/Cards/ESimCard";
+import Loader from "@/components/loader";
 
 export default function ESim() {
   const [modalOpen, setModalOpen] = useState(false);
-  const { eSims, loading, error } = useSelector((state): any => state?.esim)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { eSims, loading, error } = useSelector((state:any)=> state?.esim)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user } = useSelector((state: any) => state.user);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
 
   const fetchSims = async () => {
@@ -26,6 +31,7 @@ export default function ESim() {
   console.log("---- e-sims ----", eSims);
 
   const handleAddESim = async (values) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: any = await dispatch(createESim(values));
     console.log("-- response in the add sim ---", response);
 
@@ -66,29 +72,31 @@ export default function ESim() {
     }
   }
 
+  // if (loading)
+  //   return <Loader />
+
   return (
-    <div className="p-6">
-      <button
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
-        onClick={() => setModalOpen(true)}
-      >
-        Add E-SIM
-      </button>
+    loading ? <Loader /> :
+      <div className="p-6">
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded mb-4"
+          onClick={() => setModalOpen(true)}
+        >
+          Add E-SIM
+        </button>
 
-      <ESimModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        handleSubmit={handleAddESim} // pass the add function to modal
-      />
+        <ESimModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          handleSubmit={handleAddESim} // pass the add function to modal
+        />
+        {error && <p className="text-red-500">{error}</p>}
 
-      {loading && <p>Loading E-SIMs...</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      <ul className="mt-4 space-y-2">
-        {eSims && eSims.map((sim) => (
-          <ESimCard esim={sim} onDelete={handleDeleteESim} />
-        ))}
-      </ul>
-    </div>
+        <ul className="mt-4 space-y-2">
+          {eSims && eSims.map((sim) => (
+            <ESimCard key={sim?._id} esim={sim} onDelete={handleDeleteESim} />
+          ))}
+        </ul>
+      </div>
   );
 }

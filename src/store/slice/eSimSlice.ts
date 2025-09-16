@@ -37,10 +37,12 @@ const initialState: ESimState = {
 
 export const fetchESims = createAsyncThunk("eSim/fetchESims", async (_, thunkAPI) => {
     try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data: any = await api<ESIM[]>({ url: "/admin/e-sim/", method: "GET" });
 
         console.log("---- data in the esims ----", data);
         return data.data;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
         return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
     }
@@ -48,14 +50,17 @@ export const fetchESims = createAsyncThunk("eSim/fetchESims", async (_, thunkAPI
 
 export const createESim = createAsyncThunk(
     "eSim/createESim",
-    async (eSimData: Partial<ESIM>, thunkAPI) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (eSimData: any, thunkAPI) => {
         try {
-            const data = await api<ESIM, Partial<ESIM>>({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data:any = await api<ESIM, Partial<ESIM>>({
                 url: "/admin/e-sim/create-sim",
                 method: "POST",
                 data: eSimData,
             });
             return data.data;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
         }
@@ -64,14 +69,18 @@ export const createESim = createAsyncThunk(
 
 export const updateESim = createAsyncThunk(
     "eSim/updateESim",
-    async ({ id, updates }: { id: string; updates: Partial<ESIM> }, thunkAPI) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async ({ id, updates }: { id: string; updates: any }, thunkAPI) => {
         try {
-            const data = await api<ESIM, Partial<ESIM>>({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data: any = await api<ESIM, Partial<ESIM>>({
                 url: `/admin/e-sim/${id}`,
                 method: "PUT",
                 data: updates,
             });
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return data.data;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
         }
@@ -83,8 +92,9 @@ export const deleteESim = createAsyncThunk(
     async (id: string, thunkAPI) => {
         try {
             const response = await api<void>({ url: `/admin/e-sim/${id}`, method: "DELETE" });
-            console.log("---- removing e-sim -----", response );
+            console.log("---- removing e-sim -----", response);
             return id;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
         }
@@ -110,6 +120,7 @@ const eSimSlice = createSlice({
             state.loading = false;
             state.eSims = action.payload;
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(fetchESims.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
@@ -124,6 +135,7 @@ const eSimSlice = createSlice({
             state.loading = false;
             state.eSims.push(action.payload);
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(createESim.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
@@ -139,6 +151,7 @@ const eSimSlice = createSlice({
             const index = state.eSims.findIndex((e) => e._id === action.payload._id);
             if (index !== -1) state.eSims[index] = action.payload;
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(updateESim.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
@@ -153,6 +166,7 @@ const eSimSlice = createSlice({
             state.loading = false;
             state.eSims = state.eSims.filter((e) => e._id !== action.payload);
         });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(deleteESim.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;

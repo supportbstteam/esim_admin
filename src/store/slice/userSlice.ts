@@ -34,6 +34,7 @@ export const logout = createAsyncThunk("auth/logout", async (_, { rejectWithValu
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     return null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Logout failed");
   }
@@ -45,6 +46,9 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, { rejectWi
     const token = Cookies.get("token"); // ✅ Correct cookie usage
     if (!token) throw new Error("No token found");
 
+    console.log("--- token ---", token);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: any = await api({
       method: "GET",
       url: "/admin/details",
@@ -52,6 +56,7 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, { rejectWi
     });
 
     return { user: response.data, token };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Auth check failed");
   }

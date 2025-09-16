@@ -9,8 +9,10 @@ import { checkAuth, logout } from "@/store/slice/userSlice";
 
 export default function Navbar() {
   const pathname = usePathname();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
   const isActive = (path: string) => pathname === path;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = useSelector((state: any) => state.user);
 
   // console.log("---- isauthenticated navbar ----", user)
