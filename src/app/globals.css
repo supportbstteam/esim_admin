@@ -3,7 +3,7 @@
    Custom Fonts & Body
 ======================= */
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -56,18 +56,23 @@ html {
   backdrop-filter: blur(12px);
 }
 .bg-white\/60 {
-  background: rgba(255,255,255,0.6);
+  background: rgba(255, 255, 255, 0.6);
 }
 .dark .bg-gray-800\/70 {
-  background: rgba(31,41,55,0.7);
+  background: rgba(31, 41, 55, 0.7);
 }
 
 /* =======================
    Gradient Text Animation
 ======================= */
 @keyframes gradient-move {
-  0%,100% {background-position:0 50%;}
-  50% {background-position:100% 50%;}
+  0%,
+  100% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 .animate-gradient {
   background-size: 200% 200%;
@@ -87,5 +92,25 @@ html {
   overflow: hidden;
 }
 .transition-all {
-  transition: all 0.3s ease-in-out;
+  transition: all 11s ease-in-out;
+}
+
+/* auth layout */
+/* Place this in your globals.css or wherever you keep global styles */
+.animated-gradient {
+  background: linear-gradient(90deg, #16325d, #37c74f);
+  background-size: 200% 200%;
+  animation: gradientMove 10s ease-in-out infinite;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

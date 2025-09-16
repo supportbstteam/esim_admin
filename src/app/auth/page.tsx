@@ -63,9 +63,10 @@ export default function AuthPage() {
       initialValues={{ username: "", password: "" }}
       validationSchema={LoginSchema}
       onSubmit={handleSubmit}
+      
     >
       {({ isSubmitting }) => (
-        <Form className="space-y-6">
+        <Form className="space-y-6 ">
           {/* Username */}
           <div>
             <Field

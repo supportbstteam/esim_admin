@@ -11,7 +11,7 @@
     "strictBindCallApply": false,
     "strictPropertyInitialization": false,
     "useUnknownInCatchVariables": false,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -24,9 +24,22 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ]
   },
-  "include": ["**/*"],
-  "exclude": ["node_modules"]
+  "include": [
+    "**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

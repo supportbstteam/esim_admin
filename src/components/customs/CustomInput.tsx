@@ -8,9 +8,14 @@ export default function CustomInput({ className = "", ...rest }: CustomInputProp
 
   return (
     <div
-      className={`relative rounded-md transition-all duration-300 p-[2px] bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 ${
+      className={`relative rounded-md transition-all duration-300 p-[2px] ${
         isFocused ? "opacity-100" : "opacity-40"
       }`}
+      style={{
+        background: isFocused
+          ? "linear-gradient(to right, #16325d, #37c74f)"
+          : "linear-gradient(to right, #16325d, #37c74f)",
+      }}
     >
       <input
         {...rest}
@@ -22,7 +27,12 @@ export default function CustomInput({ className = "", ...rest }: CustomInputProp
           setIsFocused(false);
           rest.onBlur?.(e);
         }}
-        className={`w-full rounded-md border-none px-3 py-2 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${className}`}
+        className={`w-full rounded-md border-transparent px-3 py-2 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${className}`}
+        style={{
+          border: "2px solid transparent",
+          borderRadius: "0.375rem", // same as rounded-md
+          backgroundClip: "padding-box", // prevent background bleed on border
+        }}
       />
     </div>
   );

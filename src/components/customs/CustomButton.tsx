@@ -18,10 +18,9 @@ export default function CustomButton({
 
   const variantClasses =
     variant === "primary"
-      ? "bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-none before:absolute before:inset-0 before:rounded-xl before:opacity-70 before:blur-lg before:bg-gradient-to-r before:from-indigo-500 before:via-purple-500 before:to-pink-500 hover:before:opacity-90 hover:scale-105 hover:shadow-2xl focus:ring-purple-400"
+      ? "bg-gradient-to-r from-[#16325d] via-[#284a7b] to-[#37c74f] text-white border-none before:absolute before:inset-0 before:rounded-xl before:opacity-70 before:blur-lg before:bg-gradient-to-r before:from-[#1c2c4d] before:via-[#2f5a88] before:to-[#2bc15d] hover:before:opacity-90 hover:scale-105 hover:shadow-2xl focus:ring-[#2bc15d]"
       : "bg-white text-gray-900 border border-gradient-to-r border-blue-400 border-pink-400 hover:bg-gray-100 focus:ring-gray-400";
 
-  // Custom animation for the gradient background
   const customStyle: React.CSSProperties =
     variant === "primary"
       ? {
