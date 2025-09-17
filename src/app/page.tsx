@@ -33,3 +33,6 @@ export default function Home() {
 
   return null; // no UI needed since it redirects
 }
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
