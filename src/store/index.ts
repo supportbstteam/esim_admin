@@ -3,12 +3,14 @@ import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 import themeReducer from "./slice/themeSlice";
 import userReducer from "./slice/userSlice";
 import eSimReducer from "./slice/eSimSlice";
+import countriesSlice from "./slice/countrySlice";
 
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
     user: userReducer,
     esim: eSimReducer,
+    countries: countriesSlice
   },
 });
 

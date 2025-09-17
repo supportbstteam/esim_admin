@@ -3,6 +3,8 @@
 import { api } from "@/lib/api";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
+const countryUrl: string = "/admin/countries"
+
 // 🔹 Country type
 export interface Country {
     _id?: string;
@@ -18,13 +20,13 @@ export interface Country {
 
 // 🔹 State type
 interface CountryState {
-    items: Country[];
+    countries: Country[];
     loading: boolean;
     error: string | null;
 }
 
 const initialState: CountryState = {
-    items: [],
+    countries: [],
     loading: false,
     error: null,
 };
@@ -38,7 +40,7 @@ export const fetchCountries = createAsyncThunk<Country[]>(
     "countries/fetchAll",
     async (_, thunkAPI) => {
         try {
-            return await api<Country[]>({ url: "/countries", method: "GET" });
+            return await api<Country[]>({ url: countryUrl + "/", method: "GET" });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to fetch countries");
@@ -51,7 +53,7 @@ export const createCountry = createAsyncThunk<Country, Omit<Country, "_id">>(
     "countries/create",
     async (newCountry, thunkAPI) => {
         try {
-            return await api<Country>({ url: "/countries", method: "POST", data: newCountry });
+            return await api<Country>({ url: countryUrl + "/add-country", method: "POST", data: newCountry });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to create country");
@@ -65,7 +67,7 @@ export const updateCountry = createAsyncThunk<Country, { id: string; data: Parti
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async ({ id, data }: any, thunkAPI) => {
         try {
-            return await api<Country>({ url: `/countries/${id}`, method: "PUT", data });
+            return await api<Country>({ url: `${countryUrl}/update/${id}`, method: "PUT", data });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || "Failed to update country");
@@ -78,7 +80,7 @@ export const deleteCountry = createAsyncThunk<string, string>(
     "countries/delete",
     async (id, thunkAPI) => {
         try {
-            await api({ url: `/countries/${id}`, method: "DELETE" });
+            await api({ url: `${countryUrl}/delete/${id}`, method: "DELETE" });
             return id;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -102,7 +104,7 @@ const countrySlice = createSlice({
         });
         builder.addCase(fetchCountries.fulfilled, (state, action: PayloadAction<Country[]>) => {
             state.loading = false;
-            state.items = action.payload;
+            state.countries = action.payload;
         });
         builder.addCase(fetchCountries.rejected, (state, action) => {
             state.loading = false;
@@ -111,18 +113,18 @@ const countrySlice = createSlice({
 
         // CREATE
         builder.addCase(createCountry.fulfilled, (state, action: PayloadAction<Country>) => {
-            state.items.push(action.payload);
+            state.countries.push(action.payload);
         });
 
         // UPDATE
         builder.addCase(updateCountry.fulfilled, (state, action: PayloadAction<Country>) => {
-            const idx = state.items.findIndex((c) => c._id === action.payload._id);
-            if (idx !== -1) state.items[idx] = action.payload;
+            const idx = state.countries.findIndex((c) => c._id === action.payload._id);
+            if (idx !== -1) state.countries[idx] = action.payload;
         });
 
         // DELETE
         builder.addCase(deleteCountry.fulfilled, (state, action: PayloadAction<string>) => {
-            state.items = state.items.filter((c) => c._id !== action.payload);
+            state.countries = state.countries.filter((c) => c._id !== action.payload);
         });
     },
 });

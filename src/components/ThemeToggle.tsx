@@ -33,9 +33,9 @@ export function ThemeToggle() {
           <input
             type="radio"
             name="theme"
-            value="light"
-            checked={theme === "light"}
-            onChange={() => setTheme("light")}
+            value="dark"
+            checked={theme === "dark"}
+            onChange={() => setTheme("dark")}
             className="hidden"
           />
           <span

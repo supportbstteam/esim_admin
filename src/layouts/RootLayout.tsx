@@ -1,4 +1,4 @@
-"use client";
+
 import '../app/globals.css'
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/Navbar";
