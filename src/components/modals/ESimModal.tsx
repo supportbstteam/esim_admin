@@ -114,7 +114,9 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                             className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         >
                                                             <option value="">Select a Country</option>
-                                                            {countries.map((c: any) => (
+                                                            {
+                                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                            countries.map((c: any) => (
                                                                 <option key={c._id} value={c._id}>
                                                                     {c.name} ({c.isoCode})
                                                                 </option>
