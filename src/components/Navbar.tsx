@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ThemeToggle } from "./ThemeToggle";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, logout } from "@/store/slice/userSlice";
 
 export default function Navbar() {
+  const router = useRouter();
   const pathname = usePathname();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
@@ -20,6 +21,7 @@ export default function Navbar() {
   const handleLogout = async () => {
     await dispatch(logout())
     await dispatch(checkAuth());
+    router.push('/')
   };
 
   useEffect(() => {
