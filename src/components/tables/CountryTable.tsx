@@ -165,7 +165,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
   };
 
   return (
-    <div className="bg-[#1a1a1a] rounded-lg shadow-lg overflow-hidden">
+    <div className="rounded-lg shadow-lg overflow-hidden">
       {/* Search Bar */}
       <div className="p-4 border-b border-gray-700">
         <div className="relative">
@@ -220,7 +220,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
               </tr>
             ))}
           </thead>
-          <tbody className="bg-[#1a1a1a] divide-y divide-gray-700">
+          <tbody className="shadow-amber-50 divide-y divide-gray-700">
             {table.getRowModel().rows.map(row => (
               <tr
                 key={row.id}

@@ -14,7 +14,7 @@ export default function ESimModal({ open, onClose, handleSubmit }) {
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-10 backdrop-blur-md transition-colors">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0000000] backdrop-blur-md transition-colors">
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-3xl p-10 relative flex flex-col gap-6">
                 <div className="flex justify-between items-center mb-3">
                     <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white tracking-wide">

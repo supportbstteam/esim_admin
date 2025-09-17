@@ -28,7 +28,7 @@ function Country() {
     <div className="p-6">
       {/* Header with Add Button */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">Countries Management</h1>
+        <h1 className="text-2xl font-bold text-white">Countries</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
           className="bg-gradient-to-r from-[#16325d] to-[#37c74f] hover:from-[#37c74f] hover:to-[#16325d] text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
