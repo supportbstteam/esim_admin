@@ -54,7 +54,7 @@ export default function Navbar() {
       </h1>
 
       <nav className="flex items-center space-x-10">
-        {[
+        {/* {[
           { label: "Home", path: "/" },
           { label: "About", path: "/about" },
           { label: "Contact", path: "/contact" },
@@ -79,7 +79,7 @@ export default function Navbar() {
           >
             {label}
           </Link>
-        ))}
+        ))} */}
 
         {/* ✅ Login/Logout Button */}
         {!user?.isAuthenticated ? (
@@ -98,7 +98,7 @@ export default function Navbar() {
           </button>
         )}
 
-        <ThemeToggle />
+        {/* <ThemeToggle /> */}
       </nav>
     </header>
   );

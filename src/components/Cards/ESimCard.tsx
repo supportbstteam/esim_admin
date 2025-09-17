@@ -20,7 +20,7 @@ export default function ESimCard({ esim, onDelete }) {
             </span>
           </div>
           <div className="text-lg font-bold text-gray-900 dark:text-white mb-1">
-            {esim.countryName} ({esim.countryCode})
+            {esim.country?.name} ({esim?.country?.isoCode})
           </div>
           <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
             Company: <span className="font-semibold">{esim.company}</span>

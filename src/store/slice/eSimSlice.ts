@@ -53,13 +53,18 @@ export const createESim = createAsyncThunk(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (eSimData: any, thunkAPI) => {
         try {
+            // Wrap the array into an object with key `sims` to match backend expectation
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const data:any = await api<ESIM, Partial<ESIM>>({
+            const payload: any = { sims: eSimData };
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data: any = await api<{ message: string; data: any[] }, typeof payload>({
                 url: "/admin/e-sim/create-sim",
                 method: "POST",
-                data: eSimData,
+                data: payload,
             });
-            return data.data;
+
+            return data.data; // this is an array of created SIMs
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);

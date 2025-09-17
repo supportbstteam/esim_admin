@@ -9,11 +9,13 @@ import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 import ESimCard from "@/components/Cards/ESimCard";
 import Loader from "@/components/loader";
+import { fetchCountries } from "@/store/slice/countrySlice";
 
 export default function ESim() {
+  // const dispatch = use
   const [modalOpen, setModalOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { eSims, loading, error } = useSelector((state:any)=> state?.esim)
+  const { eSims, loading, error } = useSelector((state: any) => state?.esim)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user } = useSelector((state: any) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,18 +24,20 @@ export default function ESim() {
 
   const fetchSims = async () => {
     await dispatch(fetchESims());
+    await dispatch(fetchCountries());
   };
   // console.log("--- user ---", user);
 
   useEffect(() => {
     fetchSims();
   }, [user?._id]);
-  console.log("---- e-sims ----", eSims);
+  // console.log("---- e-sims ----", eSims);
 
-  const handleAddESim = async (values) => {
+  const handleAddESim = async ({eSims}) => {
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const response: any = await dispatch(createESim(values));
-    console.log("-- response in the add sim ---", response);
+    const response: any = await dispatch(createESim(eSims));
+    // console.log("-- response in the add sim ---", response);
 
     if (response?.type === "eSim/createESim/fulfilled") {
       fetchSims();
