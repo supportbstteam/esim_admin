@@ -11,7 +11,6 @@ import {
   createColumnHelper,
   SortingState,
 } from "@tanstack/react-table";
-import Chip from "@mui/material/Chip";
 
 interface Country {
   _id: string;
@@ -34,6 +33,26 @@ interface OperatorsTableProps {
   onDelete: (operatorId: string) => void;
 }
 
+// ✅ Custom Tailwind Badge
+const Badge: React.FC<{ label: string; variant?: "success" | "inactive" | "default" }> = ({
+  label,
+  variant = "default",
+}) => {
+  const styles = {
+    default: "bg-[#16325d] text-white",
+    success: "bg-green-600 text-white",
+    inactive: "border border-gray-400 text-gray-300",
+  };
+
+  return (
+    <span
+      className={`px-2 py-0.5 rounded-full text-xs font-medium ${styles[variant]}`}
+    >
+      {label}
+    </span>
+  );
+};
+
 const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, onDelete }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -51,17 +70,7 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
         cell: (info) => (
           <div className="flex flex-wrap gap-1">
             {info.getValue().map((c, idx) => (
-              <Chip
-                key={idx}
-                label={`${c.name} (${c.isoCode})`}
-                size="small"
-                sx={{
-                  bgcolor: "#16325d",
-                  color: "white",
-                  fontSize: "0.75rem",
-                  height: "22px",
-                }}
-              />
+              <Badge key={idx} label={`${c.name} (${c.isoCode})`} />
             ))}
           </div>
         ),
@@ -74,9 +83,9 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
         header: "Status",
         cell: (info) =>
           info.getValue() ? (
-            <Chip label="Active" color="success" size="small" sx={{ fontSize: "0.75rem", height: "22px" }} />
+            <Badge label="Active" variant="success" />
           ) : (
-            <Chip label="Inactive" variant="outlined" size="small" sx={{ fontSize: "0.75rem", height: "22px" }} />
+            <Badge label="Inactive" variant="inactive" />
           ),
       }),
       columnHelper.display({
@@ -206,26 +215,13 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
           of {table.getFilteredRowModel().rows.length} entries
         </span>
         <div className="flex items-center gap-2">
-          {/* <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-            className="bg-gray-700 border border-gray-600 rounded text-white text-sm px-2 py-1 focus:outline-none focus:ring-2 focus:ring-[#37c74f]"
-          >
-            {[10, 20, 30, 40, 50].map((size) => (
-              <option key={size} value={size}>
-                Show {size}
-              </option>
-            ))}
-          </select> */}
           <div className="flex items-center gap-1">
             <button
               onClick={() => table.setPageIndex(0)}
               disabled={!table.getCanPreviousPage()}
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-              </svg>
+              ⏮
             </button>
             <button
               onClick={() => table.previousPage()}
@@ -249,9 +245,7 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
               disabled={!table.getCanNextPage()}
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-              </svg>
+              ⏭
             </button>
           </div>
         </div>
