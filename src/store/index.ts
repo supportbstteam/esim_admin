@@ -6,6 +6,7 @@ import themeReducer from "./slice/themeSlice";
 import userReducer from "./slice/userSlice";
 import eSimReducer from "./slice/eSimSlice";
 import countriesSlice from "./slice/countrySlice";
+import operatorSlice from "./slice/operatorSlice";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     user: userReducer,
     esim: eSimReducer,
     countries: countriesSlice,
+    operator: operatorSlice
   },
 });
 

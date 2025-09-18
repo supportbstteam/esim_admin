@@ -115,12 +115,12 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                         >
                                                             <option value="">Select a Country</option>
                                                             {
-                                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                                            countries.map((c: any) => (
-                                                                <option key={c._id} value={c._id}>
-                                                                    {c.name} ({c.isoCode})
-                                                                </option>
-                                                            ))}
+                                                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                                countries.map((c: any) => (
+                                                                    <option key={c._id} value={c._id}>
+                                                                        {c.name} ({c.isoCode})
+                                                                    </option>
+                                                                ))}
                                                         </Field>
                                                         <ErrorMessage
                                                             name={`eSims.${index}.countryId`}

@@ -258,7 +258,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
 
         <div className="flex items-center gap-2">
           {/* Page Size Selector */}
-          <select
+          {/* <select
             value={table.getState().pagination.pageSize}
             onChange={e => {
               table.setPageSize(Number(e.target.value))
@@ -270,7 +270,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
                 Show {pageSize}
               </option>
             ))}
-          </select>
+          </select> */}
 
           {/* Pagination Buttons */}
           <div className="flex items-center gap-1">

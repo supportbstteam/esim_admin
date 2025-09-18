@@ -19,7 +19,6 @@ export default function ESim() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user } = useSelector((state: any) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
 
   const fetchSims = async () => {

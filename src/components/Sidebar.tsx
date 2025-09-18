@@ -34,6 +34,13 @@ export default function Sidebar() {
         </Link>
 
         <Link
+          href="/admin/operators"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <FiMapPin /> Operators
+        </Link>
+
+        <Link
           href="/admin/country"
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >

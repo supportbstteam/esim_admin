@@ -46,7 +46,7 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, { rejectWi
     const token = Cookies.get("token"); // ✅ Correct cookie usage
     if (!token) throw new Error("No token found");
 
-    console.log("--- token ---", token);
+    // console.log("--- token ---", token);
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: any = await api({
