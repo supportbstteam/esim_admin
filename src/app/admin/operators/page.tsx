@@ -47,6 +47,7 @@ export default function Operators() {
         resetForm();
         setModalOpen(false);
     };
+    // operating the operator
 
     return (
         <div className="p-8">
