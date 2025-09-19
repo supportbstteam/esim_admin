@@ -28,10 +28,10 @@ function Country() {
     <div className="p-6">
       {/* Header with Add Button */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-white">Countries</h1>
+        <h1 className="text-2xl font-bold text-[#000]">Countries</h1>
         <button
           onClick={() => setIsAddModalOpen(true)}
-          className="bg-gradient-to-r from-[#16325d] to-[#37c74f] hover:from-[#37c74f] hover:to-[#16325d] text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2"
+           className="flex items-center gap-2 px-6 py-3 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

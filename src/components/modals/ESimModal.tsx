@@ -192,7 +192,8 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 rounded-lg font-bold bg-blue-600 text-white hover:bg-blue-700 transition shadow"
+                                      className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+                                    // className="px-6 py-2 rounded-lg font-bold bg-blue-600 text-white hover:bg-blue-700 transition shadow"
                                     disabled={isSubmitting}
                                 >
                                     Save All

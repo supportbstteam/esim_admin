@@ -62,7 +62,7 @@ const CustomMultiSelect: React.FC<{
                 styles={{
                     control: (provided, state) => ({
                         ...provided,
-                        backgroundColor: "#1f2937", // dark gray
+                        backgroundColor: "#fff", // dark gray
                         borderColor: state.isFocused ? "#3b82f6" : "#374151", // blue on focus
                         boxShadow: state.isFocused ? "0 0 0 1px #3b82f6" : "none",
                         "&:hover": { borderColor: "#3b82f6" },
@@ -285,7 +285,7 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2 rounded-lg font-bold bg-blue-600 text-white hover:bg-blue-700 transition shadow"
+                                      className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
                                     disabled={isSubmitting}
                                 >
                                     Save All

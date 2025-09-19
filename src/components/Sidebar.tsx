@@ -4,12 +4,39 @@ import { FiHome, FiUsers, FiLayers, FiSettings } from "react-icons/fi";
 import { FiCpu } from "react-icons/fi"; // added different icon for esim
 import { FiMapPin } from "react-icons/fi"; // for country
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuth, logout } from "@/store/slice/userSlice";
 
 export default function Sidebar() {
+   const router = useRouter();
+  const pathname = usePathname();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dispatch: any = useDispatch();
+  const isActive = (path: string) => pathname === path;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const user = useSelector((state: any) => state.user);
+
+  // console.log("---- isauthenticated navbar ----", user)
+
+  const handleLogout = async () => {
+    await dispatch(logout())
+    await dispatch(checkAuth());
+    router.push('/')
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      await dispatch(checkAuth());
+    };
+    fetchUser();
+  }, []);
   return (
     <aside className="w-64 h-full bg-red dark:bg-gray-800 shadow-lg flex flex-col">
-      <div className="p-4 font-bold text-lg border-b dark:border-gray-700">
-        Dashboard
+      <div className="pt-2 border-b dark:border-gray-700">
+        <Image src="/FullLogo.png" alt="Logo" width={150} height={150} className="mx-auto mb-4 rounded-2xl"/>
       </div>
       <nav className="flex-1 p-4 space-y-3">
         <Link
@@ -60,6 +87,21 @@ export default function Sidebar() {
         >
           <FiSettings /> Settings
         </Link>
+        {!user?.isAuthenticated ? (
+          <Link
+            href="/login"
+            className="px-4 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
+          >
+            Login
+          </Link>
+        ) : (
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 rounded-md bg-red-500 text-white font-semibold hover:bg-red-600 transition"
+          >
+            Logout
+          </button>
+        )}
       </nav>
     </aside>
   );

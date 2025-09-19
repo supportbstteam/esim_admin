@@ -145,7 +145,7 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
   });
 
   return (
-    <div className="rounded-lg shadow-lg overflow-hidden bg-gray-900">
+    <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
       {/* Search Bar */}
       <div className="p-4 border-b border-gray-700">
         <input

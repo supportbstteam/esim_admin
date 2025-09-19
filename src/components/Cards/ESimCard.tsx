@@ -6,6 +6,7 @@ export default function ESimCard({ esim, onDelete }) {
   // Example: useRouter if you want programmatic navigation instead of <Link>
   // const router = useRouter();
   // function handleCardClick() { router.push(`/admin/esim/${esim._id}`); }
+  console.log("---- esim card ----", esim);
 
   return (
     <Link href={`/admin/esim/${esim._id}`} className="block group">

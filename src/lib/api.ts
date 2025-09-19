@@ -13,7 +13,7 @@ interface ApiOptions<T = unknown, P = unknown> extends AxiosRequestConfig {
 }
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
+  baseURL: "https://esim-backend-three.vercel.app/api", // Replace with your API base URL
   headers: {
     "Content-Type": "application/json",
   },

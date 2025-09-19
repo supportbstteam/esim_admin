@@ -37,7 +37,7 @@ export default function Navbar() {
         w-full h-16 
         sticky top-0 z-50 
         backdrop-blur-md bg-opacity-90 
-        bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
+        bg-gradient-to-r gradient-to-b from-emerald-500 to-emerald-900 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
         shadow-lg
         flex items-center justify-between px-8
       "
@@ -45,12 +45,12 @@ export default function Navbar() {
       <h1
         className="
           text-xl font-extrabold 
-          text-gray-800 dark:text-gray-100 
+          text-[#fff] dark:text-gray-100 
           cursor-default select-none 
           drop-shadow-md
         "
       >
-        eSIM Admin Panel
+       {pathname === "/admin/dashboard" ? "Dashboard" : pathname === "/admin/users" ? "Users" : pathname === "/admin/esim" ? "E-Sims" : pathname === "/admin/operators" ? "Operators" : pathname === "/admin/countries" ? "Countries" : "E-SIM ADMIN"}
       </h1>
 
       <nav className="flex items-center space-x-10">
@@ -81,7 +81,7 @@ export default function Navbar() {
           </Link>
         ))} */}
 
-        {/* ✅ Login/Logout Button */}
+        {/* ✅ Login/Logout Button
         {!user?.isAuthenticated ? (
           <Link
             href="/login"
@@ -96,7 +96,7 @@ export default function Navbar() {
           >
             Logout
           </button>
-        )}
+        )} */}
 
         {/* <ThemeToggle /> */}
       </nav>
