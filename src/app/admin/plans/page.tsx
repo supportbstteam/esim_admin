@@ -1,3 +1,4 @@
+import { PlansFormModal } from '@/components/modals/PlanModal'
 import React from 'react'
 
 function Plans() {

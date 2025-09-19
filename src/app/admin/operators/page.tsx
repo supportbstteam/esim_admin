@@ -1,6 +1,7 @@
 "use client";
 import AddOperatorModal from "@/components/modals/AddOperatorModal";
 import OperatorsTable from "@/components/tables/OperatorTable";
+import useDispatchFunction from "@/hooks/dispatchHook";
 import { useAppDispatch } from "@/store";
 import { fetchCountries } from "@/store/slice/countrySlice";
 import { addOperators, deleteOperator, getOperators } from "@/store/slice/operatorSlice";
@@ -10,11 +11,14 @@ import { useSelector } from "react-redux";
 
 export default function Operators() {
     const dispatch = useAppDispatch();
+
+    const { loadData } = useDispatchFunction();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { user } = useSelector((state: any) => state.user);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { operators } = useSelector((state: any) => state.operator);
     const [modalOpen, setModalOpen] = useState(false);
+
 
     const fetchSims = async () => {
         await dispatch(getOperators({}));
