@@ -57,6 +57,8 @@ export const createESim = createAsyncThunk(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const payload: any = { sims: eSimData };
 
+            console.log("---- payload -----",payload)
+
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const data: any = await api<{ message: string; data: any[] }, typeof payload>({
                 url: "/admin/e-sim/create-sim",

@@ -10,7 +10,8 @@ function Plans() {
 
   useEffect(() => {
     if (user?.id) {
-      dispatch(getOperators({ page: 1, limit: 20 })); // ✅ pass pagination defaults
+      // dispatch(getOperators({ page: 1, limit: 20 })); // ✅ pass pagination defaults
+      dispatch(getOperators()); // ✅ pass pagination defaults
     }
   }, [user?.id, dispatch]);
 
