@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { fetchCountries } from "@/store/slice/countrySlice";
 import { fetchESims } from "@/store/slice/eSimSlice";
 import { useAppDispatch } from "@/store";
+import { getOperators } from "@/store/slice/operatorSlice";
 
 const useDispatchFunction = () => {
   const dispatch = useAppDispatch();
@@ -16,6 +17,7 @@ const useDispatchFunction = () => {
       console.error("Error fetching data:", error);
     }
   }, [dispatch]);
+
 
   return { loadData };
 };
