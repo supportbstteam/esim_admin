@@ -16,11 +16,11 @@ export function ThemeToggle() {
   if (!mounted) return null;
 
   return (
-    <div className="flex items-center gap-4 bg-white dark:bg-gray-900 rounded-xl px-4 py-2 shadow-md border dark:border-gray-700">
+    <div className="flex items-center gap-4 bg-white  rounded-xl px-4 py-2 shadow-md border dark:border-gray-700">
       {/* Icon button (like shadcn example) */}
       <button
         type="button"
-        className="relative flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
+        className="relative flex items-center justify-center w-9 h-9 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-100  transition-colors hover:bg-gray-200 dark:hover:bg-gray-700"
         aria-label="Current theme"
       >
         <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
@@ -34,8 +34,8 @@ export function ThemeToggle() {
             type="radio"
             name="theme"
             value="dark"
-            checked={theme === "dark"}
-            onChange={() => setTheme("dark")}
+            checked={theme === "light"}
+            onChange={() => setTheme("light")}
             className="hidden"
           />
           <span

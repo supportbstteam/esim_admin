@@ -23,6 +23,7 @@ export default function ESim() {
 
   const fetchSims = async () => {
     await dispatch(fetchESims());
+    // await dispatch()
     await dispatch(fetchCountries());
   };
   // console.log("--- user ---", user);

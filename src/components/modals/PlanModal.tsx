@@ -47,8 +47,8 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#000a] backdrop-blur-md transition-colors">
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-3 sticky top-0 bg-white dark:bg-gray-900 z-10 py-2">
+      <div className="bg-white  rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-3 sticky top-0 bg-white  z-10 py-2">
           <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white tracking-wide">Add Plans</h2>
           <button
             onClick={onClose}
@@ -87,47 +87,47 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
                         )}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.name`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.name`}>
                               Name
                             </label>
                             <Field
                               id={`plans.${idx}.name`}
                               name={`plans.${idx}.name`}
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <ErrorMessage name={`plans.${idx}.name`} component="div" className="text-red-500 text-sm mt-1" />
                           </div>
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.dataLimit`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.dataLimit`}>
                               Data Limit
                             </label>
                             <Field
                               id={`plans.${idx}.dataLimit`}
                               name={`plans.${idx}.dataLimit`}
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <ErrorMessage name={`plans.${idx}.dataLimit`} component="div" className="text-red-500 text-sm mt-1" />
                           </div>
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.validity`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.validity`}>
                               Validity
                             </label>
                             <Field
                               id={`plans.${idx}.validity`}
                               name={`plans.${idx}.validity`}
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <ErrorMessage name={`plans.${idx}.validity`} component="div" className="text-red-500 text-sm mt-1" />
                           </div>
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.price`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.price`}>
                               Price
                             </label>
                             <Field
                               id={`plans.${idx}.price`}
                               name={`plans.${idx}.price`}
                               type="number"
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                             <ErrorMessage name={`plans.${idx}.price`} component="div" className="text-red-500 text-sm mt-1" />
                           </div>
@@ -138,7 +138,7 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
                               name={`plans.${idx}.nationalCalls`}
                               className="h-4 w-4 text-blue-600 focus:ring-blue-500 rounded transition"
                             />
-                            <label htmlFor={`plans.${idx}.nationalCalls`} className="text-gray-700 dark:text-gray-200 select-none">
+                            <label htmlFor={`plans.${idx}.nationalCalls`} className="text-gray-700 select-none">
                               National Calls
                             </label>
                           </div>
@@ -149,19 +149,19 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
                               name={`plans.${idx}.internationalCalls`}
                               className="h-4 w-4 text-blue-600 focus:ring-blue-500 rounded transition"
                             />
-                            <label htmlFor={`plans.${idx}.internationalCalls`} className="text-gray-700 dark:text-gray-200 select-none">
+                            <label htmlFor={`plans.${idx}.internationalCalls`} className="text-gray-700 select-none">
                               International Calls
                             </label>
                           </div>
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.country`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.country`}>
                               Country
                             </label>
                             <Field
                               as="select"
                               id={`plans.${idx}.country`}
                               name={`plans.${idx}.country`}
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="">Select a Country</option>
                               {countries.map((c) => (
@@ -173,14 +173,14 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
                             <ErrorMessage name={`plans.${idx}.country`} component="div" className="text-red-500 text-sm mt-1" />
                           </div>
                           <div>
-                            <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`plans.${idx}.operators`}>
+                            <label className="block font-semibold text-gray-700 mb-1" htmlFor={`plans.${idx}.operators`}>
                               Operator
                             </label>
                             <Field
                               as="select"
                               id={`plans.${idx}.operators`}
                               name={`plans.${idx}.operators`}
-                              className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full px-4 py-2 rounded-lg bg-gray-100  dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
                               <option value="">Select an Operator</option>
                               {operators.map((o) => (
@@ -219,7 +219,7 @@ export function PlansFormModal({ open = true, onClose, onSubmit }) {
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-6 py-2 rounded-lg font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 hover:dark:bg-gray-600 transition"
+                  className="px-6 py-2 rounded-lg font-semibold bg-gray-200  text-gray-700 hover:bg-gray-300 hover:dark:bg-gray-600 transition"
                   disabled={isSubmitting}
                 >
                   Cancel

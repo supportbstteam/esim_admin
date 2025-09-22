@@ -15,11 +15,12 @@ export default function Operators() {
     const { loadData } = useDispatchFunction();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { user } = useSelector((state: any) => state.user);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-esli
+    // nt/no-explicit-any
     const { operators } = useSelector((state: any) => state.operator);
     const [modalOpen, setModalOpen] = useState(false);
 
-
+// console.log('operators data'+ operators.map((op)=>op.name));
     const fetchSims = async () => {
         await dispatch(getOperators({}));
         await dispatch(fetchCountries());
@@ -56,7 +57,7 @@ export default function Operators() {
     return (
         <div className="p-8">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Operators</h1>
+                <h1 className="text-3xl font-bold text-gray-900 ">Operators</h1>
                 <button
                     onClick={() => setModalOpen(true)}
                     className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
@@ -71,6 +72,7 @@ export default function Operators() {
                     await dispatch(deleteOperator(values));
                     await fetchSims();
                 }}
+                
             />
             <AddOperatorModal
                 open={modalOpen}

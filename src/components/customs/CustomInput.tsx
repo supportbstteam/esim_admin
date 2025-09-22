@@ -27,7 +27,7 @@ export default function CustomInput({ className = "", ...rest }: CustomInputProp
           setIsFocused(false);
           rest.onBlur?.(e);
         }}
-        className={`w-full rounded-md border-transparent px-3 py-2 focus:outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 ${className}`}
+        className={`w-full rounded-md border-transparent px-3 py-2 focus:outline-none bg-white  text-gray-900 dark:text-gray-100 ${className}`}
         style={{
           border: "2px solid transparent",
           borderRadius: "0.375rem", // same as rounded-md

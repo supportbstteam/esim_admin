@@ -9,7 +9,7 @@ const eSimSchema = Yup.object({
             Yup.object({
                 simNumber: Yup.string().required("SIM Number is required"),
                 countryId: Yup.string().required("Country selection is required"),
-                company: Yup.string().required("Company is required"),
+                operator: Yup.string().required("Company is required"),
                 isActive: Yup.boolean(),
             })
         )
@@ -32,19 +32,20 @@ interface ESimModalProps {
 
 export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProps) {
     const { countries } = useAppSelector(state => state.countries);
-
+    const {operator}= useAppSelector(state => state.operator);
+    //   console.log('hsososssssssssssssssssssss'+ operator);
     if (!open) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000000] backdrop-blur-md transition-colors">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
-                <div className="flex justify-between items-center mb-3 sticky top-0 bg-white dark:bg-gray-900 z-10 py-2">
-                    <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white tracking-wide">
+            <div className="bg-white  rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-3 sticky top-0 bg-white  z-10 py-2">
+                    <h2 className="text-2xl font-extrabold text-gray-800  tracking-wide">
                         Add eSIMs
                     </h2>
                     <button
                         onClick={onClose}
-                        className="text-3xl text-gray-400 hover:text-red-500 dark:hover:text-red-400 focus:outline-none"
+                        className="text-3xl text-gray-400 hover:text-red-500  focus:outline-none"
                         aria-label="Close modal"
                     >
                         &times;
@@ -73,7 +74,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                         {values.eSims.map((_: ESIMEntry, index: number) => (
                                             <div
                                                 key={index}
-                                                className="mb-8 border border-gray-300 dark:border-gray-700 rounded-lg p-6 relative"
+                                                className="mb-8 border border-gray-300  rounded-lg p-6 relative"
                                             >
                                                 {values.eSims.length > 1 && (
                                                     <button
@@ -88,13 +89,13 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
 
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <div>
-                                                        <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`eSims.${index}.simNumber`}>
+                                                        <label className="block font-semibold text-gray-700 mb-1" htmlFor={`eSims.${index}.simNumber`}>
                                                             SIM Number
                                                         </label>
                                                         <Field
                                                             id={`eSims.${index}.simNumber`}
                                                             name={`eSims.${index}.simNumber`}
-                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-900   focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         />
                                                         <ErrorMessage
                                                             name={`eSims.${index}.simNumber`}
@@ -104,14 +105,14 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                     </div>
 
                                                     <div>
-                                                        <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`eSims.${index}.countryId`}>
+                                                        <label className="block font-semibold text-gray-700 mb-1" htmlFor={`eSims.${index}.countryId`}>
                                                             Country
                                                         </label>
                                                         <Field
                                                             as="select"
                                                             id={`eSims.${index}.countryId`}
                                                             name={`eSims.${index}.countryId`}
-                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-900   focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         >
                                                             <option value="">Select a Country</option>
                                                             {
@@ -130,16 +131,26 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                     </div>
 
                                                     <div>
-                                                        <label className="block font-semibold text-gray-700 dark:text-gray-200 mb-1" htmlFor={`eSims.${index}.company`}>
-                                                            Company
+                                                        <label className="block font-semibold text-gray-700 mb-1" htmlFor={`eSims.${index}.countryId`}>
+                                                            Operator
                                                         </label>
                                                         <Field
-                                                            id={`eSims.${index}.company`}
-                                                            name={`eSims.${index}.company`}
-                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                        />
+                                                            as="select"
+                                                            id={`eSims.${index}.countryId`}
+                                                            name={`eSims.${index}.countryId`}
+                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-900   focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        >
+                                                            <option value="">Select a Country</option>
+                                                            {
+                                                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                                                countries.map((c: any) => (
+                                                                    <option key={c._id} value={c._id}>
+                                                                        {c.name} ({c.isoCode})
+                                                                    </option>
+                                                                ))}
+                                                        </Field>
                                                         <ErrorMessage
-                                                            name={`eSims.${index}.company`}
+                                                            name={`eSims.${index}.countryId`}
                                                             component="div"
                                                             className="text-red-500 text-sm mt-1"
                                                         />
@@ -154,7 +165,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                         />
                                                         <label
                                                             htmlFor={`eSims.${index}.isActive`}
-                                                            className="text-gray-700 dark:text-gray-200 select-none"
+                                                            className="text-gray-700 select-none"
                                                         >
                                                             Active
                                                         </label>
@@ -185,7 +196,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="px-6 py-2 rounded-lg font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 hover:dark:bg-gray-600 transition"
+                                    className="px-6 py-2 rounded-lg font-semibold bg-gray-200  text-gray-700 hover:bg-gray-300 "
                                     disabled={isSubmitting}
                                 >
                                     Cancel

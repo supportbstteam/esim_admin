@@ -34,8 +34,8 @@ export default function Sidebar() {
     fetchUser();
   }, []);
   return (
-    <aside className="w-64 h-full bg-red dark:bg-gray-800 shadow-lg flex flex-col">
-      <div className="pt-2 border-b dark:border-gray-700">
+    <aside className="w-64 h-full bg-red dark:bg-gray-800  shadow-lg flex flex-col">
+      <div className="pt-2 border-b  dark:border-gray-700">
         <Image src="/FullLogo.png" alt="Logo" width={150} height={150} className="mx-auto mb-4 rounded-2xl"/>
       </div>
       <nav className="flex-1 p-4 space-y-3">

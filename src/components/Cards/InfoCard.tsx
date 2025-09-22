@@ -39,7 +39,7 @@ export default function InfoCard({ children, className = "" }: CardProps) {
             ></div>
 
             {/* Linear gradient border - created with a pseudo-element inside */}
-            <div className="relative z-10 p-6 bg-white dark:bg-gray-900 rounded-xl border border-transparent dark:border-gray-700">
+            <div className="relative z-10 p-6 bg-white  rounded-xl border border-transparent dark:border-gray-700">
                 {children}
             </div>
 

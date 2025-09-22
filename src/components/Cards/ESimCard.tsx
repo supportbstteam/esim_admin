@@ -10,7 +10,7 @@ export default function ESimCard({ esim, onDelete }) {
 
   return (
     <Link href={`/admin/esim/${esim._id}`} className="block group">
-      <div className="flex relative items-center bg-white dark:bg-gray-900 rounded-2xl shadow hover:shadow-xl transition duration-300 border border-gray-200 dark:border-gray-800 px-6 py-5 gap-5 cursor-pointer group-hover:ring-2 group-hover:ring-blue-300">
+      <div className="flex relative items-center bg-white  rounded-2xl shadow hover:shadow-xl transition duration-300 border border-gray-200 dark:border-gray-800 px-6 py-5 gap-5 cursor-pointer group-hover:ring-2 group-hover:ring-blue-300">
         <div className="flex flex-col flex-1">
           <div className="flex gap-4 items-center mb-2">
             <span className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-400 tracking-wide">

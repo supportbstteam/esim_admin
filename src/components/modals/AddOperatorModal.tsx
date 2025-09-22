@@ -132,13 +132,13 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000050] backdrop-blur-sm">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
+            <div className="bg-white  rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
                 {/* Header */}
-                <div className="flex justify-between items-center mb-3 sticky top-0 bg-white dark:bg-gray-900 z-10 py-2">
-                    <h2 className="text-2xl font-extrabold text-gray-800 dark:text-white tracking-wide">Add Operators</h2>
+                <div className="flex justify-between items-center mb-3 sticky top-0 bg-white  z-10 py-2">
+                    <h2 className="text-2xl font-extrabold text-gray-800  tracking-wide">Add Operators</h2>
                     <button
                         onClick={onClose}
-                        className="text-3xl text-gray-400 hover:text-red-500 dark:hover:text-red-400 focus:outline-none"
+                        className="text-3xl text-gray-400 hover:text-red-500  focus:outline-none"
                         aria-label="Close modal"
                     >
                         &times;
@@ -167,7 +167,7 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                         {values.operators.map((_, index) => (
                                             <div
                                                 key={index}
-                                                className="mb-8 border border-gray-300 dark:border-gray-700 rounded-lg p-6 relative"
+                                                className="mb-8 border border-gray-300  rounded-lg p-6 relative"
                                             >
                                                 {values.operators.length > 1 && (
                                                     <button
@@ -185,14 +185,14 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                                     <div>
                                                         <label
                                                             htmlFor={`operators.${index}.name`}
-                                                            className="block font-semibold text-gray-700 dark:text-gray-200 mb-1"
+                                                            className="block font-semibold text-gray-700 mb-1"
                                                         >
                                                             Operator Name
                                                         </label>
                                                         <Field
                                                             id={`operators.${index}.name`}
                                                             name={`operators.${index}.name`}
-                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-900   focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         />
                                                         <ErrorMessage
                                                             name={`operators.${index}.name`}
@@ -205,7 +205,7 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                                     <div>
                                                         <label
                                                             htmlFor={`operators.${index}.countries`}
-                                                            className="block font-semibold text-gray-700 dark:text-gray-200 mb-1"
+                                                            className="block font-semibold text-gray-700 mb-1"
                                                         >
                                                             Countries
                                                         </label>
@@ -219,14 +219,14 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                                     <div>
                                                         <label
                                                             htmlFor={`operators.${index}.code`}
-                                                            className="block font-semibold text-gray-700 dark:text-gray-200 mb-1"
+                                                            className="block font-semibold text-gray-700 mb-1"
                                                         >
                                                             Code
                                                         </label>
                                                         <Field
                                                             id={`operators.${index}.code`}
                                                             name={`operators.${index}.code`}
-                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                                                            className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-900   focus:outline-none focus:ring-2 focus:ring-green-500"
                                                         />
                                                         <ErrorMessage
                                                             name={`operators.${index}.code`}
@@ -245,7 +245,7 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                                         />
                                                         <label
                                                             htmlFor={`operators.${index}.isActive`}
-                                                            className="text-gray-700 dark:text-gray-200 select-none"
+                                                            className="text-gray-700 select-none"
                                                         >
                                                             Active
                                                         </label>
@@ -278,7 +278,7 @@ export default function OperatorModal({ open, onClose, handleSubmit }: OperatorM
                                 <button
                                     type="button"
                                     onClick={onClose}
-                                    className="px-6 py-2 rounded-lg font-semibold bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 hover:dark:bg-gray-600 transition"
+                                    className="px-6 py-2 rounded-lg font-semibold bg-gray-200  text-gray-700 hover:bg-gray-300  transition"
                                     disabled={isSubmitting}
                                 >
                                     Cancel

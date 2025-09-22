@@ -26,16 +26,20 @@ interface Country {
 
 interface CountryTableProps {
   countries: Country[];
+  onDelete: (country: Country) => void; // Use correct type
+  onEdit: (country: Country) => void;
 }
 
 const columnHelper = createColumnHelper<Country>();
 
-const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const dispatch: any = useDispatch();
+const CountryTable: React.FC<CountryTableProps> = ({ countries, onDelete, onEdit }) => {
+  const dispatch = useDispatch();
   const [globalFilter, setGlobalFilter] = useState('');
   const [sorting, setSorting] = useState<SortingState>([]);
 
+  // Remove handleEdit here, delegate to parent via onEdit
+
+  // Remove handleDelete here, delegate to parent via onDelete
 
   const columns = useMemo(
     () => [
@@ -100,7 +104,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <button
-              onClick={() => handleEdit(row.original._id)}
+              onClick={() => onEdit(row.original)}
               className="p-1 text-blue-400 hover:text-blue-300 transition-colors"
               title="Edit"
             >
@@ -109,7 +113,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
               </svg>
             </button>
             <button
-              onClick={() => handleDelete(row.original._id)}
+              onClick={() => onDelete(row.original)}
               className="p-1 text-red-400 hover:text-red-300 transition-colors"
               title="Delete"
             >
@@ -144,28 +148,8 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries }) => {
     },
   });
 
-  const handleEdit = (id: string) => {
-    console.log('Edit country:', id);
-    // Add your edit logic here
-  };
-
-  const handleDelete = async (id: string) => {
-    // const response = await dis
-    try {
-      const response = await dispatch(deleteCountry(id));
-      if (response.type === 'countries/delete/fulfilled') {
-        toast.success("Country Deleted Succesfully");
-      }
-
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    catch (err: any) {
-      console.error("Error in the Delete Country ", err);
-    }
-  };
-
   return (
-    <div className="rounded-lg shadow-lg overflow-hidden rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
+    <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
       {/* Search Bar */}
       <div className="p-4 border-b border-gray-700">
         <div className="relative">

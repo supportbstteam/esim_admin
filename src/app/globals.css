@@ -45,7 +45,7 @@ html {
   color: #111827;
 }
 .dark .input-gradient-border input {
-  background-color: #1f2937;
+  background-color: #fff;
   color: #f9fafb;
 }
 
@@ -59,7 +59,7 @@ html {
   background: rgba(255, 255, 255, 0.6);
 }
 .dark .bg-gray-800\/70 {
-  background: rgba(31, 41, 55, 0.7);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 /* =======================
