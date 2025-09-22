@@ -1,84 +1,118 @@
 "use client";
-import AddOperatorModal from "@/components/modals/AddOperatorModal";
-import OperatorsTable from "@/components/tables/OperatorTable";
-import useDispatchFunction from "@/hooks/dispatchHook";
-import { useAppDispatch } from "@/store";
-import { fetchCountries } from "@/store/slice/countrySlice";
-import { addOperators, deleteOperator, getOperators } from "@/store/slice/operatorSlice";
+
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
+import { useAppDispatch } from "@/store";
+import AddOperatorModal from "@/components/modals/AddOperatorModal";
+import OperatorsTable from "@/components/tables/OperatorTable";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import { fetchCountries } from "@/store/slice/countrySlice";
+import { addOperators, deleteOperator, getOperators, updateOperator } from "@/store/slice/operatorSlice";
 
 export default function Operators() {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const { user } = useSelector((state: any) => state.user);
+  const { operators } = useSelector((state: any) => state.operator);
 
-    const { loadData } = useDispatchFunction();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { user } = useSelector((state: any) => state.user);
-    // eslint-disable-next-line @typescript-esli
-    // nt/no-explicit-any
-    const { operators } = useSelector((state: any) => state.operator);
-    const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOperator, setSelectedOperator] = useState<any>(null);
+  const [deleteTarget, setDeleteTarget] = useState<any>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-// console.log('operators data'+ operators.map((op)=>op.name));
-    const fetchSims = async () => {
-        await dispatch(getOperators({}));
-        await dispatch(fetchCountries());
-    };
+  // Fetch operators and countries
+  const fetchData = async () => {
+    await dispatch(getOperators({}));
+    await dispatch(fetchCountries());
+  };
 
-    useEffect(() => {
-        fetchSims();
-    }, [user?._id]);
+  useEffect(() => {
+    if (user?._id) fetchData();
+  }, [user?._id]);
 
-    const handleAddOperator = async (values, { resetForm }) => {
+  // Handle add or edit operator
+  const handleSaveOperator = async (values, { resetForm }) => {
+    try {
+      if (selectedOperator) {
+        const response = await dispatch(
+          updateOperator({ id: selectedOperator._id, ...values.operators[0] })
+        );
+        if (response?.type.endsWith("fulfilled")) toast.success("Operator updated successfully");
+      } else {
+        const response = await dispatch(addOperators(values));
+        if (response?.type.endsWith("fulfilled")) toast.success("Operator added successfully");
+      }
+      await fetchData();
+    } catch (err) {
+      console.error("Error saving operator", err);
+      toast.error("Something went wrong");
+    }
+    resetForm();
+    setModalOpen(false);
+    setSelectedOperator(null);
+  };
 
-        const { operators } = values;
-        if (!operators)
-            toast.error("Please fill all the required fields")
+  // Handle delete operator
+  const handleDeleteOperator = async (operator) => {
+    try {
+      await dispatch(deleteOperator(operator._id));
+      await fetchData();
+      toast.success("Operator deleted");
+    } catch (err) {
+      console.error("Error deleting operator", err);
+      toast.error("Something went wrong");
+    }
+    setDeleteModalOpen(false);
+    setDeleteTarget(null);
+  };
 
-        try {
-            const response = await dispatch(addOperators(operators));
-            if (response?.type === "operators/addOperators/fulfilled") {
-                toast.success("Operator added successfully")
-            }
-            else if (response?.type === "operators/addOperators/rejected") {
-                toast.error(`${response?.payload}`)
+  return (
+    <div className="p-8">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-900">Operators</h1>
+        <button
+          onClick={() => {
+            setSelectedOperator(null);
+            setModalOpen(true);
+          }}
+          className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+        >
+          + Add Operator
+        </button>
+      </div>
 
-            }
-        }
-        catch (err) {
-            console.error("Error in the Adding Operator", err);
-        }
-        resetForm();
-        setModalOpen(false);
-    };
-    // operating the operator
+      {/* Operators Table */}
+      <OperatorsTable
+        operatorData={operators}
+        onEdit={(operator) => {
+          setSelectedOperator(operator);
+          setModalOpen(true);
+        }}
+        onDelete={(operator) => {
+          setDeleteTarget(operator);
+          setDeleteModalOpen(true);
+        }}
+      />
 
-    return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold text-gray-900 ">Operators</h1>
-                <button
-                    onClick={() => setModalOpen(true)}
-                    className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
-                >
-                    + Add Operator
-                </button>
-            </div>
-            <OperatorsTable operatorData={operators} onEdit={(values) => {
-                console.log("--- values in the edit ----", values)
-            }}
-                onDelete={async (values) => {
-                    await dispatch(deleteOperator(values));
-                    await fetchSims();
-                }}
-                
-            />
-            <AddOperatorModal
-                open={modalOpen}
-                onClose={() => setModalOpen(false)}
-                handleSubmit={handleAddOperator}
-            />
-        </div>
-    );
+      {/* Delete Confirmation Modal */}
+      <ConfirmDeleteModal
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={() => deleteTarget && handleDeleteOperator(deleteTarget)}
+        operatorName={deleteTarget?.name}
+      />
+
+      {/* Add / Edit Operator Modal */}
+      <AddOperatorModal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+          setSelectedOperator(null);
+        }}
+        handleSubmit={handleSaveOperator}
+        operator={selectedOperator} // prefill modal for editing
+      />
+    </div>
+  );
 }
