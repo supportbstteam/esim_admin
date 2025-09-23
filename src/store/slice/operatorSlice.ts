@@ -42,11 +42,13 @@ export const addOperators = createAsyncThunk(
         operators: any,
         { rejectWithValue }
     ) => {
+
+        // console.log("---- operator in teh add opoerator slice ---", { operators });
         try {
             const res = await api<{ operators: Operator[] }>({
                 url: "/admin/operator/create-operator",
                 method: "POST",
-                data: { operators },
+                data: operators,
             });
             return res.operators;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

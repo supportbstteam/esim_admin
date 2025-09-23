@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "@/store";
+import { useAppDispatch, useAppSelector } from "@/store";
 import AddOperatorModal from "@/components/modals/AddOperatorModal";
 import OperatorsTable from "@/components/tables/OperatorTable";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
@@ -12,11 +12,15 @@ import { addOperators, deleteOperator, getOperators, updateOperator } from "@/st
 
 export default function Operators() {
   const dispatch = useAppDispatch();
-  const { user } = useSelector((state: any) => state.user);
-  const { operators } = useSelector((state: any) => state.operator);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { user }: any = useAppSelector((state) => state.user);
+  const { operators } = useAppSelector((state) => state.operator);
+  const [isEdit, setIsEdit] = useState<boolean>(false)
 
   const [modalOpen, setModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedOperator, setSelectedOperator] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [deleteTarget, setDeleteTarget] = useState<any>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -32,15 +36,22 @@ export default function Operators() {
 
   // Handle add or edit operator
   const handleSaveOperator = async (values, { resetForm }) => {
+
+    // console.log("----- values in the add operators function -----", values);
     try {
       if (selectedOperator) {
+
+        // console.log("---- values ----", { values.operators[0] });
+        // return;
         const response = await dispatch(
-          updateOperator({ id: selectedOperator._id, ...values.operators[0] })
+          updateOperator({ operatorId: selectedOperator._id, updates: values.operators[0] })
         );
-        if (response?.type.endsWith("fulfilled")) toast.success("Operator updated successfully");
+
+        console.log("---- response in the edit operator form ---", response);
+        if (response?.type === 'operators/updateOperator/fulfilled') toast.success("Operator updated successfully");
       } else {
         const response = await dispatch(addOperators(values));
-        if (response?.type.endsWith("fulfilled")) toast.success("Operator added successfully");
+        if (response?.type === 'operators/addOperators/fulfilled') toast.success("Operator added successfully");
       }
       await fetchData();
     } catch (err) {
@@ -54,10 +65,21 @@ export default function Operators() {
 
   // Handle delete operator
   const handleDeleteOperator = async (operator) => {
+
+    // console.log("----- opeartor ----", operator);
+    // return;
     try {
-      await dispatch(deleteOperator(operator._id));
-      await fetchData();
-      toast.success("Operator deleted");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response: any = await dispatch(deleteOperator(operator));
+      // console.log("---- response in teh deleting the operator ----", response);
+
+      if (response?.type === 'operators/deleteOperator/fulfilled') {
+        await fetchData();
+        toast.success("Operator deleted");
+      }
+      else {
+        toast.error(response?.payload)
+      }
     } catch (err) {
       console.error("Error deleting operator", err);
       toast.error("Something went wrong");
@@ -83,10 +105,32 @@ export default function Operators() {
       </div>
 
       {/* Operators Table */}
-      <OperatorsTable
+      {/* <OperatorsTable
         operatorData={operators}
         onEdit={(operator) => {
           setSelectedOperator(operator);
+          setIsEdit(true);
+          setModalOpen(true);
+        }}
+        onDelete={(operator) => {
+          setDeleteTarget(operator);
+          setDeleteModalOpen(true);
+        }}
+      /> */}
+      <OperatorsTable
+        operatorData={operators.map((op) => ({
+          ...op,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          countries: op.countries.map((c: any) => ({
+            _id: c._id,
+            name: c.name,
+            isoCode: c.isoCode,
+            phoneCode: c.phoneCode || "", // provide default if missing
+          })),
+        }))}
+        onEdit={(operator) => {
+          setSelectedOperator(operator);
+          setIsEdit(true);
           setModalOpen(true);
         }}
         onDelete={(operator) => {
@@ -94,6 +138,7 @@ export default function Operators() {
           setDeleteModalOpen(true);
         }}
       />
+
 
       {/* Delete Confirmation Modal */}
       <ConfirmDeleteModal

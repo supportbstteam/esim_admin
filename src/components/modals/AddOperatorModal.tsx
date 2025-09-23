@@ -22,7 +22,9 @@ interface OperatorModalProps {
 interface AddOperatorModalProps {
     open: boolean;
     onClose: () => void;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     handleSubmit: (values: any, formikHelpers: any) => Promise<void>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     operator?: any; // 👈 pass selected operator for editing
 }
 
@@ -124,7 +126,7 @@ const CustomMultiSelect: React.FC<{
     );
 };
 
-export default function OperatorModal({ open, onClose, handleSubmit, operator }: OperatorModalProps & { operator?: OperatorEntry }) {
+export default function OperatorModal({ open, onClose, handleSubmit, operator}: OperatorModalProps & { operator?: OperatorEntry }) {
 
     const { countries } = useAppSelector((state) => state.countries);
 
@@ -143,9 +145,9 @@ export default function OperatorModal({ open, onClose, handleSubmit, operator }:
             <div className="bg-white  rounded-2xl shadow-2xl w-full max-w-4xl p-10 relative flex flex-col gap-6 max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-3 sticky top-0 bg-white  z-10 py-2">
-                   <h2 className="text-2xl font-extrabold text-gray-800 tracking-wide">
-    {operator ? "Edit Operator" : "Add Operators"}
-</h2>
+                    <h2 className="text-2xl font-extrabold text-gray-800 tracking-wide">
+                        {operator ? "Edit Operator" : "Add Operators"}
+                    </h2>
 
                     <button
                         onClick={onClose}

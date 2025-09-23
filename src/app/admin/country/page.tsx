@@ -17,9 +17,11 @@ function Country() {
 
   // State for delete confirmation modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [countryToDelete, setCountryToDelete] = useState<any>(null);
 
   // State for edit modal
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [editCountry, setEditCountry] = useState<any>(null);
 
   useEffect(() => {
@@ -29,25 +31,39 @@ function Country() {
     fetchCountry();
   }, [dispatch]);
 
-const handleDelete = () => {
-  if (!countryToDelete?._id) {
-    toast.error("Invalid country id");
-    return;
-  }
+  const handleDelete = async () => {
 
-  dispatch(deleteCountry(countryToDelete._id))
-    .unwrap()
-    .then(() => {
-      toast.success(`${countryToDelete.name} deleted successfully`);
+
+    if (!countryToDelete?._id) {
+      toast.error("Invalid country id");
+      return;
+    }
+
+    console.log("---- countryToDelete ----", countryToDelete);
+
+    const response = await dispatch(deleteCountry(countryToDelete?._id));
+
+    console.log("---- response ----", response);
+
+    if (response?.type === 'countries/delete/fulfilled') {
       setDeleteModalOpen(false);
       setCountryToDelete(null);
-    })
-    .catch(() => {
+      toast.success(`${countryToDelete.name} deleted successfully`);
+    }
+    else {
       toast.error("Failed to delete country");
-    });
-};
 
+    }
 
+    // dispatch(deleteCountry(countryToDelete._id))
+    //   .unwrap()
+    //   .then(() => {
+    //   })
+    //   .catch(() => {
+    //   });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (country: any) => {
     setEditCountry(country);
     setIsAddModalOpen(true);
@@ -65,7 +81,7 @@ const handleDelete = () => {
             setEditCountry(null);
             setIsAddModalOpen(true);
           }}
-           className="flex items-center gap-2 px-6 py-3 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+          className="flex items-center gap-2 px-6 py-3 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -77,6 +93,7 @@ const handleDelete = () => {
       {/* Countries Table */}
       <CountryTable
         countries={countries}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         onDelete={(country: any) => {
           setCountryToDelete(country);
           setDeleteModalOpen(true);
