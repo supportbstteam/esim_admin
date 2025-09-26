@@ -42,15 +42,15 @@ const initialState: PlansDbState = {
 // Async thunks
 // =====================
 export const fetchPlansDb = createAsyncThunk<
-  Plan[], // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Record<string, any> | undefined, // arg type
-  { rejectValue: ApiError } // reject type
->("plansDb/fetchPlans", async (params = {}, { rejectWithValue }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  any, // return type
+  void, // arg type → no arguments
+  { rejectValue: ApiError }
+>("plansDb/fetchPlans", async (_, { rejectWithValue }) => {
   try {
     const data = await api<{ count: number; plans: Plan[] }>({
-      url: "/plans",
+      url: "/admin/plans",
       method: "GET",
-      params,
     });
     return data.plans;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,6 +58,7 @@ export const fetchPlansDb = createAsyncThunk<
     return rejectWithValue(err.response?.data || { message: err.message });
   }
 });
+
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async (plans: any, { rejectWithValue }: any) => {
@@ -83,7 +84,7 @@ export const updatePlanDb = createAsyncThunk<
 >("plansDb/updatePlan", async ({ planId, data }: any, { rejectWithValue }) => {
   try {
     const res = await api<{ plan: Plan }>({
-      url: `/plans/${planId}`,
+      url: `/admin/plans/${planId}`,
       method: "PUT",
       data,
     });
@@ -100,7 +101,7 @@ export const deletePlanDb = createAsyncThunk<
   { rejectValue: ApiError }
 >("plansDb/deletePlan", async (planId, { rejectWithValue }) => {
   try {
-    await api({ url: `/plans/${planId}`, method: "DELETE" });
+    await api({ url: `/admin/plans/${planId}`, method: "DELETE" });
     return planId;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

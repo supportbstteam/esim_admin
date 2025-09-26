@@ -131,7 +131,7 @@ export const ModalTopupForm: React.FC<ModalPlanFormProps> = ({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { countries } = useAppSelector((state: any) => state.countries);
 
-    console.log("Topup Plans from Redux:", topups);
+    // console.log("Topup Plans from Redux:", topups);
 
     if (!open) return null;
 

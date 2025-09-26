@@ -44,12 +44,17 @@ export const fetchTopupPlans = createAsyncThunk(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async () => {
         try {
-            const data = await api({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data: any = await api({
                 url: "/admin/top-up/",
                 method: "GET",
                 // params: countryId ? { countryId } : {},
             });
-            return data;
+
+            // console.log("---- data in the top op fetch -----", data);
+
+
+            return data?.plans;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return (err.response?.data || err.message);
