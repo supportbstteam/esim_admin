@@ -38,7 +38,8 @@ function Plans() {
       }
 
       // Map each entry to match Plan interface
-      const mappedPlans = values
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const mappedPlans: any = values
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .filter((entry: any) => entry.planData) // only valid ones
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

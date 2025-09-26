@@ -60,7 +60,7 @@ export const fetchPlansDb = createAsyncThunk<
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async (plans: any, { rejectWithValue }) => {
+export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async (plans: any, { rejectWithValue }: any) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: any = await api({

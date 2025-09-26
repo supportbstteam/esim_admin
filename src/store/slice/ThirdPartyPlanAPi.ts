@@ -38,12 +38,13 @@ const initialState: PlansState = {
 
 export const fetchThirdPartyPlans = createAsyncThunk(
     "plans/fetchThirdPartyPlans",// eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (params: Record<string, any> = {}, { rejectWithValue }) => {
+    // async (params: Record<string, any> = {}, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const data = await api<Plan[]>({
                 url: "/admin/third-party-api/services/plans",
                 method: "GET",
-                params,
+                // params,
             });
             return data;// eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
