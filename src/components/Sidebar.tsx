@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, logout } from "@/store/slice/userSlice";
 
 export default function Sidebar() {
-   const router = useRouter();
+  const router = useRouter();
   const pathname = usePathname();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
@@ -36,7 +36,7 @@ export default function Sidebar() {
   return (
     <aside className="w-64 h-full bg-red dark:bg-gray-800  shadow-lg flex flex-col">
       <div className="pt-2 border-b  dark:border-gray-700">
-        <Image src="/FullLogo.png" alt="Logo" width={150} height={150} className="mx-auto mb-4 rounded-2xl"/>
+        <Image src="/FullLogo.png" alt="Logo" width={150} height={150} className="mx-auto mb-4 rounded-2xl" />
       </div>
       <nav className="flex-1 p-4 space-y-3">
         <Link
@@ -79,6 +79,13 @@ export default function Sidebar() {
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           <FiLayers /> Plans
+        </Link>
+
+        <Link
+          href="/admin/topup"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <FiLayers /> Top-up
         </Link>
 
         <Link

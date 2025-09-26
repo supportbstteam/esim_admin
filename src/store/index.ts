@@ -9,7 +9,8 @@ import countriesSlice from "./slice/countrySlice";
 import operatorSlice from "./slice/operatorSlice";
 import thirdPartyAPiSlice from "./slice/ThirdPartyPlanAPi"
 import planSlice from "./slice/apiPlanDbSlice"
-
+import thirdTopupSlice from "./slice/ThirdPartyTopupSlice"
+import topupSlice from "./slice/apiTopupDbSlice"
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
@@ -18,7 +19,9 @@ export const store = configureStore({
     countries: countriesSlice,
     operator: operatorSlice,
     thirdParty: thirdPartyAPiSlice,
-    plan: planSlice
+    thirdPartyTopUp: thirdTopupSlice,
+    plan: planSlice,
+    topup: topupSlice
   },
 });
 
