@@ -12,13 +12,13 @@ export default function ESimCard({ esim, onDelete }: ESimCardProps) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleConfirmDelete = () => {
-    onDelete(esim._id);
+    onDelete(esim.id);
     setDeleteModalOpen(false);
   };
 
   return (
     <>
-      <Link href={`/admin/esim/${esim._id}`} className="block group">
+      <Link href={`/admin/esim/${esim.id}`} className="block group">
         <div className="flex relative items-center bg-white rounded-2xl shadow hover:shadow-xl transition duration-300 border border-gray-200 px-6 py-5 gap-5 cursor-pointer group-hover:ring-2 group-hover:ring-blue-300">
           <div className="flex flex-col flex-1">
             <div className="flex gap-4 items-center mb-2">

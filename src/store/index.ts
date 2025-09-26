@@ -7,6 +7,8 @@ import userReducer from "./slice/userSlice";
 import eSimReducer from "./slice/eSimSlice";
 import countriesSlice from "./slice/countrySlice";
 import operatorSlice from "./slice/operatorSlice";
+import thirdPartyAPiSlice from "./slice/ThirdPartyPlanAPi"
+import planSlice from "./slice/apiPlanDbSlice"
 
 export const store = configureStore({
   reducer: {
@@ -14,7 +16,9 @@ export const store = configureStore({
     user: userReducer,
     esim: eSimReducer,
     countries: countriesSlice,
-    operator: operatorSlice
+    operator: operatorSlice,
+    thirdParty: thirdPartyAPiSlice,
+    plan: planSlice
   },
 });
 

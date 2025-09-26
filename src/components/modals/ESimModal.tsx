@@ -120,7 +120,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                                 {
                                                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                                     countries.map((c: any) => (
-                                                                        <option key={c._id} value={c._id}>
+                                                                        <option key={c.id} value={c.id}>
                                                                             {c.name} ({c.isoCode})
                                                                         </option>
                                                                     ))}
@@ -146,7 +146,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                                 {
                                                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                                                     operators.map((c: any) => (
-                                                                        <option key={c._id} value={c._id}>
+                                                                        <option key={c.id} value={c.id}>
                                                                             {c.name}
                                                                         </option>
                                                                     ))}

@@ -133,7 +133,7 @@ export default function OperatorModal({ open, onClose, handleSubmit, operator}: 
     if (!open) return null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const countryOptions = countries.map((c: any) => ({
-        value: c._id,
+        value: c.id,
         label: `${c.name} (${c.isoCode})`,
     }));
 

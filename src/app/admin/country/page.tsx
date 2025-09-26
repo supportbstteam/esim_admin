@@ -33,15 +33,14 @@ function Country() {
 
   const handleDelete = async () => {
 
-
-    if (!countryToDelete?._id) {
+    if (!countryToDelete?.id) {
       toast.error("Invalid country id");
       return;
     }
 
     console.log("---- countryToDelete ----", countryToDelete);
 
-    const response = await dispatch(deleteCountry(countryToDelete?._id));
+    const response = await dispatch(deleteCountry(countryToDelete?.id));
 
     console.log("---- response ----", response);
 
@@ -55,7 +54,7 @@ function Country() {
 
     }
 
-    // dispatch(deleteCountry(countryToDelete._id))
+    // dispatch(deleteCountry(countryToDelete.id))
     //   .unwrap()
     //   .then(() => {
     //   })

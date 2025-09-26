@@ -13,14 +13,14 @@ import {
 } from "@tanstack/react-table";
 
 interface Country {
-  _id: string;
+  id: string;
   name: string;
   isoCode: string;
   phoneCode: string;
 }
 
 interface Operator {
-  _id: string;
+  id: string;
   name: string;
   code: string;
   isActive: boolean;
@@ -110,7 +110,7 @@ const OperatorsTable: React.FC<OperatorsTableProps> = ({ operatorData, onEdit, o
                 </svg>
               </button>
               <button
-                onClick={() => onDelete(operator._id)}
+                onClick={() => onDelete(operator.id)}
                 className="p-1 text-red-400 hover:text-red-300 transition-colors"
                 title="Delete"
               >

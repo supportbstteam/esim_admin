@@ -5,7 +5,7 @@ import { MdDelete } from 'react-icons/md';
 
 type CountryCardProps = {
   data: {
-    _id: string;
+    id: string;
     name: string;
     isoCode: string;
     iso3Code: string;
@@ -22,7 +22,7 @@ const CountryCard: React.FC<CountryCardProps> = ({ data, onDelete }) => {
   const router = useRouter();
 
   const handleNavigate = () => {
-    router.push(`/admin/country/${data._id}`);
+    router.push(`/admin/country/${data.id}`);
   };
 
   return (
@@ -59,7 +59,7 @@ const CountryCard: React.FC<CountryCardProps> = ({ data, onDelete }) => {
         className="absolute bottom-4 right-4 rounded-full bg-red-600 hover:bg-red-800 p-2 transition"
         onClick={e => {
           e.stopPropagation();
-          onDelete(data._id);
+          onDelete(data.id);
         }}
         aria-label="Delete"
       >

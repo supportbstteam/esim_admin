@@ -4,7 +4,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 
 // E-SIM type
 export interface ESIM {
-    _id: string;
+    id: string;
     simNumber: string;
     countryName: string;
     countryCode: string;
@@ -13,12 +13,12 @@ export interface ESIM {
     isActive: boolean;
     isDeleted: boolean;
     assignedTo?: {
-        _id: string;
+        id: string;
         name: string;
         email: string;
     } | null;
-    plans: Array<{ _id: string; name: string }>;
-    company: { _id: string; name: string };
+    plans: Array<{ id: string; name: string }>;
+    company: { id: string; name: string };
 }
 
 interface ESimState {
@@ -155,7 +155,7 @@ const eSimSlice = createSlice({
         });
         builder.addCase(updateESim.fulfilled, (state, action: PayloadAction<ESIM>) => {
             state.loading = false;
-            const index = state.eSims.findIndex((e) => e._id === action.payload._id);
+            const index = state.eSims.findIndex((e) => e.id === action.payload.id);
             if (index !== -1) state.eSims[index] = action.payload;
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -171,7 +171,7 @@ const eSimSlice = createSlice({
         });
         builder.addCase(deleteESim.fulfilled, (state, action: PayloadAction<string>) => {
             state.loading = false;
-            state.eSims = state.eSims.filter((e) => e._id !== action.payload);
+            state.eSims = state.eSims.filter((e) => e.id !== action.payload);
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(deleteESim.rejected, (state, action: PayloadAction<any>) => {

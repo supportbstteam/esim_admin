@@ -30,7 +30,7 @@ export default function ESim() {
 
   useEffect(() => {
     fetchSims();
-  }, [user?._id]);
+  }, [user?.id]);
   // console.log("---- e-sims ----", eSims);
 
   const handleAddESim = async ({eSims}) => {
@@ -105,7 +105,7 @@ export default function ESim() {
 
         <ul className="mt-4 space-y-2">
           {eSims && eSims.map((sim) => (
-            <ESimCard key={sim?._id} esim={sim} onDelete={handleDeleteESim} />
+            <ESimCard key={sim?.id} esim={sim} onDelete={handleDeleteESim} />
           ))}
         </ul>
       </div>

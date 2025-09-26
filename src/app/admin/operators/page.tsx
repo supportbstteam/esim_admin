@@ -31,8 +31,8 @@ export default function Operators() {
   };
 
   useEffect(() => {
-    if (user?._id) fetchData();
-  }, [user?._id]);
+    if (user?.id) fetchData();
+  }, [user?.id]);
 
   // Handle add or edit operator
   const handleSaveOperator = async (values, { resetForm }) => {
@@ -44,7 +44,7 @@ export default function Operators() {
         // console.log("---- values ----", { values.operators[0] });
         // return;
         const response = await dispatch(
-          updateOperator({ operatorId: selectedOperator._id, updates: values.operators[0] })
+          updateOperator({ operatorId: selectedOperator.id, updates: values.operators[0] })
         );
 
         console.log("---- response in the edit operator form ---", response);
@@ -122,7 +122,7 @@ export default function Operators() {
           ...op,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           countries: op.countries.map((c: any) => ({
-            _id: c._id,
+            id: c.id,
             name: c.name,
             isoCode: c.isoCode,
             phoneCode: c.phoneCode || "", // provide default if missing

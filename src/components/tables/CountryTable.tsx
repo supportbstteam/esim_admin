@@ -15,7 +15,7 @@ import { deleteCountry } from '@/store/slice/countrySlice';
 import toast from 'react-hot-toast';
 
 interface Country {
-  _id: string;
+  id: string;
   name: string;
   isoCode: string;
   iso3Code: string;

@@ -3,10 +3,10 @@ import { api } from "@/lib/api";
 
 // ------------------- Types -------------------
 export interface Operator {
-    _id: string;
+    id: string;
     name: string;
     code: string;
-    countries: { _id: string; name: string; isoCode: string }[];
+    countries: { id: string; name: string; isoCode: string }[];
     isActive: boolean;
     createdAt: string;
     updatedAt: string;
@@ -58,11 +58,17 @@ export const addOperators = createAsyncThunk(
     }
 );
 
-// Get operators (with filters + pagination)
 export const getOperators = createAsyncThunk(
     "operators/getOperators",
     async (
-        params: { name?: string; code?: string; country?: string; isActive?: boolean; page?: number; limit?: number },
+        params: {
+            name?: string;
+            code?: string;
+            country?: string;
+            isActive?: boolean;
+            page?: number;
+            limit?: number
+        } = {}, // ✅ default empty object
         { rejectWithValue }
     ) => {
         try {
@@ -83,6 +89,7 @@ export const getOperators = createAsyncThunk(
         }
     }
 );
+
 
 // Get single operator
 export const getOperatorById = createAsyncThunk(
@@ -206,9 +213,9 @@ const operatorSlice = createSlice({
         builder.addCase(updateOperator.fulfilled, (state, action: PayloadAction<Operator>) => {
             state.loading = false;
             state.operators = state.operators.map((op) =>
-                op._id === action.payload._id ? action.payload : op
+                op.id === action.payload.id ? action.payload : op
             );
-            if (state.operator?._id === action.payload._id) {
+            if (state.operator?.id === action.payload.id) {
                 state.operator = action.payload;
             }
         });
@@ -222,7 +229,7 @@ const operatorSlice = createSlice({
         builder.addCase(deleteOperator.fulfilled, (state, action: PayloadAction<Operator>) => {
             state.loading = false;
             state.operators = state.operators.map((op) =>
-                op._id === action.payload._id ? action.payload : op
+                op.id === action.payload.id ? action.payload : op
             );
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

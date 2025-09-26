@@ -7,7 +7,7 @@ import { createCountry } from "@/store/slice/countrySlice";
 import toast from "react-hot-toast";
 
 interface Country {
-  _id?: string;
+  id?: string;
   name: string;
   isoCode: string;
   iso3Code: string;
@@ -38,6 +38,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
   onSuccess,
   country,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
   if (!isOpen) return null;
 
@@ -49,9 +50,10 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
     phoneCode: "",
     isActive: true,
   };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: Country, { setSubmitting, resetForm }: any) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(createCountry(values));
       if (response?.type === "countries/create/fulfilled") {
         toast.success(country ? "Country Updated Successfully" : "Country Added Successfully");

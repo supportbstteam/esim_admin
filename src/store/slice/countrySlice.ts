@@ -7,7 +7,7 @@ const countryUrl: string = "/admin/countries"
 
 // 🔹 Country type
 export interface Country {
-    _id?: string;
+    id?: string;
     name: string;
     isoCode: string;
     iso3Code?: string;
@@ -49,7 +49,7 @@ export const fetchCountries = createAsyncThunk<Country[]>(
 );
 
 // CREATE country
-export const createCountry = createAsyncThunk<Country, Omit<Country, "_id">>(
+export const createCountry = createAsyncThunk<Country, Omit<Country, "id">>(
     "countries/create",
     async (newCountry, thunkAPI) => {
         try {
@@ -118,13 +118,13 @@ const countrySlice = createSlice({
 
         // UPDATE
         builder.addCase(updateCountry.fulfilled, (state, action: PayloadAction<Country>) => {
-            const idx = state.countries.findIndex((c) => c._id === action.payload._id);
+            const idx = state.countries.findIndex((c) => c.id === action.payload.id);
             if (idx !== -1) state.countries[idx] = action.payload;
         });
 
         // DELETE
         builder.addCase(deleteCountry.fulfilled, (state, action: PayloadAction<string>) => {
-            state.countries = state.countries.filter((c) => c._id !== action.payload);
+            state.countries = state.countries.filter((c) => c.id !== action.payload);
         });
     },
 });
