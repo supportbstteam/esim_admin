@@ -88,13 +88,15 @@ function Topup() {
 
     return (
         <div>
-            <h1 className="text-xl font-semibold mb-4">Plans</h1>
-            <button
-                className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
-                onClick={() => setIsModalOpen(true)}
-            >
-                Add Topup
-            </button>
+            <div className="flex justify-between items-center w-full">
+                <h1 className="text-xl font-semibold mb-4 text-black ">Top Up</h1>
+                <button
+                    className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    Add Topup
+                </button>
+            </div>
             <ModalTopupForm
                 open={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

@@ -89,13 +89,16 @@ function Plans() {
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">Plans</h1>
-      <button
-        className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
-        onClick={() => setIsModalOpen(true)}
-      >
-        Add Plan
-      </button>
+      <div className="flex justify-between w-full items-center">
+        <h1 className="text-xl font-semibold mb-4 text-black">Plans</h1>
+        <button
+          className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
+          onClick={() => setIsModalOpen(true)}
+        >
+          Add Plan
+        </button>
+      </div>
+
       <ModalPlanForm
         open={isModalOpen}
         onClose={() => setIsModalOpen(false)}
