@@ -46,7 +46,7 @@ export default function Sidebar() {
           <FiHome /> Dashboard
         </Link>
 
-        <Link
+        {/* <Link
           href="/admin/users"
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
@@ -58,7 +58,7 @@ export default function Sidebar() {
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           <FiCpu /> E-Sims
-        </Link>
+        </Link> */}
 
         {/* <Link
           href="/admin/operators"

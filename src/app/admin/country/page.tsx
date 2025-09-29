@@ -38,11 +38,11 @@ function Country() {
       return;
     }
 
-    console.log("---- countryToDelete ----", countryToDelete);
+    // console.log("---- countryToDelete ----", countryToDelete);
 
     const response = await dispatch(deleteCountry(countryToDelete?.id));
 
-    console.log("---- response ----", response);
+    // console.log("---- response ----", response);
 
     if (response?.type === 'countries/delete/fulfilled') {
       setDeleteModalOpen(false);
