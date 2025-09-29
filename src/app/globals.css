@@ -1,3 +1,6 @@
+/* global.css */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 @import "tailwindcss";
 /* =======================
    Custom Fonts & Body

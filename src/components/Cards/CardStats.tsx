@@ -1,6 +1,11 @@
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import { MdPublic } from 'react-icons/md';
+
+// Import Bebas Neue font globally
+const GlobalStyle = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+`;
 
 const borderAnimation = keyframes`
   to {
@@ -48,7 +53,8 @@ const IconBox = styled.div`
 `;
 
 const CardTitle = styled.div`
-  font-size: 1.11rem;
+  font-family: 'Bebas Neue', cursive, sans-serif;
+  font-size: 2rem;
   font-weight: 600;
   margin-bottom: 0.18rem;
   opacity: 0.95;
@@ -57,6 +63,7 @@ const CardTitle = styled.div`
 `;
 
 const CardValue = styled.div`
+  font-family: 'Bebas Neue', cursive, sans-serif;
   font-size: 2.9rem;
   font-weight: bold;
   text-align: center;
@@ -64,17 +71,22 @@ const CardValue = styled.div`
 `;
 
 type Props = {
-  title: string;
-  value: number;
-  icon: React.ReactNode;
+    title: string;
+    value: number;
+    icon: React.ReactNode;
 };
 
 const CardStat = ({ title, value, icon }: Props) => (
-  <StatCard>
-    <IconBox>{icon}</IconBox>
-    <CardTitle>{title}</CardTitle>
-    <CardValue>{value}</CardValue>
-  </StatCard>
+    <>
+        <GlobalStyle />
+        <StatCard>
+            <div className='flex items-center'  >
+            <IconBox>{icon}</IconBox>
+            <CardTitle>{title}</CardTitle>
+            </div>
+            <CardValue>{value}</CardValue>
+        </StatCard>
+    </>
 );
 
 export default CardStat;
