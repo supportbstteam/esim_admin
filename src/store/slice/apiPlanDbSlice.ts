@@ -101,7 +101,8 @@ export const deletePlanDb = createAsyncThunk<
   { rejectValue: ApiError }
 >("plansDb/deletePlan", async (planId, { rejectWithValue }) => {
   try {
-    await api({ url: `/admin/plans/${planId}`, method: "DELETE" });
+    const response = await api({ url: `/admin/plans/${planId}`, method: "DELETE" });
+    // console.log("--- response in the delete plan ----", response);
     return planId;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {

@@ -4,7 +4,7 @@ import { ModalPlanForm } from "@/components/modals/ModalPlanForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchThirdPartyPlans } from "@/store/slice/ThirdPartyPlanAPi";
 import { fetchCountries } from "@/store/slice/countrySlice";
-import { createPlansDb, fetchPlansDb } from "@/store/slice/apiPlanDbSlice";
+import { createPlansDb, deletePlanDb, fetchPlansDb } from "@/store/slice/apiPlanDbSlice";
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 
@@ -17,8 +17,8 @@ function Plans() {
   useEffect(() => {
     const fetchPlans = async () => {
       await dispatch(fetchThirdPartyPlans());
-      await dispatch(fetchCountries());
       await dispatch(fetchPlansDb());
+      await dispatch(fetchCountries());
     };
 
     fetchPlans();
@@ -74,9 +74,17 @@ function Plans() {
   const handleEditPlan = (plan: any) => {
     toast.success(`Edit plan: ${plan.name}`);
   };
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDeletePlan = (plan: any) => {
-    toast.success(`Delete plan: ${plan.name}`);
+  const handleDeletePlan = async (plan: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const response: any = await dispatch(deletePlanDb(plan?.id));
+
+    if (response?.type === 'plansDb/deletePlan/fulfilled') {
+      // console.log("---- delete in the response ----", response);
+      toast.success(`Plan Deleted`);
+    }
+
   };
 
   return (

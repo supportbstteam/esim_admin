@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchCountries } from "@/store/slice/countrySlice";
 import toast from "react-hot-toast";
 import { ModalTopupForm } from "@/components/modals/ModalTopupPlan";
-import { createTopupPlans, fetchTopupPlans } from "@/store/slice/apiTopupDbSlice";
+import { createTopupPlans, deleteTopupPlan, fetchTopupPlans } from "@/store/slice/apiTopupDbSlice";
 import { fetchThirdPartyTopupPlans } from "@/store/slice/ThirdPartyTopupSlice";
 import TopupTable from "@/components/tables/TopUpTable";
 
@@ -74,11 +74,17 @@ function Topup() {
         // TODO: Implement edit modal or inline edit
         toast.success(`Edit Topup: ${topup.name}`);
     };
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleDeleteTopup = (topup: any) => {
-        // TODO: Implement delete logic (API call/thunk)
-        toast.success(`Delete Topup: ${topup.name}`);
-    };
+    const handleDeleteTopup = async (topup: any) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const response: any = await dispatch(deleteTopupPlan(topup?.id));
+
+        if (response?.type === 'topupPlans/delete/fulfilled') {
+            // console.log("---- delete in the response ----", response);
+            toast.success(`Plan Deleted`);
+        };
+    }
 
     return (
         <div>
