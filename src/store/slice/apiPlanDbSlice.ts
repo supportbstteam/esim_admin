@@ -61,13 +61,13 @@ export const fetchPlansDb = createAsyncThunk<
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async (plans: any, { rejectWithValue }: any) => {
+export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async (_, { rejectWithValue }: any) => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data: any = await api({
-      url: "/admin/plans/create-plan",
+      url: "/admin/third-party-api/services/import",
       method: "POST",
-      data: Array.isArray(plans) ? plans : [plans],
+      // data: Array.isArray(plans) ? plans : [plans],
     });
     return data.plans;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,6 +104,27 @@ export const deletePlanDb = createAsyncThunk<
     const response = await api({ url: `/admin/plans/${planId}`, method: "DELETE" });
     // console.log("--- response in the delete plan ----", response);
     return planId;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data || { message: err.message });
+  }
+});
+
+export const togglePlanStatusDb = createAsyncThunk<
+  Plan, // return type
+  { id: string; isActive?: boolean }, // arg type
+  { rejectValue: ApiError }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+>("plansDb/toggleStatus", async ({ id, isActive }: any, { rejectWithValue }) => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res: any = await api({
+      url: `/admin/plans/status/${id}`,
+      method: "POST",
+      data: isActive !== undefined ? { isActive } : {},
+    });
+
+    return res.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     return rejectWithValue(err.response?.data || { message: err.message });
@@ -184,6 +205,22 @@ const plansDbSlice = createSlice({
       .addCase(deletePlanDb.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Failed to delete plan";
+      });
+
+    builder
+      .addCase(togglePlanStatusDb.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(togglePlanStatusDb.fulfilled, (state, action: PayloadAction<Plan>) => {
+        state.loading = false;
+        state.plans = state.plans.map((p) =>
+          p.planId === action.payload.planId ? { ...p, ...action.payload } : p
+        );
+      })
+      .addCase(togglePlanStatusDb.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to toggle plan status";
       });
   },
 });

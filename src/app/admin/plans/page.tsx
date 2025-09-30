@@ -4,7 +4,7 @@ import { ModalPlanForm } from "@/components/modals/ModalPlanForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchThirdPartyPlans } from "@/store/slice/ThirdPartyPlanAPi";
 import { fetchCountries } from "@/store/slice/countrySlice";
-import { createPlansDb, deletePlanDb, fetchPlansDb } from "@/store/slice/apiPlanDbSlice";
+import { createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb } from "@/store/slice/apiPlanDbSlice";
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 
@@ -29,40 +29,10 @@ function Plans() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddPlan = async (values: any) => {
     try {
-      if (!values || !Array.isArray(values)) {
-        toast.error("Invalid form data");
-        return;
-      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedPlans: any = values
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .filter((entry: any) => entry.planData)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        .map((entry: any) => ({
-          planId: entry.planData.id,
-          country_id: entry.countryId,
-          title: entry.planData.title,
-          name: entry.planData.name,
-          data: entry.planData.data,
-          call: entry.planData.call,
-          sms: entry.planData.sms,
-          isUnlimited: entry.planData.is_unlimited,
-          validityDays: entry.planData.validity_days,
-          price: entry.planData.price,
-          currency: entry.planData.currency,
-          country: entry.planData.country,
-        }));
-      if (mappedPlans.length === 0) {
-        toast.error("No valid plans selected");
-        return;
-      }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response: any = await dispatch(createPlansDb(mappedPlans));
+      const response: any = await dispatch(createPlansDb());
       if (response?.type === "plansDb/createPlans/fulfilled") {
         toast.success("Plans added successfully ✅");
-        setIsModalOpen(false);
-      } else {
-        toast.error("❌ Failed to add plans");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -71,8 +41,25 @@ function Plans() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEditPlan = (plan: any) => {
-    toast.success(`Edit plan: ${plan.name}`);
+  const handleToggleStatus = async (plan: any) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response: any = await dispatch(togglePlanStatusDb({ id: plan?.id, isActive: plan?.isActive }))
+
+      if (response?.type === "plansDb/toggleStatus/fulfilled") {
+        toast.success("Status changed successfully")
+        await dispatch(fetchPlansDb());
+      }
+
+      console.log("---- response in the toggle handle ----", response);
+
+      // if(response?.type === "")
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (err: any) {
+      console.error("Error in the handling status:", err);
+
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,9 +80,9 @@ function Plans() {
         <h1 className="text-xl font-semibold mb-4 text-black">Plans</h1>
         <button
           className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleAddPlan}
         >
-          Add Plan
+          Import Plans
         </button>
       </div>
 
@@ -108,7 +95,7 @@ function Plans() {
       {/* Add PlanTable here */}
       <PlanTable
         plans={plans}
-        onEdit={handleEditPlan}
+        onToggle={handleToggleStatus}
         onDelete={handleDeletePlan}
       />
     </div>

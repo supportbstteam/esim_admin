@@ -20,10 +20,11 @@ interface Plan {
   };
   price: string;
   currency: string;
-  data: string; // This is amount in GB, e.g., "1.00"
+  data: string;
   isUnlimited: boolean;
   validityDays: number;
   isDeleted: boolean;
+  isActive: boolean; // <-- new key for toggle
   call?: string;
   sms?: string;
   createdAt: string;
@@ -31,13 +32,13 @@ interface Plan {
 
 interface PlanTableProps {
   plans: Plan[];
-  onEdit: (plan: Plan) => void;
+  onToggle: (plan: Plan) => void;
   onDelete: (plan: Plan) => void;
 }
 
 const columnHelper = createColumnHelper<Plan>();
 
-const PlanTable: React.FC<PlanTableProps> = ({ plans, onEdit, onDelete }) => {
+const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -96,33 +97,46 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onEdit, onDelete }) => {
           </span>
         ),
       }),
-      columnHelper.accessor("isDeleted", {
+      // Toggle switch for status using isActive field
+      columnHelper.accessor("isActive", {
         header: "Status",
-        cell: (info) => (
-          <span
-            className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${!info.getValue()
-              ? "bg-green-100 text-green-800"
-              : "bg-red-100 text-red-800"
-              }`}
-          >
-            {!info.getValue() ? "Active" : "Deleted"}
-          </span>
-        ),
+        cell: (info) => {
+          const isActive = info.getValue();
+          return (
+            <div className="flex items-center gap-2">
+              <label className="relative inline-flex items-center group cursor-pointer">
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={isActive}
+                  onChange={() => onToggle(info.row.original)}
+                />
+                <span className={`
+                  w-11 h-6 rounded-full transition-all duration-300 ring-1 ring-[#37c74f]/60
+                  flex items-center 
+                  ${isActive
+                    ? "bg-gradient-to-r from-[#37c74f] to-[#16325d]"
+                    : "bg-gradient-to-l from-gray-500 via-gray-700 to-gray-900"
+                  }`}>
+                  <span className={`
+                    w-5 h-5 bg-white shadow-lg rounded-full transform transition-all duration-300
+                    ${isActive ? "translate-x-5" : ""}
+                  `}></span>
+                </span>
+              </label>
+              <span className={`ml-2 text-xs font-semibold transition-colors duration-300 
+                ${isActive ? "text-[#37c74f]" : "text-red-600"}`}>
+                {isActive ? "Active" : "Deleted"}
+              </span>
+            </div>
+          );
+        },
       }),
       columnHelper.display({
         id: "actions",
         header: "Actions",
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            {/* <button
-              onClick={() => onEdit(row.original)}
-              className="p-1 text-blue-400 hover:text-blue-300 transition-colors"
-              title="Edit"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button> */}
             <button
               onClick={() => onDelete(row.original)}
               className="p-1 text-red-400 hover:text-red-300 transition-colors"
@@ -136,7 +150,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onEdit, onDelete }) => {
         ),
       }),
     ],
-    []
+    [onToggle, onDelete]
   );
 
   const table = useReactTable({
@@ -212,7 +226,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onEdit, onDelete }) => {
               </tr>
             ))}
           </thead>
-          <tbody className="shadow-amber-50 divide-y divide-gray-700">
+          <tbody className="divide-y divide-gray-700">
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className="hover:bg-gray-800/50 transition-colors">
                 {row.getVisibleCells().map((cell) => (

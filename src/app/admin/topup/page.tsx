@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchCountries } from "@/store/slice/countrySlice";
 import toast from "react-hot-toast";
 import { ModalTopupForm } from "@/components/modals/ModalTopupPlan";
-import { createTopupPlans, deleteTopupPlan, fetchTopupPlans } from "@/store/slice/apiTopupDbSlice";
+import { createTopupPlans, deleteTopupPlan, fetchTopupPlans, postInActiveTopupPlan } from "@/store/slice/apiTopupDbSlice";
 import { fetchThirdPartyTopupPlans } from "@/store/slice/ThirdPartyTopupSlice";
 import TopupTable from "@/components/tables/TopUpTable";
 
@@ -29,31 +29,8 @@ function Topup() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleAddPlan = async (values: any) => {
         try {
-            if (!values || !Array.isArray(values)) {
-                toast.error("Invalid form data");
-                return;
-            }
-            const mappedPlans = values
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                .filter((entry: any) => entry.planData)
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                .map((entry: any) => ({
-                    id: entry.planData.id,
-                    country_id: entry.countryId,
-                    title: entry.planData.title,
-                    name: entry.planData.name,
-                    data: entry.planData.data,
-                    is_unlimited: entry.planData.is_unlimited,
-                    validity_days: entry.planData.validity_days,
-                    price: entry.planData.price,
-                    currency: entry.planData.currency,
-                }));
-            if (mappedPlans.length === 0) {
-                toast.error("No valid plans selected");
-                return;
-            }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const response: any = await dispatch(createTopupPlans(mappedPlans));
+            const response: any = await dispatch(createTopupPlans());
             if (response?.type === "topupPlans/create/fulfilled") {
                 toast.success("✅ Plans added successfully");
                 setIsModalOpen(false);
@@ -68,11 +45,26 @@ function Topup() {
         }
     };
 
-    // Handlers for table actions (implement edit/delete logic here)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleEditTopup = (topup: any) => {
-        // TODO: Implement edit modal or inline edit
-        toast.success(`Edit Topup: ${topup.name}`);
+    const handleToggleStatus = async (topup: any) => {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await dispatch(postInActiveTopupPlan({ id: topup?.id, isActive: topup?.isActive }))
+
+            if (response?.type === "topupPlans/toggleStatus/fulfilled") {
+                toast.success("Status changed successfully")
+                await dispatch(fetchTopupPlans());
+            }
+
+            console.log("---- response in the toggle handle ----", response);
+
+            // if(response?.type === "")
+        }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        catch (err: any) {
+            console.error("Error in the handling status:", err);
+
+        }
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -92,9 +84,9 @@ function Topup() {
                 <h1 className="text-xl font-semibold mb-4 text-black ">Top Up</h1>
                 <button
                     className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={handleAddPlan}
                 >
-                    Add Topup
+                    Import Topup Plans
                 </button>
             </div>
             <ModalTopupForm
@@ -106,7 +98,7 @@ function Topup() {
             {/* TopupTable integration */}
             <TopupTable
                 topups={items}
-                onEdit={handleEditTopup}
+                onToggleStatus={handleToggleStatus}
                 onDelete={handleDeleteTopup}
             />
         </div>

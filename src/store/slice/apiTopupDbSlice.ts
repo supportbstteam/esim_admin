@@ -66,12 +66,12 @@ export const fetchTopupPlans = createAsyncThunk(
 export const createTopupPlans = createAsyncThunk(
     "topupPlans/create",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    async (plans: any, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const data = await api<{ plans: TopupPlan[] }>({
-                url: "/admin/top-up/create-topup",
+                url: "/admin/third-party-api/services/import-topup",
                 method: "POST",
-                data: plans,
+                // data: plans,
             });
             return data.plans;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,6 +117,29 @@ export const deleteTopupPlan = createAsyncThunk(
     }
 );
 
+// Change status (activate/deactivate) a plan
+export const postInActiveTopupPlan = createAsyncThunk(
+    "topupPlans/toggleStatus",
+    async (
+        { id, isActive }: { id: string; isActive?: boolean }, // 👈 can pass explicit status
+        { rejectWithValue }
+    ) => {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const response: any = await api({
+                url: `/admin/top-up/status/${id}`,
+                method: "POST",
+                data: isActive !== undefined ? { isActive } : {}, // send explicit if provided
+            });
+
+            return response.data;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data || err.message);
+        }
+    }
+);
+
 // --- Slice ---
 const topupPlansSlice = createSlice({
     name: "topupPlans",
@@ -136,7 +159,8 @@ const topupPlansSlice = createSlice({
         builder.addCase(fetchTopupPlans.fulfilled, (state, action: PayloadAction<TopupPlan[]>) => {
             state.loading = false;
             state.items = action.payload;
-        });// eslint-disable-next-line @typescript-eslint/no-explicit-any
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(fetchTopupPlans.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
@@ -159,8 +183,24 @@ const topupPlansSlice = createSlice({
         builder.addCase(deleteTopupPlan.fulfilled, (state, action: PayloadAction<string>) => {
             state.items = state.items.filter((p) => p.id !== action.payload);
         });
+
+        // ✅ toggle status
+        builder.addCase(
+            postInActiveTopupPlan.fulfilled,
+            (state, action: PayloadAction<TopupPlan>) => {
+                const idx = state.items.findIndex((p) => p.id === action.payload.id);
+                if (idx !== -1) {
+                    // update just the toggled plan
+                    state.items[idx] = {
+                        ...state.items[idx],
+                        ...action.payload,
+                    };
+                }
+            }
+        );
     },
 });
+
 
 export const { clearTopupPlans } = topupPlansSlice.actions;
 
