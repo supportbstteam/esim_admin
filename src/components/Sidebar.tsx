@@ -46,14 +46,14 @@ export default function Sidebar() {
           <FiHome /> Dashboard
         </Link>
 
-        {/* <Link
+        <Link
           href="/admin/users"
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           <FiUsers /> Users
         </Link>
 
-        <Link
+        {/* <Link
           href="/admin/esim"
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >

@@ -7,7 +7,8 @@ import { fetchCountries } from '@/store/slice/countrySlice';
 import { fetchThirdPartyPlans } from '@/store/slice/ThirdPartyPlanAPi';
 import styled from 'styled-components';
 import CardStat from '@/components/Cards/CardStats';
-import { MdAttachMoney, MdPublic, MdSignalCellularAlt } from 'react-icons/md';
+import { MdAttachMoney, MdPublic, MdSignalCellularAlt, MdPerson } from 'react-icons/md';
+import { getAllAdminUsers } from '@/store/slice/adminUserSlice';
 
 const CardGrid = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchThirdPartyPlans());
+      await dispatch(getAllAdminUsers());
       await dispatch(fetchTopupPlans());
       await dispatch(fetchPlansDb());
       await dispatch(fetchCountries());
@@ -36,12 +38,16 @@ function Dashboard() {
   const { countries } = useAppSelector((state) => state?.countries);
   const { plans } = useAppSelector((state) => state.plan);
   const { items } = useAppSelector((state) => state.topup);
+  const { customer } = useAppSelector((state) => state.customer);
+
+  console.log("--- customer ---", customer);
 
   return (
     <CardGrid>
       <CardStat title="Countries" value={countries?.length ?? 0} icon={<MdPublic />} />
       <CardStat title="Plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
       <CardStat title="Topups" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />
+      <CardStat title="Customer" value={customer?.length ?? 0} icon={<MdPerson />} />
 
     </CardGrid>
   );
