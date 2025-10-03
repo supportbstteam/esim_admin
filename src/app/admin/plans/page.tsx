@@ -4,7 +4,7 @@ import { ModalPlanForm } from "@/components/modals/ModalPlanForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchThirdPartyPlans } from "@/store/slice/ThirdPartyPlanAPi";
 import { fetchCountries } from "@/store/slice/countrySlice";
-import { createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb } from "@/store/slice/apiPlanDbSlice";
+import { addFeaturePlan, createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb } from "@/store/slice/apiPlanDbSlice";
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 
@@ -63,6 +63,28 @@ function Plans() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleFeaturePlan = async (plan: any) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response: any = await dispatch(addFeaturePlan({ id: plan?.id, isFeatured: plan?.isFeatured }))
+
+      if (response?.type === "plansDb/addFeaturePlan/fulfilled") {
+        toast.success("Status changed successfully")
+        await dispatch(fetchPlansDb());
+      }
+
+      console.log("---- response in the toggle handle ----", response);
+
+      // if(response?.type === "")
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    catch (err: any) {
+      console.error("Error in the handling status:", err);
+
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDeletePlan = async (plan: any) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: any = await dispatch(deletePlanDb(plan?.id));
@@ -97,6 +119,7 @@ function Plans() {
         plans={plans}
         onToggle={handleToggleStatus}
         onDelete={handleDeletePlan}
+        addFeature={handleFeaturePlan}
       />
     </div>
   );

@@ -12,6 +12,10 @@ import planSlice from "./slice/apiPlanDbSlice"
 import thirdTopupSlice from "./slice/ThirdPartyTopupSlice"
 import topupSlice from "./slice/apiTopupDbSlice"
 import customerSlice from "./slice/adminUserSlice"
+import contactSlice from "./slice/contactSlice"
+import socialSlice from "./slice/socialSlice"
+import contentSlice from "./slice/contentSlice"
+
 export const store = configureStore({
   reducer: {
     theme: themeReducer,
@@ -23,7 +27,10 @@ export const store = configureStore({
     thirdPartyTopUp: thirdTopupSlice,
     plan: planSlice,
     topup: topupSlice,
-    customer: customerSlice
+    customer: customerSlice,
+    contacts: contactSlice,
+    socials: socialSlice,
+    contents: contentSlice
   },
 });
 

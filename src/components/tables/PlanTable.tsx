@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -10,6 +10,7 @@ import {
   createColumnHelper,
   SortingState,
 } from "@tanstack/react-table";
+import { MdOutlineVerified } from "react-icons/md";
 
 interface Plan {
   id: string;
@@ -24,7 +25,8 @@ interface Plan {
   isUnlimited: boolean;
   validityDays: number;
   isDeleted: boolean;
-  isActive: boolean; // <-- new key for toggle
+  isActive: boolean;
+  isFeatured?: boolean;
   call?: string;
   sms?: string;
   createdAt: string;
@@ -34,11 +36,149 @@ interface PlanTableProps {
   plans: Plan[];
   onToggle: (plan: Plan) => void;
   onDelete: (plan: Plan) => void;
+  addFeature: (plan: Plan) => void;
 }
 
 const columnHelper = createColumnHelper<Plan>();
 
-const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
+// ------------------ Action Cell ------------------
+const ActionCell: React.FC<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  row: any;
+  onDelete: (plan: Plan) => void;
+  addFeature: (plan: Plan) => void;
+}> = ({ row, onDelete, addFeature }) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { isFeatured } = row.original;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-2 relative">
+      {/* Delete Button */}
+      <button
+        onClick={() => onDelete(row.original)}
+        className="p-1 text-red-400 hover:text-red-300 transition-colors"
+        title="Delete"
+      >
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+          />
+        </svg>
+      </button>
+
+      {/* 3-dot More Menu */}
+      <div className="relative" ref={dropdownRef}>
+        <button
+          onClick={() => setMenuOpen((val) => !val)}
+          className="p-1 text-gray-400 hover:text-white transition-colors"
+          title="More actions"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="12" cy="5" r="1.5" />
+            <circle cx="12" cy="12" r="1.5" />
+            <circle cx="12" cy="19" r="1.5" />
+          </svg>
+        </button>
+        {menuOpen && (
+          <div className="absolute right-0 z-20 mt-1 min-w-[180px] bg-gray-900 border border-gray-700 rounded shadow-xl py-1">
+            <button
+              onClick={() => {
+                addFeature(row.original);
+                setMenuOpen(false);
+              }}
+              className={`block w-full text-left px-4 py-2 text-sm text-gray-200 ${
+                !isFeatured ? "bg-blue-900" : "bg-red-700"
+              } hover:bg-[#16325d] transition-colors`}
+            >
+              {isFeatured ? "Remove from feature" : "Add to feature"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ------------------ Status Cell ------------------
+const StatusCell: React.FC<{
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  row: any;
+  onToggle: (plan: Plan) => void;
+}> = ({ row, onToggle }) => {
+  const isActive = row.original.isActive;
+
+  return (
+    <div className="flex items-center gap-2">
+      <label className="relative inline-flex items-center group cursor-pointer">
+        <input
+          type="checkbox"
+          className="sr-only"
+          checked={isActive}
+          onChange={() => onToggle(row.original)}
+        />
+        <span
+          className={`
+            w-11 h-6 rounded-full transition-all duration-300 ring-1 ring-[#37c74f]/60
+            flex items-center
+            ${
+              isActive
+                ? "bg-gradient-to-r from-[#37c74f] to-[#16325d]"
+                : "bg-gradient-to-l from-gray-500 via-gray-700 to-gray-900"
+            }
+          `}
+        >
+          <span
+            className={`
+              w-5 h-5 bg-white shadow-lg rounded-full transform transition-all duration-300
+              ${isActive ? "translate-x-5" : ""}
+            `}
+          ></span>
+        </span>
+      </label>
+      <span
+        className={`ml-2 text-xs font-semibold transition-colors duration-300
+          ${isActive ? "text-[#37c74f]" : "text-red-600"}`}
+      >
+        {isActive ? "Active" : "Deleted"}
+      </span>
+    </div>
+  );
+};
+
+// ------------------ Main Table ------------------
+const PlanTable: React.FC<PlanTableProps> = ({
+  plans,
+  onDelete,
+  onToggle,
+  addFeature,
+}) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -47,7 +187,12 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
       columnHelper.accessor("country.name", {
         header: "Country",
         cell: (info) => (
-          <div className="font-medium text-white">{info.getValue()}</div>
+          <div className="font-medium text-white flex items-center gap-1">
+            {info.getValue()}
+            {info.row.original.isFeatured && (
+              <MdOutlineVerified className="w-6 h-6 text-[#ebbc22] ml-2 " />
+            )}
+          </div>
         ),
       }),
       columnHelper.accessor("title", {
@@ -75,7 +220,9 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
         header: "Call",
         cell: (info) =>
           info.getValue() && info.getValue() !== "0.00" ? (
-            <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm">{info.getValue()}</span>
+            <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm">
+              {info.getValue()}
+            </span>
           ) : (
             <span className="text-gray-400">N/A</span>
           ),
@@ -84,7 +231,9 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
         header: "SMS",
         cell: (info) =>
           info.getValue() && info.getValue() !== "0.00" ? (
-            <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm">{info.getValue()}</span>
+            <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm">
+              {info.getValue()}
+            </span>
           ) : (
             <span className="text-gray-400">N/A</span>
           ),
@@ -97,69 +246,26 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
           </span>
         ),
       }),
-      // Toggle switch for status using isActive field
-      columnHelper.accessor("isActive", {
+      columnHelper.display({
+        id: "status",
         header: "Status",
-        cell: (info) => {
-          const isActive = info.getValue();
-          return (
-            <div className="flex items-center gap-2">
-              <label className="relative inline-flex items-center group cursor-pointer">
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={isActive}
-                  onChange={() => onToggle(info.row.original)}
-                />
-                <span className={`
-                  w-11 h-6 rounded-full transition-all duration-300 ring-1 ring-[#37c74f]/60
-                  flex items-center 
-                  ${isActive
-                    ? "bg-gradient-to-r from-[#37c74f] to-[#16325d]"
-                    : "bg-gradient-to-l from-gray-500 via-gray-700 to-gray-900"
-                  }`}>
-                  <span className={`
-                    w-5 h-5 bg-white shadow-lg rounded-full transform transition-all duration-300
-                    ${isActive ? "translate-x-5" : ""}
-                  `}></span>
-                </span>
-              </label>
-              <span className={`ml-2 text-xs font-semibold transition-colors duration-300 
-                ${isActive ? "text-[#37c74f]" : "text-red-600"}`}>
-                {isActive ? "Active" : "Deleted"}
-              </span>
-            </div>
-          );
-        },
+        cell: ({ row }) => <StatusCell row={row} onToggle={onToggle} />,
       }),
       columnHelper.display({
         id: "actions",
         header: "Actions",
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => onDelete(row.original)}
-              className="p-1 text-red-400 hover:text-red-300 transition-colors"
-              title="Delete"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-              </svg>
-            </button>
-          </div>
+          <ActionCell row={row} onDelete={onDelete} addFeature={addFeature} />
         ),
       }),
     ],
-    [onToggle, onDelete]
+    [onToggle, onDelete, addFeature]
   );
 
   const table = useReactTable({
     data: plans,
     columns,
-    state: {
-      globalFilter,
-      sorting,
-    },
+    state: { globalFilter, sorting },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -167,9 +273,7 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     initialState: {
-      pagination: {
-        pageSize: 10,
-      },
+      pagination: { pageSize: 10 },
     },
   });
 
@@ -179,8 +283,18 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
       <div className="p-4 border-b border-gray-700">
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className="w-5 h-5 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
           </div>
           <input
@@ -207,16 +321,39 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
                     <div className="flex items-center gap-2">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       {{
                         asc: (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 15l7-7 7 7"
+                            />
                           </svg>
                         ),
                         desc: (
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 9l-7 7-7-7"
+                            />
                           </svg>
                         ),
                       }[header.column.getIsSorted() as string] ?? null}
@@ -228,10 +365,19 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
           </thead>
           <tbody className="divide-y divide-gray-700">
             {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-gray-800/50 transition-colors">
+              <tr
+                key={row.id}
+                className="hover:bg-gray-800/50 transition-colors"
+              >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-6 py-4 whitespace-nowrap text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  <td
+                    key={cell.id}
+                    className="px-6 py-4 whitespace-nowrap text-sm"
+                  >
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
                   </td>
                 ))}
               </tr>
@@ -244,9 +390,14 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
       <div className="px-6 py-3 border-t border-gray-700 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-400">
-            Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{" "}
+            Showing{" "}
+            {table.getState().pagination.pageIndex *
+              table.getState().pagination.pageSize +
+              1}{" "}
+            to{" "}
             {Math.min(
-              (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+              (table.getState().pagination.pageIndex + 1) *
+                table.getState().pagination.pageSize,
               table.getFilteredRowModel().rows.length
             )}{" "}
             of {table.getFilteredRowModel().rows.length} entries
@@ -261,8 +412,18 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="First page"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                />
               </svg>
             </button>
             <button
@@ -271,12 +432,23 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="Previous page"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
             <span className="px-3 py-1 text-sm text-gray-400">
-              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
             </span>
             <button
               onClick={() => table.nextPage()}
@@ -284,8 +456,18 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="Next page"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
               </svg>
             </button>
             <button
@@ -294,8 +476,18 @@ const PlanTable: React.FC<PlanTableProps> = ({ plans, onDelete, onToggle }) => {
               className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="Last page"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                />
               </svg>
             </button>
           </div>

@@ -131,6 +131,27 @@ export const togglePlanStatusDb = createAsyncThunk<
   }
 });
 
+export const addFeaturePlan = createAsyncThunk<
+  Plan, // return type
+  { id: string; isFeatured?: boolean }, // arg type
+  { rejectValue: ApiError }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+>("plansDb/addFeaturePlan", async ({ id, isFeatured }: any, { rejectWithValue }) => {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const res: any = await api({
+      url: `/admin/plans/feature/${id}`,
+      method: "POST",
+      data: isFeatured !== undefined ? { isFeatured } : {},
+    });
+
+    return res.data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (err: any) {
+    return rejectWithValue(err.response?.data || { message: err.message });
+  }
+});
+
 // =====================
 // Slice
 // =====================
@@ -207,6 +228,7 @@ const plansDbSlice = createSlice({
         state.error = action.payload?.message || "Failed to delete plan";
       });
 
+    // active or inactive controllers
     builder
       .addCase(togglePlanStatusDb.pending, (state) => {
         state.loading = true;
@@ -219,6 +241,23 @@ const plansDbSlice = createSlice({
         );
       })
       .addCase(togglePlanStatusDb.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || "Failed to toggle plan status";
+      });
+
+    // active or inactive controllers
+    builder
+      .addCase(addFeaturePlan.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addFeaturePlan.fulfilled, (state, action: PayloadAction<Plan>) => {
+        state.loading = false;
+        state.plans = state.plans.map((p) =>
+          p.planId === action.payload.planId ? { ...p, ...action.payload } : p
+        );
+      })
+      .addCase(addFeaturePlan.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || "Failed to toggle plan status";
       });

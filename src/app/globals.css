@@ -1,12 +1,15 @@
 /* global.css */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
+
 
 @import "tailwindcss";
 /* =======================
    Custom Fonts & Body
 ======================= */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   transition: background-color 0.3s, color 0.3s;
 }
 

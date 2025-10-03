@@ -55,7 +55,9 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, { rejectWi
       headers: { Authorization: `Bearer ${token}` }, // ✅ attach token
     });
 
-    return { user: response.data, token };
+    // console.log("----- response in the user details ----", response);
+
+    return { user: response, token };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return rejectWithValue(error.response?.data?.message || "Auth check failed");

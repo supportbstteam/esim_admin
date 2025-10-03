@@ -9,6 +9,8 @@ import styled from 'styled-components';
 import CardStat from '@/components/Cards/CardStats';
 import { MdAttachMoney, MdPublic, MdSignalCellularAlt, MdPerson } from 'react-icons/md';
 import { getAllAdminUsers } from '@/store/slice/adminUserSlice';
+import { getSocials } from '@/store/slice/socialSlice';
+import { getContacts } from '@/store/slice/contactSlice';
 
 const CardGrid = styled.div`
   display: flex;
@@ -27,6 +29,8 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(fetchThirdPartyPlans());
+      await dispatch(getSocials());
+      await dispatch(getContacts());
       await dispatch(getAllAdminUsers());
       await dispatch(fetchTopupPlans());
       await dispatch(fetchPlansDb());
@@ -40,7 +44,7 @@ function Dashboard() {
   const { items } = useAppSelector((state) => state.topup);
   const { customer } = useAppSelector((state) => state.customer);
 
-  console.log("--- customer ---", customer);
+  // console.log("--- customer ---", customer);
 
   return (
     <CardGrid>
