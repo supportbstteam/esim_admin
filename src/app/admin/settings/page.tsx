@@ -1,8 +1,8 @@
 "use client";
 
 import { useAppDispatch, useAppSelector } from '@/store';
-import { LucideTrash2 } from 'lucide-react';
-import React, { useEffect } from 'react';
+import { Loader2, LucideTrash2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { createSocials, getSocials, updateSocial } from '@/store/slice/socialSlice';
@@ -138,50 +138,89 @@ function SocialMediaManagement() {
   );
 }
 
-
-
 const contactSchema = Yup.object().shape({
   contacts: Yup.array()
     .of(
       Yup.object().shape({
-        type: Yup.string().required('Contact type is required'),
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        value: Yup.string().when(['type'], (type: any, schema: Yup.StringSchema) => {
-          if ((type).toString()?.toLowerCase() === 'email') {
-            return schema.email('Invalid email address').required('Email is required');
-          } else {
-            return schema
-              .matches(/^\+?[0-9\s-]{7,15}$/, 'Invalid phone number')
-              .required('Phone number is required');
-          }
+        // ---- Contact Type ----
+        type: Yup.string().required("Contact type is required"),
+
+        // ---- Value Validation (depends on Type) ----
+        value: Yup.string().when("type", {
+          is: (val: unknown) => !!val,
+          then: (schema) =>
+            schema.test(
+              "value-validation",
+              "Invalid value",
+              function (val: unknown) {
+                const type = this.parent.type;
+
+                let t = "";
+                if (typeof type === "string") {
+                  t = type.toLowerCase();
+                } else if (Array.isArray(type)) {
+                  t = type[0]?.toLowerCase() ?? "";
+                }
+
+                if (!val) return false; // required
+
+                if (t === "email") {
+                  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val as string);
+                } else if (t === "phone") {
+                  return /^\+?[0-9\s-]{10,15}$/.test(val as string);
+                } else if (t === "address" || t === "other") {
+                  return (val as string).trim().length > 0;
+                }
+
+                return false; // default fail
+              }
+            ).required("Value is required"),
+          otherwise: (schema) => schema.required("Value is required"),
         }),
-        position: Yup.string(),
+
+        // ---- Position (Optional) ----
+        position: Yup.string()
+          .max(100, "Position must be under 100 characters")
+          .nullable(),
       })
     )
-    .min(1, 'At least one contact information is required'),
+    .min(1, "At least one contact information is required")
+    .required("Please provide at least one contact"),
 });
 
-
-
-function ContactUsManagement() {
+const ContactUsManagement = () => {
   const dispatch = useAppDispatch();
   const { items: contacts } = useAppSelector((state) => state.contacts);
   const { user } = useAppSelector((state) => state.user);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       await dispatch(getSocials());
       await dispatch(getContacts());
-    }
+    };
     fetchData();
-  }, [user?.id])
+  }, [dispatch, user?.id]);
 
   return (
     <Formik
-      initialValues={{ contacts: contacts.length ? contacts : [{ type: "Phone", value: "", position: "" }] }}
+      initialValues={{
+        contacts: contacts.length
+          ? contacts
+          : [{ type: "Phone", value: "", position: "" }],
+      }}
       validationSchema={contactSchema}
       enableReinitialize
-      onSubmit={async (values) => {
+      onSubmit={async (values, { setSubmitting, validateForm }) => {
+        setLoading(true);
+
+        const validationErrors = await validateForm(values);
+        if (Object.keys(validationErrors).length > 0) {
+          toast.error("Please fix validation errors before submitting ❌");
+          setLoading(false);
+          setSubmitting(false);
+          return;
+        }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const createList = values.contacts.filter((c: any) => !c.id);
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -189,44 +228,165 @@ function ContactUsManagement() {
 
         try {
           if (createList.length) {
-            await dispatch(createContacts(createList));
-            toast.success(`${createList.length} contact(s) created successfully ✅`);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const res: any = await dispatch(createContacts(createList));
+
+            if (res.error) {
+              // Backend error handled here
+              console.error("❌ Backend error creating contacts:", res.error);
+              const errMsg =
+                res.error?.message ||
+                res.payload?.message ||
+                "Failed to create contacts.";
+              toast.error(errMsg);
+            } else {
+              toast.success(`${createList.length} contact(s) created successfully ✅`);
+            }
           }
+
           for (const c of updateList) {
-            await dispatch(updateContact({ id: c.id!, ...c }));
-            toast.success(`Contact "${c.type}" updated successfully ✅`);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const res: any = await dispatch(updateContact({ id: c.id!, ...c }));
+
+            if (res.error) {
+              console.error("❌ Backend error updating contact:", res.error);
+              const errMsg =
+                res.error?.message ||
+                res.payload?.message ||
+                `Failed to update contact "${c.type}".`;
+              toast.error(errMsg);
+            } else {
+              toast.success(`Contact "${c.type}" updated successfully ✅`);
+            }
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
-          toast.error(err?.message || "Something went wrong ❌");
+          console.error("❌ Unexpected Error:", err);
+          toast.error(
+            err?.response?.data?.message ||
+            err?.message ||
+            "Something went wrong ❌"
+          );
+        } finally {
+          setLoading(false);
+          setSubmitting(false);
         }
       }}
+
     >
-      {({ values, isValid, dirty }) => (
-        <Form>
-          <FieldArray name="contacts">
-            {({ push, remove }) => (
-              <div className="border rounded shadow-sm mb-6 border-[#808080] relative">
-                <div className="p-4">
-                  <h3 className="text-xl text-black font-semibold mb-2">Contact Us</h3>
-                  {values.contacts.map((_, index) => (
-                    <div key={index} className="flex items-center space-x-3 mb-3">
-                      <Field name={`contacts[${index}].type`} placeholder="Type" className="border border-black text-black px-2 py-1 rounded" />
-                      <Field name={`contacts[${index}].value`} placeholder="Value" className="border border-black text-black px-2 py-1 rounded" />
-                      <Field name={`contacts[${index}].position`} placeholder="Position" className="border border-black text-black px-2 py-1 rounded" />
-                      <button type="button" onClick={() => remove(index)}>
-                        <LucideTrash2 className='text-[#ff0000]' />
+      {({ values, isValid, dirty, errors, touched }) => {
+        // Log real-time form states
+        console.log("📝 Form Values:", values);
+        console.log("❗ Validation Errors:", errors);
+        console.log("👆 Touched Fields:", touched);
+
+        return (
+          <Form>
+            <FieldArray name="contacts">
+              {({ push, remove }) => (
+                <div className="border rounded shadow-sm mb-6 border-[#808080] relative">
+                  <div className="p-4">
+                    <h3 className="text-xl text-black font-semibold mb-2">
+                      Contact Us
+                    </h3>
+
+                    {values.contacts.map((_, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-4"
+                      >
+                        {/* Type Field */}
+                        <div className="flex-1">
+                          <Field
+                            as="select"
+                            name={`contacts[${index}].type`}
+                            className="border border-black text-black px-2 py-1 rounded w-full"
+                          >
+                            <option value="">Select Type</option>
+                            <option value="Email">Email</option>
+                            <option value="Phone">Phone</option>
+                            <option value="Address">Address</option>
+                            <option value="Other">Other</option>
+                          </Field>
+                          <ErrorMessage
+                            name={`contacts[${index}].type`}
+                            component="div"
+                            className="text-red-600 text-sm mt-1"
+                          />
+                        </div>
+
+                        {/* Value Field */}
+                        <div className="flex-1">
+                          <Field
+                            name={`contacts[${index}].value`}
+                            placeholder="Enter Value"
+                            className="border border-black text-black px-2 py-1 rounded w-full"
+                          />
+                          <ErrorMessage
+                            name={`contacts[${index}].value`}
+                            component="div"
+                            className="text-red-600 text-sm mt-1"
+                          />
+                        </div>
+
+                        {/* Position Field */}
+                        <div className="flex-1">
+                          <Field
+                            name={`contacts[${index}].position`}
+                            placeholder="Position"
+                            className="border border-black text-black px-2 py-1 rounded w-full"
+                          />
+                          <ErrorMessage
+                            name={`contacts[${index}].position`}
+                            component="div"
+                            className="text-red-600 text-sm mt-1"
+                          />
+                        </div>
+
+                        {/* Delete Button */}
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="mt-2 sm:mt-0"
+                        >
+                          <LucideTrash2 className="text-[#ff0000]" />
+                        </button>
+                      </div>
+                    ))}
+
+                    {/* Buttons */}
+                    <div className="flex justify-between mt-4">
+                      <button
+                        type="button"
+                        className="bg-amber-600 text-white px-3 py-2 rounded-md"
+                        onClick={() =>
+                          push({ type: "", value: "", position: "" })
+                        }
+                      >
+                        + Add Contact
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={!isValid || !dirty || loading}
+                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
+                          ? "bg-gray-500 cursor-not-allowed"
+                          : "bg-[#243c50] hover:bg-[#1e2f3d]"
+                          }`}
+                      >
+                        {loading && (
+                          <Loader2 className="animate-spin h-4 w-4 text-white" />
+                        )}
+                        {loading ? "Submitting..." : "Submit"}
                       </button>
                     </div>
-                  ))}
-                  <button type="button" className='bg-amber-600 p-2 rounded-md ' onClick={() => push({ type: "", value: "", position: "" })}>+ Add Contact</button>
-                  <button type="submit" className='bg-[#243c50] p-2 rounded-md absolute right-2 bottom-2' disabled={!isValid || !dirty}>Submit</button>
+                  </div>
                 </div>
-              </div>
-            )}
-          </FieldArray>
-        </Form>
-      )}
+              )}
+            </FieldArray>
+          </Form>
+        );
+      }}
     </Formik>
   );
 }
@@ -238,30 +398,6 @@ function Settings() {
 
   const activity = [
     {
-      id: 1,
-      label: "Profile",
-      description: "Edit Profile",
-      goTo: "/admin/profile"
-    },
-    {
-      id: 2,
-      label: "About Us",
-      description: "About us Page",
-      goTo: "/admin/about"
-    },
-    {
-      id: 3,
-      label: "Privacy Policies",
-      description: "Privacy Policies Page",
-      goTo: "/admin/privacy"
-    },
-    {
-      id: 4,
-      label: "Terms & Conditions",
-      description: "Terms & Conditions Page",
-      goTo: "/admin/terms"
-    },
-    {
       id: 5,
       label: "Blogs",
       description: "Manage Your Blog post here",
@@ -272,12 +408,6 @@ function Settings() {
       label: "Testimonials",
       description: "Manage Your Testimonials here",
       goTo: "/admin/testimonials"
-    },
-    {
-      id: 7,
-      label: "FAQs",
-      description: "Manage Your FAQs here",
-      goTo: "/admin/faq"
     },
   ]
 
