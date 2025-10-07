@@ -9,7 +9,7 @@ import { createSocials, getSocials, updateSocial } from '@/store/slice/socialSli
 import { createContacts, getContacts, updateContact } from '@/store/slice/contactSlice';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
-// Profile component remains unchanged
+// Profile component remains unchanged -- updated the vercel
 
 const socialSchema = Yup.object().shape({
   socials: Yup.array().of(
