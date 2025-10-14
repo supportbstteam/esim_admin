@@ -15,6 +15,7 @@ import customerSlice from "./slice/adminUserSlice"
 import contactSlice from "./slice/contactSlice"
 import socialSlice from "./slice/socialSlice"
 import contentSlice from "./slice/contentSlice"
+import orderSlice from "./slice/orderSlice"
 
 export const store = configureStore({
   reducer: {
@@ -30,7 +31,8 @@ export const store = configureStore({
     customer: customerSlice,
     contacts: contactSlice,
     socials: socialSlice,
-    contents: contentSlice
+    contents: contentSlice,
+    orders: orderSlice,
   },
 });
 

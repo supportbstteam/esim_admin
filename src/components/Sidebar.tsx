@@ -82,6 +82,13 @@ export default function Sidebar() {
         </Link>
 
         <Link
+          href="/admin/orders"
+          className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        >
+          <FiLayers /> Orders
+        </Link>
+
+        <Link
           href="/admin/cms"
           className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >

@@ -42,7 +42,7 @@ export default function ContentList() {
   const contentArray = Object.values(contents); // Convert contents object to array
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6 w-full mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-[#16325d] tracking-wide">
         All CMS Pages
       </h1>

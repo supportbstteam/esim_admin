@@ -120,3 +120,16 @@ html {
     background-position: 0% 50%;
   }
 }
+
+.info-box {
+  @apply bg-white border border-gray-100 p-4 rounded-xl shadow-sm;
+}
+.info-section {
+  @apply bg-white border border-gray-100 p-4 rounded-xl shadow-sm space-y-2;
+}
+.label {
+  @apply text-sm text-gray-500 block;
+}
+.value {
+  @apply font-semibold;
+}
