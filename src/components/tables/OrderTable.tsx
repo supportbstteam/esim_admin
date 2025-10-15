@@ -26,7 +26,7 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                 </thead>
                 <tbody>
                     {orders.map((order) => {
-                        // console.log("---- order in the maop -----", order);
+                        // console.log("---- order in the map -----", order);
                         return(
                         <tr
                             key={order.id}
