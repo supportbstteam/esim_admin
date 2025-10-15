@@ -64,18 +64,14 @@ export default function ContentEditor({ page }: ContentEditorProps) {
     }
   }, [content, page]);
 
-  // Keep htmlText in sync with visual editor (live HTML preview)
-  useEffect(() => {
-    try {
-      const html = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-      setHtmlText(html);
-    } catch {
-      // ignore conversion errors
-    }
-  }, [editorState]);
+  // ✅ FIX: Removed auto-sync to prevent overwriting HTML with stripped version
+  // (keeping user HTML safe and intact)
 
   const handleSave = async () => {
-    const html = showHtml ? htmlText : draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    // ✅ FIX: Save raw HTML directly when in HTML mode (preserves Tailwind classes, etc.)
+    const html = showHtml
+      ? htmlText
+      : draftToHtml(convertToRaw(editorState.getCurrentContent()));
 
     if (!title) {
       toast.error("Please enter a title for the page.");
@@ -113,32 +109,12 @@ export default function ContentEditor({ page }: ContentEditorProps) {
     }
   };
 
-  // When user toggles from HTML view back to editor, parse the htmlText and set editorState
+  // ✅ FIX: Simplified — no longer re-parses HTML when toggling (prevents class loss)
   const handleToggleHtml = () => {
-    if (!showHtml) {
-      // switching to HTML view
-      setShowHtml(true);
-      return;
-    }
-
-    // switching back to editor: try to parse htmlText
-    try {
-      const blocks = htmlToDraft(htmlText || "");
-      if (blocks) {
-        const contentState = ContentState.createFromBlockArray(blocks.contentBlocks, blocks.entityMap);
-        setEditorState(EditorState.createWithContent(contentState));
-        setShowHtml(false);
-      } else {
-        // if parsing yields nothing, create empty
-        setEditorState(EditorState.createEmpty());
-        setShowHtml(false);
-      }
-    } catch (err) {
-      toast.error("Invalid HTML — could not parse into editor content.");
-    }
+    setShowHtml((prev) => !prev);
   };
 
-  // Helper to load current htmlText into editor immediately (attempt parse)
+  // Helper: force-load current HTML into editor (manual)
   const loadHtmlIntoEditor = () => {
     try {
       const blocks = htmlToDraft(htmlText || "");
@@ -184,7 +160,9 @@ export default function ContentEditor({ page }: ContentEditorProps) {
       {/* Input for "other" page */}
       {page === "other" && (
         <div className="mb-4">
-          <label className="block font-semibold mb-1 text-[#16325d]">Page Key (e.g., refund, disclaimer):</label>
+          <label className="block font-semibold mb-1 text-[#16325d]">
+            Page Key (e.g., refund, disclaimer):
+          </label>
           <input
             type="text"
             placeholder="Enter page key..."
@@ -224,7 +202,6 @@ export default function ContentEditor({ page }: ContentEditorProps) {
 
         <button
           onClick={() => {
-            // Quick preview open in a new window (sanitized upstream required)
             const previewWindow = window.open("", "_blank", "noopener,noreferrer");
             if (previewWindow) {
               previewWindow.document.write(htmlText || draftToHtml(convertToRaw(editorState.getCurrentContent())));
@@ -243,7 +220,10 @@ export default function ContentEditor({ page }: ContentEditorProps) {
       {content?.html && (
         <div className="mt-6 border-t pt-4">
           <h2 className="text-xl font-semibold mb-2 text-black">Stored Preview:</h2>
-          <div className="prose max-w-full text-[#494949]" dangerouslySetInnerHTML={{ __html: content.html }} />
+          <div
+            className="prose max-w-full text-[#494949]"
+            dangerouslySetInnerHTML={{ __html: content.html }}
+          />
         </div>
       )}
     </div>
