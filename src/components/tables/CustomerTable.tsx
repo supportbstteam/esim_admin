@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -48,9 +48,8 @@ const Toggle = ({
     type="button"
   >
     <span
-      className={`absolute top-0 left-0 h-6 w-6 bg-white rounded-full shadow transform transition-transform duration-200 ${
-        checked ? "translate-x-6" : "translate-x-0"
-      }`}
+      className={`absolute top-0 left-0 h-6 w-6 bg-white rounded-full shadow transform transition-transform duration-200 ${checked ? "translate-x-6" : "translate-x-0"
+        }`}
     />
   </button>
 );
@@ -66,26 +65,10 @@ const CustomerTable: React.FC<Props> = ({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-
-  // Close dropdown on outside click
-  const menuRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setOpenMenuId(null);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   const openEditModal = (customer: Customer) => {
     setEditingCustomer(customer);
     setModalOpen(true);
-    setOpenMenuId(null);
   };
 
   const closeModal = () => {
@@ -113,9 +96,8 @@ const CustomerTable: React.FC<Props> = ({
         header: "Verified",
         cell: info => (
           <span
-            className={`px-2 py-1 rounded-full text-xs font-semibold ${
-              info.getValue() ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-            }`}
+            className={`px-2 py-1 rounded-full text-xs font-semibold ${info.getValue() ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+              }`}
           >
             {info.getValue() ? "Yes" : "No"}
           </span>
@@ -153,50 +135,38 @@ const CustomerTable: React.FC<Props> = ({
           </span>
         ),
       }),
-      // Actions column with 3-dot menu
       columnHelper.display({
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => {
-          const id = row.original.id;
-          return (
-            <div className="relative" ref={menuRef}>
-              <button
-                onClick={() =>
-                  setOpenMenuId(openMenuId === id ? null : id)
-                }
-                className="p-2 rounded hover:bg-gray-700 transition"
-                aria-label="More actions"
-                type="button"
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => openEditModal(row.original)}
+              className="p-2 rounded hover:bg-gray-700 transition"
+              aria-label="Edit customer"
+              type="button"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 text-gray-400 hover:text-white"
+                viewBox="0 0 20 20"
+                fill="currentColor"
               >
-                <svg
-                  className="w-5 h-5 text-gray-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <circle cx="10" cy="3" r="2" />
-                  <circle cx="10" cy="10" r="2" />
-                  <circle cx="10" cy="17" r="2" />
-                </svg>
-              </button>
-              {openMenuId === id && (
-                <div className="absolute right-0 mt-2 w-32 bg-gray-800 rounded shadow-lg z-10">
-                  <button
-                    onClick={() => openEditModal(row.original)}
-                    className="w-full text-left px-4 py-2 hover:bg-[#16325d]"
-                  >
-                    Edit
-                  </button>
-                  {/* You could add more options here */}
-                </div>
-              )}
-            </div>
-          );
-        },
+                <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
+                <path
+                  fillRule="evenodd"
+                  d="M2 16a1 1 0 011-1h10a1 1 0 110 2H3a1 1 0 01-1-1z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+        ),
       }),
     ],
-    [onToggleBlock, onToggleDelete, openMenuId]
+    [onToggleBlock, onToggleDelete]
   );
+
 
   const table = useReactTable({
     data: customers,
@@ -245,48 +215,25 @@ const CustomerTable: React.FC<Props> = ({
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gradient-to-r from-[#16325d] to-[#37c74f]">
-              {table.getHeaderGroups().map((headerGroup) => (
+              {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
+                  {headerGroup.headers.map(header => (
                     <th
                       key={header.id}
                       className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-black/20"
                       onClick={header.column.getToggleSortingHandler()}
                     >
                       <div className="flex items-center gap-2">
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                        {flexRender(header.column.columnDef.header, header.getContext())}
                         {{
                           asc: (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M5 15l7-7 7 7"
-                              />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
                             </svg>
                           ),
                           desc: (
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M19 9l-7 7-7-7"
-                              />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                             </svg>
                           ),
                         }[header.column.getIsSorted() as string] ?? null}
@@ -296,22 +243,12 @@ const CustomerTable: React.FC<Props> = ({
                 </tr>
               ))}
             </thead>
-
             <tbody className="divide-y divide-gray-700">
-              {table.getRowModel().rows.map((row) => (
-                <tr
-                  key={row.id}
-                  className="hover:bg-gray-800/50 transition"
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={cell.id}
-                      className="px-6 py-4 text-sm text-gray-300"
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+              {table.getRowModel().rows.map(row => (
+                <tr key={row.id} className="hover:bg-gray-800/50 transition">
+                  {row.getVisibleCells().map(cell => (
+                    <td key={cell.id} className="px-6 py-4 text-sm text-gray-300">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>
@@ -324,18 +261,13 @@ const CustomerTable: React.FC<Props> = ({
         <div className="px-6 py-3 border-t border-gray-700 flex items-center justify-between">
           <span className="text-sm text-gray-400">
             Showing{" "}
-            {table.getState().pagination.pageIndex *
-              table.getState().pagination.pageSize +
-              1}
-            –
+            {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1}–{" "}
             {Math.min(
-              (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
+              (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
               table.getFilteredRowModel().rows.length
             )}{" "}
             of {table.getFilteredRowModel().rows.length}
           </span>
-
           <div className="flex gap-2">
             <button
               onClick={() => table.previousPage()}
@@ -345,8 +277,7 @@ const CustomerTable: React.FC<Props> = ({
               Prev
             </button>
             <span className="text-gray-400">
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
+              Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
             </span>
             <button
               onClick={() => table.nextPage()}
@@ -363,7 +294,7 @@ const CustomerTable: React.FC<Props> = ({
       <CustomerAddModal
         isOpen={modalOpen}
         onClose={closeModal}
-        customer={editingCustomer} // pass null for new customer or object for edit
+        customer={editingCustomer}
       />
     </>
   );

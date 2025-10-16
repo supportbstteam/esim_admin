@@ -28,7 +28,7 @@ export const createAdminUser = createAsyncThunk(
 
 // Create new user
 export const updateAdminUser = createAsyncThunk(
-    "adminUser/create",
+    "adminUser/update",
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async (userData: any, { rejectWithValue }) => {
         try {
@@ -190,6 +190,19 @@ const adminUserSlice = createSlice({
                 state.customer.push(action.payload);
             })
             .addCase(createAdminUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
+            })
+
+            // create user
+            .addCase(updateAdminUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(updateAdminUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.customer.push(action.payload);
+            })
+            .addCase(updateAdminUser.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
