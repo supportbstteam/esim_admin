@@ -1,5 +1,6 @@
 "use client";
 import CustomerAddModal from '@/components/modals/CustomerAddModal';
+import CustomerDeleteModal from '@/components/modals/CustomerDeleteModal';
 import CustomerTable from '@/components/tables/CustomerTable';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -21,7 +22,10 @@ function Users() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { user } = useAppSelector((state: any) => state?.user);
   const [showModal, setShowModal] = useState(false);
+  const [deleteId, setDeleteId] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [isDeleteModal, setIsDeleteModal] = useState<boolean>(false);
 
   const fetchData = async () => {
     await dispatch(getAllAdminUsers());
@@ -36,7 +40,7 @@ function Users() {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(deleteAdminUser(id));
-      if (response?.type === 'adminUser/delete/fullfilled') {
+      if (response?.type === 'adminUser/delete/fulfilled') {
         toast.success('User deleted successfully');
         fetchData();
       } else {
@@ -53,7 +57,9 @@ function Users() {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(blockAdminUser(id));
-      if (response?.type === 'adminUser/block/fullfilled') {
+
+      console.log("--- response in the user blocking ---", response);
+      if (response?.type === 'adminUser/block/fulfilled') {
         toast.success('User blocked successfully');
         fetchData();
       } else {
@@ -66,17 +72,25 @@ function Users() {
     }
   };
 
-  // Filtered customers based on search term
   const filteredCustomers = useMemo(() => {
-    if (!searchTerm) return customer;
-    return customer.filter(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (c: any) =>
-        c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        c.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    if (!searchTerm) return [...customer].reverse();
+    return [...customer]
+      .filter(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (c: any) =>
+          c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          c.email.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .reverse();
   }, [searchTerm, customer]);
+
+  const handleDeleteClick = (id: string) => {
+    setDeleteId(id);
+    setIsDeleteModal(true);
+  };
+
+  // console.log("--- find by id filter ---", filteredCustomers.find((u: any) => u.id === deleteId)?.firstName);
 
   return (
     <div className="px-4 mt-6">
@@ -90,25 +104,26 @@ function Users() {
         </button>
       </div>
 
-      {/* Search input with React Icon */}
-      {/* <div className="mb-4 relative">
-        <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-        <input
-          type="text"
-          placeholder="Search by name or email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full text-black border border-gray-300 rounded px-10 py-2 focus:outline-none focus:border-[#32315f]"
-        />
-      </div> */}
-
       <CustomerTable
         customers={filteredCustomers}
         onToggleBlock={handleBlockCustomer}
-        onToggleDelete={handleDeleteCustomer}
+        onToggleDelete={handleDeleteClick}
       />
 
       <CustomerAddModal isOpen={showModal} onClose={() => setShowModal(false)} />
+
+      <CustomerDeleteModal
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        isDeleted={filteredCustomers && filteredCustomers.find((u: any) => u.id === deleteId)?.isDeleted}
+        isOpen={isDeleteModal}      // pass open instead of isOpen
+        onClose={() => setIsDeleteModal(false)}
+        onConfirm={() => {
+          if (deleteId) handleDeleteCustomer(deleteId);
+        }}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        username={filteredCustomers && filteredCustomers.find((u: any) => u.id === deleteId)?.firstName}
+      />
+
     </div>
   );
 }

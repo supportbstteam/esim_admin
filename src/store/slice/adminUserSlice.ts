@@ -26,6 +26,29 @@ export const createAdminUser = createAsyncThunk(
     }
 );
 
+// Create new user
+export const updateAdminUser = createAsyncThunk(
+    "adminUser/create",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (userData: any, { rejectWithValue }) => {
+        try {
+            const res = await api({
+                url: `/admin/users/${userData?.id}/update`,
+                method: "PUT",
+                data: userData,
+            });
+
+            console.log("---- repsonse in the creating the user ----", res);
+            return res?.user;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            return rejectWithValue(err.response || err.message);
+        }
+    }
+);
+
+// export const updateAdminUser 
+
 // Get all users
 export const getAllAdminUsers = createAsyncThunk(
     "adminUser/getAll",
@@ -74,7 +97,9 @@ export const blockAdminUser = createAsyncThunk(
                 url: `/admin/users/${id}/block`,
                 method: "PATCH",
             });
-            return { id, ...res };
+
+            console.log("----- response in the block user ----", res);
+            return res;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             console.log("---- error in the block customer by admin ---", err);
