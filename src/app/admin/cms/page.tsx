@@ -30,14 +30,14 @@ export default function ContentList() {
   }
 
   // Error state
-  if (error) {
-    return (
-      <div className="p-6 text-red-600">
-        <h2 className="text-lg font-semibold mb-2">Error loading content</h2>
-        <p>{error}</p>
-      </div>
-    );
-  }
+  // if (error) {
+  //   return (
+  //     <div className="p-6 text-red-600">
+  //       <h2 className="text-lg font-semibold mb-2">Error loading content</h2>
+  //       <p>{error}</p>
+  //     </div>
+  //   );
+  // }
 
   const contentArray = Object.values(contents); // Convert contents object to array
 

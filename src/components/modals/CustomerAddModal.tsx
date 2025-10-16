@@ -74,7 +74,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({ isOpen, onClose }) 
                             {/* First Name */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800">
-                                    First Name
+                                    First Name*
                                 </label>
                                 <Field
                                     type="text"
@@ -87,7 +87,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({ isOpen, onClose }) 
                             {/* Last Name */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800">
-                                    Last Name
+                                    Last Name*
                                 </label>
                                 <Field
                                     type="text"
@@ -100,7 +100,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({ isOpen, onClose }) 
                             {/* Email */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800">
-                                    Email
+                                    Email*
                                 </label>
                                 <Field
                                     type="email"
@@ -113,7 +113,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({ isOpen, onClose }) 
                             {/* Password */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800">
-                                    Password
+                                    Password*
                                 </label>
                                 <div className="relative">
                                     <Field

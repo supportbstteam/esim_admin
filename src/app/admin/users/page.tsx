@@ -91,7 +91,7 @@ function Users() {
       </div>
 
       {/* Search input with React Icon */}
-      <div className="mb-4 relative">
+      {/* <div className="mb-4 relative">
         <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <input
           type="text"
@@ -100,7 +100,7 @@ function Users() {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full text-black border border-gray-300 rounded px-10 py-2 focus:outline-none focus:border-[#32315f]"
         />
-      </div>
+      </div> */}
 
       <CustomerTable
         customers={filteredCustomers}
