@@ -152,7 +152,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
               {/* Country Name */}
               <div>
                 <label className="block font-semibold text-gray-700 mb-1">
-                  Country Name*
+                  Country Name<label className='text-red-700' >*</label>
                 </label>
                 <Field
                   name="name"
@@ -166,7 +166,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
               {/* ISO Codes */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">ISO Code*</label>
+                  <label className="block font-semibold text-gray-700 mb-1">ISO Code<label className='text-red-700' >*</label></label>
                   <Field
                     name="isoCode"
                     type="text"
@@ -178,7 +178,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">ISO3 Code*</label>
+                  <label className="block font-semibold text-gray-700 mb-1">ISO3 Code<label className='text-red-700' >*</label></label>
                   <Field
                     name="iso3Code"
                     type="text"
@@ -193,7 +193,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
               {/* Currency & Phone Code */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Currency Code*</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Currency Code<label className='text-red-700' >*</label></label>
                   <Field
                     name="currency"
                     type="text"
@@ -205,7 +205,7 @@ const AddCountryModal: React.FC<AddCountryModalProps> = ({
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-gray-700 mb-1">Phone Code*</label>
+                  <label className="block font-semibold text-gray-700 mb-1">Phone Code<label className='text-red-700' >*</label></label>
                   <Field
                     name="phoneCode"
                     type="text"

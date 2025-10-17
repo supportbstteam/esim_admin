@@ -101,7 +101,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({
                             {/* First Name */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800" htmlFor="firstName">
-                                    First Name*
+                                    First Name<label className='text-red-700' >*</label>
                                 </label>
                                 <Field
                                     id="firstName"
@@ -115,7 +115,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({
                             {/* Last Name */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800" htmlFor="lastName">
-                                    Last Name*
+                                    Last Name<label className='text-red-700' >*</label>
                                 </label>
                                 <Field
                                     id="lastName"
@@ -129,7 +129,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({
                             {/* Email */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800" htmlFor="email">
-                                    Email*
+                                    Email<label className='text-red-700' >*</label>
                                 </label>
                                 <Field
                                     id="email"
@@ -143,7 +143,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({
                             {/* Password */}
                             <div>
                                 <label className="block mb-1 text-sm font-medium text-gray-800" htmlFor="password">
-                                    {customer ? "Password (leave blank to keep current)" : "Password*"}
+                                    {customer ? "Password (leave blank to keep current)" : "Password"}<label className='text-red-700' >*</label>
                                 </label>
                                 <div className="relative">
                                     <Field

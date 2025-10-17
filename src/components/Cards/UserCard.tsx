@@ -35,14 +35,8 @@ export const UserCard: React.FC<{ user: any }> = ({ user }) => {
             </div>
 
             {/* Grid Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1">
-                        <BadgeCheck className="w-4 h-4 text-indigo-500" /> Verified
-                    </span>
-                    {statusBadge("Verified", user.isVerified, "green", "red")}
-                </div> */}
-
+            {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            
                 <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100">
                     <span className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1">
                         <Ban className="w-4 h-4 text-red-500" /> Blocked
@@ -57,15 +51,7 @@ export const UserCard: React.FC<{ user: any }> = ({ user }) => {
                     {statusBadge("Deleted", user.isDeleted, "red", "green")}
                 </div>
 
-                {/* <div className="p-4 bg-white rounded-xl shadow-sm border border-gray-100">
-                    <span className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1">
-                        <Shield className="w-4 h-4 text-blue-500" /> Role
-                    </span>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold text-sm">
-                        {user.role || "N/A"}
-                    </span>
-                </div> */}
-            </div>
+            </div> */}
         </Card>
     );
 };

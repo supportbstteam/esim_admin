@@ -36,6 +36,8 @@ export const OrderCard: React.FC<{ order: any }> = ({ order }) => {
     const hasEsim = !!order?.esim;
     const isFailedOrder = order?.status === "failed";
 
+    console.log("---- order ----", order);
+
     return (
         <Card title="Order Information" contentClassName="space-y-6 text-gray-900">
             {/* Header Section */}
@@ -122,7 +124,7 @@ export const OrderCard: React.FC<{ order: any }> = ({ order }) => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="info-box">
                             <span className="label">SIM Number:</span>
-                            <span className="value ml-1">{order?.esim?.simNumber}</span>
+                            <span className="value ml-1">{order?.esim?.iccid}</span>
                         </div>
                         <div className="info-box">
                             <span className="label">Active:</span>

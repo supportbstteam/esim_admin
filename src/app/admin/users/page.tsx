@@ -73,22 +73,29 @@ function Users() {
   };
 
   const filteredCustomers = useMemo(() => {
-    if (!searchTerm) return [...customer].reverse();
-    return [...customer]
-      .filter(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (c: any) =>
-          c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.email.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      .reverse();
+    const sorted = [...customer].sort(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
+    if (!searchTerm) return sorted;
+
+    return sorted.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (c: any) =>
+        c.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        c.email.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   }, [searchTerm, customer]);
+
 
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);
     setIsDeleteModal(true);
   };
+
+  // console.log("----- filter -----",filteredCustomers);
 
   // console.log("--- find by id filter ---", filteredCustomers.find((u: any) => u.id === deleteId)?.firstName);
 

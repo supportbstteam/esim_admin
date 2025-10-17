@@ -11,6 +11,7 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import CustomerAddModal from "@/components/modals/CustomerAddModal";
+import { FiEdit, FiTrash2 } from "react-icons/fi";
 
 type Customer = {
   id: string;
@@ -112,15 +113,6 @@ const CustomerTable: React.FC<Props> = ({
           />
         ),
       }),
-      columnHelper.accessor("isDeleted", {
-        header: "Deleted",
-        cell: info => (
-          <Toggle
-            checked={info.getValue()}
-            onChange={val => onToggleDelete(info.row.original.id, val)}
-          />
-        ),
-      }),
       columnHelper.accessor("createdAt", {
         header: "Created At",
         cell: info => (
@@ -134,31 +126,31 @@ const CustomerTable: React.FC<Props> = ({
             })}
           </span>
         ),
+        sortingFn: "datetime",
       }),
       columnHelper.display({
         id: "actions",
         header: "Actions",
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
+            {/* Edit Button */}
             <button
               onClick={() => openEditModal(row.original)}
               className="p-2 rounded hover:bg-gray-700 transition"
               aria-label="Edit customer"
               type="button"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 text-gray-400 hover:text-white"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M17.414 2.586a2 2 0 010 2.828L8.828 14H6v-2.828l8.586-8.586a2 2 0 012.828 0z" />
-                <path
-                  fillRule="evenodd"
-                  d="M2 16a1 1 0 011-1h10a1 1 0 110 2H3a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
+              <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
+            </button>
+
+            {/* Delete Button */}
+            <button
+              onClick={() => onToggleDelete(row.original.id, true)}
+              className="p-2 rounded hover:bg-red-700 transition"
+              aria-label="Delete customer"
+              type="button"
+            >
+              <FiTrash2 className="h-5 w-5 text-red-400 hover:text-white" />
             </button>
           </div>
         ),
