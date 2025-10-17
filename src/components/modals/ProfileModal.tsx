@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ interface Props {
 const ProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector(state => state?.user);
+
     const validationSchema = Yup.object({
         email: Yup.string().email("Invalid email address").required("Email is required"),
         name: Yup.string().required("Name is required"),
@@ -25,14 +26,13 @@ const ProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
             .notRequired(),
     });
 
-    // console.log("---- profile ---",user);
-
     const formik = useFormik({
         initialValues: {
             email: user?.username || "",
             name: user?.name || "",
             notificationMail: user?.notificationMail || "",
         },
+        enableReinitialize: true, // ✅ important for prefilled values
         validationSchema,
         onSubmit: async (values) => {
             try {
@@ -45,7 +45,7 @@ const ProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
                 if (response?.message === "Profile updated successfully") {
                     toast.success("Profile updated successfully!");
-                    await dispatch(checkAuth());
+                    await dispatch(checkAuth()); // refresh user data
                     onClose();
                 }
             } catch (err) {
@@ -53,8 +53,6 @@ const ProfileModal: React.FC<Props> = ({ isOpen, onClose }) => {
             }
         },
     });
-
-
 
     if (!isOpen) return null;
 
