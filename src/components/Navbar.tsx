@@ -5,9 +5,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, logout } from "@/store/slice/userSlice";
-import { FaUserCircle } from "react-icons/fa";
-import ChangePasswordModal from "./modals/ChangePasswordModal";
+import { FaAngleDown, FaChevronDown, FaChevronUp, FaUserCircle } from "react-icons/fa";
+// import ChangePasswordModal from "./modals/PasswordAndProfileModal";
 import ProfileModal from "./modals/ProfileModal";
+import ProfileAndPasswordModal from "./modals/PasswordAndProfileModal";
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -94,22 +95,27 @@ export default function Navbar() {
               >
                 <FaUserCircle className="h-8 w-8" />
                 <span className="hidden sm:inline">{user?.user?.name || "Admin"}</span>
+                {
+                  !dropdownOpen ? <FaChevronDown className="h-3 w-3" /> : <FaChevronUp className="h-3 w-3" />
+                }
+
+                {/* <FaUserCircle  /> */}
               </button>
 
               {/* Dropdown menu */}
               {dropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-md shadow-lg py-1 z-50">
-                  <button
+                  {/* <button
                     onClick={openProfileModal}
                     className="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white"
                   >
                     Profile
-                  </button>
+                  </button> */}
                   <button
                     onClick={openPasswordModal}
                     className="w-full text-left px-4 py-2 text-sm text-gray-200 hover:bg-gray-700 hover:text-white"
                   >
-                    Change Password
+                    Profile
                   </button>
                   <button
                     onClick={handleLogout}
@@ -135,13 +141,9 @@ export default function Navbar() {
       </header>
 
       {/* Profile Modal */}
-      <ProfileModal
-        isOpen={isProfileModalOpen}
-        onClose={closeProfileModal}
-      />
 
-      {/* Change Password Modal */}
-      <ChangePasswordModal
+      {/* Profile and Change Password Modal */}
+      <ProfileAndPasswordModal
         isOpen={isPasswordModalOpen}
         onClose={closePasswordModal}
       />
