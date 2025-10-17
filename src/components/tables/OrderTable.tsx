@@ -120,12 +120,15 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
 
                         {paginatedOrders.map(order => (
                             <tr
+
                                 key={order.id}
                                 className="hover:bg-gray-800/50 transition"
                             >
-                                <td className="px-6 py-4 text-sm text-blue-400 font-mono">
+                                {/* <Link> */}
+                                <td className="px-6 py-4 text-sm text-gray-400 font-mono">
                                     {order.id.slice(0, 8)}...
                                 </td>
+                                {/* </Link> */}
                                 <td className="px-6 py-4 text-gray-300">
                                     {order.user.firstName} {order.user.lastName}
                                     <div className="text-xs text-gray-400">
