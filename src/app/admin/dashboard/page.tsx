@@ -51,7 +51,7 @@ function Dashboard() {
       <CardStat title="Countries" value={countries?.length ?? 0} icon={<MdPublic />} />
       <CardStat title="Plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
       <CardStat title="Topups" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />
-      <CardStat title="Customer" value={customer?.length ?? 0} icon={<MdPerson />} />
+      <CardStat title="Customers" value={customer?.length ?? 0} icon={<MdPerson />} />
 
     </CardGrid>
   );

@@ -60,7 +60,7 @@ function Users() {
 
       console.log("--- response in the user blocking ---", response);
       if (response?.type === 'adminUser/block/fulfilled') {
-        toast.success('User blocked successfully');
+        // toast.success('User Blocked Status Changed Sucessfully');
         fetchData();
       } else {
         toast.error('Something went wrong! Please try later');

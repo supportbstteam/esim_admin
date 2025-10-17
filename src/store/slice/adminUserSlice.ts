@@ -1,5 +1,6 @@
 import { api } from "@/lib/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 // -----------------------
 // ASYNC THUNKS
@@ -97,6 +98,7 @@ export const blockAdminUser = createAsyncThunk(
                 url: `/admin/users/${id}/block`,
                 method: "PATCH",
             });
+            toast.success(res?.message);
 
             console.log("----- response in the block user ----", res);
             return res;

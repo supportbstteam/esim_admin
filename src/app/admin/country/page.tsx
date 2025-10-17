@@ -90,10 +90,10 @@ function Country() {
       <CountryTable
         countries={countries}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onDelete={(country: any) => {
-          setCountryToDelete(country);
-          setDeleteModalOpen(true);
-        }}
+        // onDelete={(country: any) => {
+        //   setCountryToDelete(country);
+        //   setDeleteModalOpen(true);
+        // }}
         onEdit={handleEdit}
       />
 

@@ -11,6 +11,7 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import { MdOutlineVerified } from "react-icons/md";
+import { number } from "yup";
 
 interface Plan {
   id: string;
@@ -30,6 +31,7 @@ interface Plan {
   call?: string;
   sms?: string;
   createdAt: string;
+  planId: string;
 }
 
 interface PlanTableProps {
@@ -113,9 +115,8 @@ const ActionCell: React.FC<{
                 addFeature(row.original);
                 setMenuOpen(false);
               }}
-              className={`block w-full text-left px-4 py-2 text-sm text-gray-200 ${
-                !isFeatured ? "bg-blue-900" : "bg-red-700"
-              } hover:bg-[#16325d] transition-colors`}
+              className={`block w-full text-left px-4 py-2 text-sm text-gray-200 ${!isFeatured ? "bg-blue-900" : "bg-red-700"
+                } hover:bg-[#16325d] transition-colors`}
             >
               {isFeatured ? "Remove from feature" : "Add to feature"}
             </button>
@@ -147,10 +148,9 @@ const StatusCell: React.FC<{
           className={`
             w-11 h-6 rounded-full transition-all duration-300 ring-1 ring-[#37c74f]/60
             flex items-center
-            ${
-              isActive
-                ? "bg-gradient-to-r from-[#37c74f] to-[#16325d]"
-                : "bg-gradient-to-l from-gray-500 via-gray-700 to-gray-900"
+            ${isActive
+              ? "bg-gradient-to-r from-[#37c74f] to-[#16325d]"
+              : "bg-gradient-to-l from-gray-500 via-gray-700 to-gray-900"
             }
           `}
         >
@@ -164,9 +164,9 @@ const StatusCell: React.FC<{
       </label>
       <span
         className={`ml-2 text-xs font-semibold transition-colors duration-300
-          ${isActive ? "text-[#37c74f]" : "text-red-600"}`}
+          ${isActive ? "text-[#37c74f]" : "text-white"}`}
       >
-        {isActive ? "Active" : "Deleted"}
+        {isActive ? "Active" : "In Active"}
       </span>
     </div>
   );
@@ -181,6 +181,8 @@ const PlanTable: React.FC<PlanTableProps> = ({
 }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  // console.log("----- plans ----", plans);
 
   const columns = useMemo(
     () => [
@@ -322,9 +324,9 @@ const PlanTable: React.FC<PlanTableProps> = ({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                       {{
                         asc: (
                           <svg
@@ -367,7 +369,8 @@ const PlanTable: React.FC<PlanTableProps> = ({
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="hover:bg-gray-800/50 transition-colors"
+                title={`Plan ID: ${row.original?.planId}`} // <-- Tooltip on hover
+                className="hover:bg-gray-800/50 transition-colors cursor-pointer"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
@@ -397,7 +400,7 @@ const PlanTable: React.FC<PlanTableProps> = ({
             to{" "}
             {Math.min(
               (table.getState().pagination.pageIndex + 1) *
-                table.getState().pagination.pageSize,
+              table.getState().pagination.pageSize,
               table.getFilteredRowModel().rows.length
             )}{" "}
             of {table.getFilteredRowModel().rows.length} entries
