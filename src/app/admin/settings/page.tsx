@@ -9,6 +9,7 @@ import { createSocials, getSocials, updateSocial } from '@/store/slice/socialSli
 import { createContacts, getContacts, updateContact } from '@/store/slice/contactSlice';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
+import { CommunicationMailManagement } from '@/components/container/CommunicationMail';
 // Profile component remains unchanged -- updated the vercel
 
 const socialSchema = Yup.object().shape({
@@ -424,6 +425,7 @@ function Settings() {
           </div>
         ))
       }
+      <CommunicationMailManagement />
       <SocialMediaManagement />
       <ContactUsManagement />
     </div>

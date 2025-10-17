@@ -7,6 +7,7 @@ interface User {
   id: string;
   name: string;
   username: string;
+  notificationMail: string;
 }
 
 interface AuthState {
@@ -55,7 +56,7 @@ export const checkAuth = createAsyncThunk("auth/checkAuth", async (_, { rejectWi
       headers: { Authorization: `Bearer ${token}` }, // ✅ attach token
     });
 
-    // console.log("----- response in the user details ----", response);
+    console.log("----- response in the user details ----", response);
 
     return { user: response, token };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

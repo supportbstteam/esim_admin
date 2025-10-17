@@ -108,21 +108,6 @@ export default function Sidebar() {
         >
           <FiSettings /> Settings
         </Link>
-        {!user?.isAuthenticated ? (
-          <Link
-            href="/login"
-            className="px-4 py-2 rounded-md bg-blue-500 text-white font-semibold hover:bg-blue-600 transition"
-          >
-            Login
-          </Link>
-        ) : (
-          <button
-            onClick={handleLogout}
-            className="px-4 py-2 rounded-md bg-red-500 text-white font-semibold hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        )}
       </nav>
     </aside>
   );
