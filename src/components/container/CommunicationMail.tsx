@@ -52,6 +52,10 @@ export const CommunicationMailManagement = () => {
                     // await dispatch(checkAuth());
 
                     console.log("---- response in the mail change ----", response);
+
+                    if (response?.message === "Notification mail updated successfully for all admins") {
+                        toast.success("Notification mail Updated");
+                    }
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 } catch (err: any) {
                     console.log("----error in the communication mail ----", err);
