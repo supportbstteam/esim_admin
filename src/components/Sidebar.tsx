@@ -1,12 +1,14 @@
 "use client";
 
-import { Home, Users, Layers, Settings, Cpu, MapPin, FileText, CreditCard, ChevronDown, ChevronRight } from "lucide-react";
+import { Home, Users, Layers, Settings, Cpu, MapPin, FileText, CreditCard, ChevronDown, ChevronRight, LucideSatellite, LucideWorkflow } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, logout } from "@/store/slice/userSlice";
+import { MdOutlineMobileFriendly } from "react-icons/md";
+import { FiAirplay } from "react-icons/fi";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -46,17 +48,19 @@ export default function Sidebar() {
     { href: "/admin/users", icon: <Users size={20} />, label: "Customers" },
     { href: "/admin/esim", icon: <Cpu size={20} />, label: "E-Sims" },
     { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
-    { href: "/admin/country", icon: <MapPin size={20} />, label: "Country" },
+    { href: "/admin/country", icon: <FiAirplay size={20} />, label: "Country" },
+    { href: "/admin/plans", icon: <Layers size={20} />, label: "Plans" },
+    { href: "/admin/topup", icon: <MdOutlineMobileFriendly size={20} />, label: "Top Up" },
     {
       href: "/admin/orders",
       icon: <FileText size={20} />,
       label: "Orders",
       subItems: [
-        { href: "/admin/orders/plans", label: "Plans", icon: <Layers size={18} /> },
+        { href: "/admin/orders/plans", label: "Plans", icon: <LucideSatellite size={18} /> },
         { href: "/admin/orders/top-up", label: "Top-up", icon: <CreditCard size={18} /> },
       ],
     },
-    { href: "/admin/cms", icon: <FileText size={20} />, label: "CMS" },
+    { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 
