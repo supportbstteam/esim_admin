@@ -47,7 +47,7 @@ export default function Sidebar() {
     { href: "/admin/dashboard", icon: <Home size={20} />, label: "Dashboard" },
     { href: "/admin/users", icon: <Users size={20} />, label: "Customers" },
     { href: "/admin/esim", icon: <Cpu size={20} />, label: "E-Sims" },
-    { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
+    // { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
     { href: "/admin/country", icon: <FiAirplay size={20} />, label: "Country" },
     { href: "/admin/plans", icon: <Layers size={20} />, label: "Plans" },
     { href: "/admin/topup", icon: <MdOutlineMobileFriendly size={20} />, label: "Top Up" },
