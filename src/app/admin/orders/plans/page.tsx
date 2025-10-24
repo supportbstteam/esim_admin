@@ -9,6 +9,8 @@ function Orders() {
     const dispatch = useAppDispatch();
     const { orders } = useAppSelector((state) => state?.orders || { orders: [] });
 
+    console.log("=----- orders ------", orders);
+
     useEffect(() => {
         const fetchOrder = async () => {
             await dispatch(fetchOrders());

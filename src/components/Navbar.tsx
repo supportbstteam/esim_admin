@@ -50,7 +50,7 @@ export default function Navbar() {
 
   const isActive = (path: string) => pathname === path;
 
-  console.log("---- user in the nav bar ----", user);
+  // console.log("---- user in the nav bar ----", user);
 
   return (
     <>
