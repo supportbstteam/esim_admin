@@ -17,13 +17,22 @@ export default function Home() {
 
   // Handle navigation once auth state is known
   useEffect(() => {
-    if (!isLoading) {
-      if (isAuthenticated) {
-        router.push("/admin/dashboard");
-      } else {
-        router.push("/auth");
+    const fetchUser = ()=> {
+
+      if (!isLoading) {
+        if (isAuthenticated) {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/auth");
+        }
+      }
+      else {
+        return <Loader />
       }
     }
+
+    fetchUser();
+    
   }, [isAuthenticated, isLoading, router]);
 
   // Loader while checking auth
