@@ -7,13 +7,14 @@ import { ModalTopupForm } from "@/components/modals/ModalTopupPlan";
 import { createTopupPlans, deleteTopupPlan, fetchTopupPlans, postInActiveTopupPlan } from "@/store/slice/apiTopupDbSlice";
 import { fetchThirdPartyTopupPlans } from "@/store/slice/ThirdPartyTopupSlice";
 import TopupTable from "@/components/tables/TopUpTable";
+import { Loader2 } from "lucide-react";
 
 function Topup() {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state) => state.user);
     // Get topups from the correct slice
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { items } = useAppSelector((state: any) => state.topup);
+    const { items, loading } = useAppSelector((state: any) => state.topup);
 
     useEffect(() => {
         const fetchPlans = async () => {
@@ -81,12 +82,15 @@ function Topup() {
     return (
         <div>
             <div className="flex justify-between items-center w-full">
-                <h1 className="text-xl font-semibold mb-4 text-black ">Top Up</h1>
+                <h1 className="text-xl  font-semibold mb-4 text-black ">Top Up</h1>
                 <button
-                    className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
+                    disabled={loading}
+                    className="bg-[#16325d] flex row items-center justify-center cursor-pointer text-white rounded px-4 py-2 mb-4"
                     onClick={handleAddPlan}
                 >
-                    Import Topup Plans
+
+                    {loading && <Loader2 className="h-4 w-4 animate-spin text-white" />}
+                    {loading ? "Importing..." : "Import Topup Plans"}
                 </button>
             </div>
             <ModalTopupForm

@@ -35,7 +35,7 @@ const CustomerAddModal: React.FC<CustomerAddModalProps> = ({
             : Yup.string().min(6).required("Password required"),
     });
 
-    console.log("---- csutomer ----", customer);
+    // console.log("---- csutomer ----", customer);
 
     const initialValues = {
         firstName: customer?.firstName || "",

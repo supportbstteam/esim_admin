@@ -7,12 +7,14 @@ import { fetchCountries } from "@/store/slice/countrySlice";
 import { addFeaturePlan, createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb } from "@/store/slice/apiPlanDbSlice";
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
+import { Loader2 } from "lucide-react";
 
 function Plans() {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.user);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { plans } = useAppSelector((state: any) => state.plan);
+  const { plans, loading } = useAppSelector((state: any) => state.plan);
+
 
   useEffect(() => {
     const fetchPlans = async () => {
@@ -28,6 +30,7 @@ function Plans() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleAddPlan = async (values: any) => {
+    // setLoading(true)
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(createPlansDb());
@@ -101,10 +104,12 @@ function Plans() {
       <div className="flex justify-between w-full items-center">
         <h1 className="text-xl font-semibold mb-4 text-black">Plans</h1>
         <button
-          className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
+          disabled={loading}
+          className="bg-[#16325d] flex row justify-center items-center gap-2 cursor-pointer text-white rounded px-4 py-2 mb-4"
           onClick={handleAddPlan}
         >
-          Import Plans
+          {loading && <Loader2 className="h-4 w-4 animate-spin text-white" />}
+          {loading ? "Importing..." : "Import Plans"}
         </button>
       </div>
 

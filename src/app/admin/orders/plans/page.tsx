@@ -26,9 +26,8 @@ function Orders() {
             {orders && orders.length > 0 ? (
                 <OrderTable
                     orders={orders}
-                    onDeleteOrder={(orderId) => {
-                        console.log("---- delete orderId ----", orderId);
-                        // Add your delete logic here
+                    onDeleteOrder={async () => {
+                        await dispatch(fetchOrders());
                     }}
                 />
             ) : (

@@ -94,7 +94,7 @@ const ActionCell: React.FC<{
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setMenuOpen((val) => !val)}
-          className="p-1 text-gray-400 hover:text-white transition-colors"
+          className="p-1 cursor-pointer text-gray-400 hover:text-white transition-colors"
           title="More actions"
         >
           <svg
@@ -115,7 +115,7 @@ const ActionCell: React.FC<{
                 addFeature(row.original);
                 setMenuOpen(false);
               }}
-              className={`block w-full text-left px-4 py-2 text-sm text-gray-200 ${!isFeatured ? "bg-blue-900" : "bg-red-700"
+              className={`block w-full text-left cursor-pointer px-4 py-2 text-sm text-gray-200 ${!isFeatured ? "bg-blue-900" : "bg-red-700"
                 } hover:bg-[#16325d] transition-colors`}
             >
               {isFeatured ? "Remove from feature" : "Add to feature"}

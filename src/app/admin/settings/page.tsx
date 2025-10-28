@@ -108,7 +108,7 @@ function SocialMediaManagement() {
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="text-red-600 font-bold px-2 py-1 hover:bg-red-100 rounded"
+                        className="text-red-600 font-bold px-2 py-1 hover:bg-red-100 cursor-pointer rounded"
                       >
                         <LucideTrash2 />
                       </button>
@@ -124,7 +124,7 @@ function SocialMediaManagement() {
                   </button>
                   <button
                     type="submit"
-                    className="bg-[#243c50] p-2 rounded-md absolute right-2 bottom-2"
+                    className="bg-[#243c50] p-2 rounded-md absolute right-2 bottom-2 cursor-pointer"
                     disabled={!isValid || !dirty}
                   >
                     Submit
@@ -359,7 +359,7 @@ const ContactUsManagement = () => {
                     <div className="flex justify-between mt-4">
                       <button
                         type="button"
-                        className="bg-amber-600 text-white px-3 py-2 rounded-md"
+                        className="bg-amber-600 text-white px-3 py-2 rounded-md cursor-pointer"
                         onClick={() =>
                           push({ type: "", value: "", position: "" })
                         }
@@ -372,7 +372,7 @@ const ContactUsManagement = () => {
                         disabled={!isValid || !dirty || loading}
                         className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
                           ? "bg-gray-500 cursor-not-allowed"
-                          : "bg-[#243c50] hover:bg-[#1e2f3d]"
+                          : "bg-[#243c50] hover:bg-[#1e2f3d] cursor-pointer"
                           }`}
                       >
                         {loading && (

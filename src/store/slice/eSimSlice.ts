@@ -38,7 +38,7 @@ const initialState: ESimState = {
 export const fetchESims = createAsyncThunk("eSim/fetchESims", async (_, thunkAPI) => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const data: any = await api<ESIM[]>({ url: "/admin/e-sim/", method: "GET" });
+        const data: any = await api<ESIM[]>({ url: "/admin/e-sim/all", method: "GET" });
 
         console.log("---- data in the esims ----", data);
         return data.data;

@@ -125,7 +125,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
                     className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-black/20 transition-colors"
                     onClick={header.column.getToggleSortingHandler()}
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center cursor-pointer gap-2">
                       {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                       {{
                         asc: (
