@@ -11,7 +11,7 @@ import type { EditorProps } from "react-draft-wysiwyg";
 import toast from "react-hot-toast";
 import { FiAlertTriangle, FiCheckCircle, FiXCircle } from "react-icons/fi";
 
-const Editor = dynamic<EditorProps>(
+export const Editor = dynamic<EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
   { ssr: false }
 );
