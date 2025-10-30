@@ -9,11 +9,13 @@ import {
   getAllAdminUsers,
 } from '@/store/slice/adminUserSlice';
 import { fetchCountries } from '@/store/slice/countrySlice';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { FiSearch } from 'react-icons/fi';
 
 function Users() {
+  const router = useRouter();
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { customer } = useAppSelector((state: any) => state?.customer);
@@ -105,7 +107,7 @@ function Users() {
         <h2 className="text-2xl font-semibold text-[#16325d]">Customers</h2>
         <button
           className="rounded px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
-          onClick={() => setShowModal(true)}
+          onClick={() => router.push("/admin/users/manage?mode=create")}
         >
           + Add Customer
         </button>

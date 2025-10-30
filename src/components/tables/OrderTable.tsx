@@ -23,7 +23,8 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
     // ✅ Flatten orders (one per order, not per eSIM)
     const flatOrders = useMemo(() => {
         return orders.map(order => ({
-            orderId: order.id,
+            orderId: order.orderCode,
+            id: order?.id,
             user: order.user,
             createdAt: order.createdAt,
             totalAmount: order.totalAmount,
@@ -36,13 +37,17 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
     // ✅ Search filter
     const filteredOrders = useMemo(() => {
         const search = globalFilter.toLowerCase();
+
         return flatOrders.filter(o => {
             const esimMatch = o.firstEsim?.productName?.toLowerCase().includes(search);
             const userMatch =
                 o.user?.firstName?.toLowerCase().includes(search) ||
                 o.user?.lastName?.toLowerCase().includes(search) ||
                 o.user?.email?.toLowerCase().includes(search);
-            const idMatch = o.orderId.toLowerCase().includes(search);
+
+            // Normalize case for matching, but keep orderId display uppercase
+            const idMatch = o.orderId?.toLowerCase().includes(search);
+
             return idMatch || userMatch || esimMatch;
         });
     }, [flatOrders, globalFilter]);
@@ -52,6 +57,8 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
         pageIndex * pageSize,
         pageIndex * pageSize + pageSize
     );
+
+    // console.log("----- flatOrders data -----",flatOrders);
 
     const handlePrev = () => pageIndex > 0 && setPageIndex(pageIndex - 1);
     const handleNext = () => pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);
@@ -151,71 +158,79 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                             </tr>
                         )}
 
-                        {paginatedOrders.map(o => (
-                            <tr key={o.orderId} className="hover:bg-gray-800/50 transition">
-                                <td className="px-6 py-4 text-sm text-gray-400 font-mono">
-                                    {o.orderId.slice(0, 8)}...
-                                </td>
-                                <td className="px-6 py-4 text-gray-300">
-                                    {(o?.user?.firstName + " " + o?.user?.lastName) ||
-                                        "User Deleted"}
-                                    <div className="text-xs text-gray-400">
-                                        {o?.user?.email}
-                                    </div>
-                                </td>
-                                <td className="px-6 py-4 text-[#37c74f] font-medium">
-                                    {o.esimCount} eSIM{o.esimCount > 1 ? "s" : ""}
-                                </td>
-                                {/* <td className="px-6 py-4 text-gray-300">
+                        {paginatedOrders.map(o => {
+                            // console.log("----- pagination order ----", o);
+                            return (
+                                <tr key={o.orderId} className="hover:bg-gray-800/50 transition">
+                                    <td className="px-6 py-4 text-sm text-gray-400 font-mono">
+                                        {o.orderId.slice(0, 8)}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-300">
+                                        {o?.user ? (
+                                            <>
+                                                {`${o.user.firstName ?? ""} ${o.user.lastName ?? ""}`.trim() || "Unnamed User"}
+                                                <div className="text-xs text-gray-400">
+                                                    {o.user.email || "No email"}
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <span className="text-red-400 ">Deleted User</span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-[#37c74f] font-medium">
+                                        {o.esimCount} eSIM{o.esimCount > 1 ? "s" : ""}
+                                    </td>
+                                    {/* <td className="px-6 py-4 text-gray-300">
                                     {o.firstEsim?.productName || "N/A"}
                                 </td> */}
-                                <td className="px-6 py-4 text-gray-400">
-                                    {o.totalAmount} {o.firstEsim?.currency || ""}
-                                </td>
-                                <td className="px-6 py-4">
-                                    <span
-                                        className={`px-2 py-1 rounded-full text-xs font-semibold ${o?.status === "completed"
-                                            ? "bg-green-100 text-green-800"
-                                            : o?.status === "failed"
-                                                ? "bg-red-100 text-red-800"
-                                                : "bg-yellow-100 text-yellow-800"
-                                            }`}
-                                    >
-                                        {o?.status?.toUpperCase()}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4 text-gray-400">
-                                    {new Date(o.createdAt).toLocaleString("en-IN", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    <div className="flex items-center justify-center gap-3">
-                                        <Link
-                                            href={`/admin/orders/${o.orderId}`}
-                                            className="p-2 rounded hover:bg-gray-700 transition"
-                                            aria-label="View Order"
+                                    <td className="px-6 py-4 text-gray-400">
+                                        {o.totalAmount} {o.firstEsim?.currency || ""}
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        <span
+                                            className={`px-2 py-1 rounded-full text-xs font-semibold ${o?.status === "completed"
+                                                ? "bg-green-100 text-green-800"
+                                                : o?.status === "failed"
+                                                    ? "bg-red-100 text-red-800"
+                                                    : "bg-yellow-100 text-yellow-800"
+                                                }`}
                                         >
-                                            <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
-                                        </Link>
-                                        <button
-                                            onClick={() => {
-                                                SetSelectedOrder(o);
-                                                setShowModal(true);
-                                            }}
-                                            aria-label="Delete Order"
-                                            className="p-2 rounded hover:bg-red-700 cursor-pointer transition"
-                                        >
-                                            <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                                            {o?.status?.toUpperCase()}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-400">
+                                        {new Date(o.createdAt).toLocaleString("en-IN", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <Link
+                                                href={`/admin/orders/${o.id}`}
+                                                className="p-2 rounded hover:bg-gray-700 transition"
+                                                aria-label="View Order"
+                                            >
+                                                <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
+                                            </Link>
+                                            <button
+                                                onClick={() => {
+                                                    SetSelectedOrder(o);
+                                                    setShowModal(true);
+                                                }}
+                                                aria-label="Delete Order"
+                                                className="p-2 rounded hover:bg-red-700 cursor-pointer transition"
+                                            >
+                                                <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>

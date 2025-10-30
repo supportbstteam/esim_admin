@@ -136,21 +136,21 @@ const CustomerTable: React.FC<Props> = ({
             {/* Edit Button */}
             <button
               onClick={() => openEditModal(row.original)}
-              className="p-2 rounded hover:bg-gray-700 transition"
+              className="p-2  rounded hover:bg-gray-700 transition cursor-pointer"
               aria-label="Edit customer"
               type="button"
             >
-              <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
+              <FiEdit className="h-5 w-5 text-gray-400 cursor-pointer hover:text-white" />
             </button>
 
             {/* Delete Button */}
             <button
               onClick={() => onToggleDelete(row.original.id, true)}
-              className="p-2 rounded hover:bg-red-700 transition"
+              className="p-2 rounded hover:bg-red-700 transition cursor-pointer"
               aria-label="Delete customer"
               type="button"
             >
-              <FiTrash2 className="h-5 w-5 text-red-400 hover:text-white" />
+              <FiTrash2 className="h-5 w-5 text-red-400 cursor-pointer hover:text-white" />
             </button>
           </div>
         ),
@@ -239,7 +239,8 @@ const CustomerTable: React.FC<Props> = ({
               {table.getRowModel().rows.map(row => (
                 <tr key={row.id} className="hover:bg-gray-800/50 transition">
                   {row.getVisibleCells().map(cell => (
-                    <td key={cell.id} className="px-6 py-4 text-sm text-gray-300">
+                    <td key={cell.id} className={`px-6 py-4 whitespace-nowrap text-sm ${cell.column.id === "actions" ? "cursor-pointer hover:bg-gray-800/70" : ""
+                      }`}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

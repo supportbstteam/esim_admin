@@ -46,8 +46,10 @@ export default function AuthPage() {
         // ✅ handle remember me logic
         if (rememberMe) {
           Cookies.set("token", token, { expires: 7 }); // 7 days persistent
+          router.push("/");
         } else {
-          Cookies.set("token", token, { expires: 0 }); // session cookie
+          Cookies.set("token", token, { expires: 1 }); // session cookie
+          // router.push("/");
         }
 
         await dispatch(checkAuth());

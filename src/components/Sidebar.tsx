@@ -10,6 +10,7 @@ import { checkAuth, logout } from "@/store/slice/userSlice";
 import { MdOutlineMobileFriendly } from "react-icons/md";
 import { FiAirplay } from "react-icons/fi";
 import { BsCardHeading } from "react-icons/bs";
+import { BiBlanket } from "react-icons/bi";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -47,7 +48,6 @@ export default function Sidebar() {
   const navItems = [
     { href: "/admin/dashboard", icon: <Home size={20} />, label: "Dashboard" },
     { href: "/admin/users", icon: <Users size={20} />, label: "Customers" },
-    { href: "/admin/esim", icon: <Cpu size={20} />, label: "E-Sims" },
     // { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
     { href: "/admin/country", icon: <FiAirplay size={20} />, label: "Country" },
     { href: "/admin/plans", icon: <Layers size={20} />, label: "Plans" },
@@ -59,11 +59,12 @@ export default function Sidebar() {
       subItems: [
         { href: "/admin/orders/plans", label: "Plans", icon: <LucideSatellite size={18} /> },
         { href: "/admin/orders/top-up", label: "Top-up", icon: <CreditCard size={18} /> },
+        { href: "/admin/esim", icon: <Cpu size={18} />, label: "E-Sims" },
       ],
     },
     { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
-    { href: "/admin/testimonials", icon: <LucideWorkflow size={20} />, label: "Testimonials" },
+    { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 

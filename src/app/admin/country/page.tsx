@@ -7,8 +7,10 @@ import CountryTable from '@/components/tables/CountryTable';
 import AddCountryModal from '@/components/modals/AddCountryModal';
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 import toast from "react-hot-toast";
+import { useRouter } from 'next/navigation';
 
 function Country() {
+  const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,8 +66,7 @@ function Country() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleEdit = (country: any) => {
-    setEditCountry(country);
-    setIsAddModalOpen(true);
+    return router.push(`/admin/country/${country?.id}`);
   };
 
   if (loading) return <Loader />

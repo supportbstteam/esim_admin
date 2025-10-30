@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useMemo } from "react";
 import {
   useReactTable,
@@ -11,11 +12,12 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { Blog, deleteBlog } from "@/store/slice/blogsSlice";
+import { Blog, deleteBlog, updateBlog } from "@/store/slice/blogsSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import { Toggle } from "../ui/Toggle"; // ✅ import your custom toggle
 
 const columnHelper = createColumnHelper<Blog>();
 
@@ -26,22 +28,39 @@ const BlogsTable: React.FC = () => {
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [selected, setSelected] = useState(null);
-  const [showModal, setShowModal] = useState(null);
+  const [selected, setSelected] = useState<Blog | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
+  // 🗑️ Delete handler
   const handleDelete = async () => {
     try {
-      await dispatch(deleteBlog(selected?.id)).unwrap();
+      if (!selected?.id) return;
+      await dispatch(deleteBlog(selected.id)).unwrap();
       toast.success("Blog deleted successfully!");
       setShowModal(false);
-    } catch (err) {
+    } catch {
       toast.error("Failed to delete blog");
     }
   };
 
+  // 🟢 Publish toggle handler
+  const handleTogglePublish = async (blog: Blog) => {
+    try {
+      // toast.loading("Updating publish status...");
+      await dispatch(
+        updateBlog({ id: blog.id, data: { ...blog, published: !blog.published } })
+      ).unwrap();
+      toast.dismiss();
+      toast.success(
+        `Blog ${blog.published ? "unpublished" : "published"} successfully!`
+      );
+    } catch {
+      toast.dismiss();
+      toast.error("Failed to update publish status");
+    }
+  };
 
-  // console.log("----- selected item ----", selected);
-
+  // 🧱 Table Columns
   const columns = useMemo(
     () => [
       columnHelper.accessor("title", {
@@ -76,19 +95,17 @@ const BlogsTable: React.FC = () => {
         ),
       }),
       columnHelper.accessor("published", {
-        header: "Active",
-        cell: (info) => {
-          // console.log("---- info ----", info);
+        header: "Published",
+        cell: ({ row }) => {
+          const blog = row.original;
           return (
-            <span
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${info.getValue()
-                ? "bg-green-100 text-green-800"
-                : "bg-red-100 text-red-800"
-                }`}
-            >
-              {info.getValue() ? "Yes" : "No"}
-            </span>
-          )
+            <div className="flex items-center justify-center">
+              <Toggle
+                checked={blog.published}
+                onChange={() => handleTogglePublish(blog)}
+              />
+            </div>
+          );
         },
       }),
       columnHelper.display({
@@ -105,7 +122,7 @@ const BlogsTable: React.FC = () => {
             </button>
             <button
               onClick={() => {
-                setSelected(row?.original);
+                setSelected(row.original);
                 setShowModal(true);
               }}
               className="p-2 rounded hover:bg-red-700 transition"
@@ -120,6 +137,7 @@ const BlogsTable: React.FC = () => {
     [router]
   );
 
+  // 🧮 React Table Setup
   const table = useReactTable({
     data: blogs || [],
     columns,
@@ -134,7 +152,9 @@ const BlogsTable: React.FC = () => {
   });
 
   if (loading)
-    return <div className="text-center text-gray-400 py-6">Loading blogs...</div>;
+    return (
+      <div className="text-center text-gray-400 py-6">Loading blogs...</div>
+    );
 
   return (
     <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
@@ -286,9 +306,7 @@ const BlogsTable: React.FC = () => {
 
       <ConfirmDeleteModal
         open={showModal}
-        onClose={() => {
-          setShowModal(false);
-        }}
+        onClose={() => setShowModal(false)}
         operatorName={selected?.title}
         onConfirm={handleDelete}
       />

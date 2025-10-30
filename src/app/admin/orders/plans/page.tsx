@@ -18,7 +18,7 @@ function Orders() {
         fetchOrder();
     }, [dispatch]);
 
-    // console.log("--- orders ---", orders);
+    console.log("--- orders ---", orders);
 
     return (
         <div className="p-4">

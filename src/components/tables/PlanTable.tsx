@@ -68,30 +68,11 @@ const ActionCell: React.FC<{
   }, []);
 
   return (
-    <div className="flex items-center gap-2 relative">
+    <div className="flex cursor-pointer items-center gap-2 relative">
       {/* Delete Button */}
-      {/* <button
-        onClick={() => onDelete(row.original)}
-        className="p-1 text-red-400 hover:text-red-300 transition-colors"
-        title="Delete"
-      >
-        <svg
-          className="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-          />
-        </svg>
-      </button> */}
 
       {/* 3-dot More Menu */}
-      <div className="relative" ref={dropdownRef}>
+      <div className="relative cursor-pointer " ref={dropdownRef}>
         <button
           onClick={() => setMenuOpen((val) => !val)}
           className="p-1 cursor-pointer text-gray-400 hover:text-white transition-colors"
@@ -109,7 +90,7 @@ const ActionCell: React.FC<{
           </svg>
         </button>
         {menuOpen && (
-          <div className="absolute right-0 z-20 mt-1 min-w-[180px] bg-gray-900 border border-gray-700 rounded shadow-xl py-1">
+          <div className="absolute cursor-pointer right-0 z-20 mt-1 min-w-[180px] bg-gray-900 border border-gray-700 rounded shadow-xl py-1">
             <button
               onClick={() => {
                 addFeature(row.original);
@@ -375,7 +356,8 @@ const PlanTable: React.FC<PlanTableProps> = ({
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className="px-6 py-4 whitespace-nowrap text-sm"
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${cell.column.id === "actions" ? "cursor-pointer hover:bg-gray-800/70" : ""
+                      }`}
                   >
                     {flexRender(
                       cell.column.columnDef.cell,

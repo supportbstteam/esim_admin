@@ -398,18 +398,18 @@ function Settings() {
   const router = useRouter();
 
   const activity = [
-    {
-      id: 5,
-      label: "Blogs",
-      description: "Manage Your Blog post here",
-      goTo: "/admin/blogs"
-    },
-    {
-      id: 6,
-      label: "Testimonials",
-      description: "Manage Your Testimonials here",
-      goTo: "/admin/testimonials"
-    },
+    // {
+    //   id: 5,
+    //   label: "Blogs",
+    //   description: "Manage Your Blog post here",
+    //   goTo: "/admin/blogs"
+    // },
+    // {
+    //   id: 6,
+    //   label: "Testimonials",
+    //   description: "Manage Your Testimonials here",
+    //   goTo: "/admin/testimonials"
+    // },
   ]
 
   return (
