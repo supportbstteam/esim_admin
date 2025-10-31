@@ -6,43 +6,51 @@ import * as Yup from "yup";
 import { useAppDispatch } from "@/store";
 import {
   createAdminUser,
-  getAllAdminUsers,
   updateAdminUser,
+  getAllAdminUsers,
 } from "@/store/slice/adminUserSlice";
 import toast from "react-hot-toast";
+import { Toggle } from "@/components/ui/Toggle";
+import { api } from "@/lib/api";
 
 function CreateOrUpdate() {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const mode = searchParams.get("mode"); // can be "create" or a user id
-  const [userData, setUserData] = useState<{
-    id?: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-  } | null>(null);
-  const [showPassword, setShowPassword] = useState(false);
+  const mode = searchParams.get("mode");
+  const id = searchParams.get("id");
 
-  // Fetch user if mode is an id
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [userData, setUserData] = useState<any>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isActive, setIsActive] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const isEditMode = mode === "update";
+
+  // ✅ Fetch user data if update mode
   useEffect(() => {
-    const fetchUser = async () => {
-      if (mode && mode !== "create") {
-        try {
-          const response = await fetch(`/api/admin-users/${mode}`); // replace with your backend endpoint
-          const data = await response.json();
-          if (response.ok) setUserData(data);
-          else toast.error("Failed to fetch user data");
-        } catch (err) {
-          console.error(err);
-          toast.error("Error fetching user");
+    const fetchUserById = async () => {
+      setLoading(true);
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const res: any = await api({
+          url: `/admin/users/${id}`,
+          method: "GET",
+        });
+        if (res?.user) {
+          setUserData(res.user);
+          setIsActive(res.user.isActive ?? true);
         }
+      } catch (err) {
+        console.error("User fetch error:", err);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchUser();
-  }, [mode]);
 
-  const isEditMode = mode !== "create";
+    if (isEditMode && id) fetchUserById();
+  }, [isEditMode, id]);
 
   const validationSchema = Yup.object().shape({
     firstName: Yup.string().trim().min(2).required("First name required"),
@@ -63,17 +71,19 @@ function CreateOrUpdate() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: typeof initialValues, { setSubmitting }: any) => {
     try {
+      const payload = { ...values, isActive };
       let response;
+
       if (isEditMode && userData?.id) {
-        response = await dispatch(updateAdminUser({ id: userData.id, ...values }));
+        response = await dispatch(updateAdminUser({ id: userData.id, ...payload }));
       } else {
-        response = await dispatch(createAdminUser(values));
+        response = await dispatch(createAdminUser(payload));
       }
 
       if (response?.type?.endsWith("/fulfilled")) {
-        toast.success(isEditMode ? "Updated user successfully" : "Created new user successfully");
+        toast.success(isEditMode ? "User updated successfully" : "User created successfully");
         dispatch(getAllAdminUsers());
-        router.push("/admin/users"); // ✅ redirect back after submit
+        router.push("/admin/users");
       } else {
         toast.error(response?.payload?.data?.message || "Operation failed");
       }
@@ -85,19 +95,17 @@ function CreateOrUpdate() {
     }
   };
 
-  if (isEditMode && !userData) {
-    return (
-      <div className="flex justify-center items-center h-64 text-gray-600">
-        Loading user details...
-      </div>
-    );
-  }
+  // console.log("---- user ----", userData);
 
   return (
     <div className="max-w-lg mx-auto mt-10 bg-white shadow-md rounded-xl p-8">
       <h2 className="text-2xl font-semibold mb-6 text-gray-900">
         {isEditMode ? "Edit Customer" : "Add New Customer"}
       </h2>
+
+      {loading && (
+        <div className="text-center text-gray-600 mb-6">Fetching user details...</div>
+      )}
 
       <Formik
         initialValues={initialValues}
@@ -107,7 +115,6 @@ function CreateOrUpdate() {
       >
         {({ isSubmitting }) => (
           <Form className="space-y-5" noValidate>
-            {/* First Name */}
             <div>
               <label htmlFor="firstName" className="block mb-1 text-sm font-medium text-gray-800">
                 First Name<span className="text-red-600">*</span>
@@ -116,12 +123,11 @@ function CreateOrUpdate() {
                 id="firstName"
                 name="firstName"
                 type="text"
-                className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
               />
               <ErrorMessage name="firstName" component="div" className="text-red-600 text-xs mt-1" />
             </div>
 
-            {/* Last Name */}
             <div>
               <label htmlFor="lastName" className="block mb-1 text-sm font-medium text-gray-800">
                 Last Name<span className="text-red-600">*</span>
@@ -130,12 +136,11 @@ function CreateOrUpdate() {
                 id="lastName"
                 name="lastName"
                 type="text"
-                className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
               />
               <ErrorMessage name="lastName" component="div" className="text-red-600 text-xs mt-1" />
             </div>
 
-            {/* Email */}
             <div>
               <label htmlFor="email" className="block mb-1 text-sm font-medium text-gray-800">
                 Email<span className="text-red-600">*</span>
@@ -144,12 +149,11 @@ function CreateOrUpdate() {
                 id="email"
                 name="email"
                 type="email"
-                className="w-full text-black border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                className="w-full text-black border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
               />
               <ErrorMessage name="email" component="div" className="text-red-600 text-xs mt-1" />
             </div>
 
-            {/* Password */}
             <div>
               <label htmlFor="password" className="block mb-1 text-sm font-medium text-gray-800">
                 {isEditMode ? "Password (optional)" : "Password"}<span className="text-red-600">*</span>
@@ -159,12 +163,12 @@ function CreateOrUpdate() {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
-                  className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 pr-10 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full border text-black border-gray-300 rounded-lg px-3 py-2 pr-10 focus:ring-2 focus:ring-green-500"
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword((v) => !v)}
-                  className="absolute inset-y-0 right-2 flex items-center text-gray-600 hover:text-gray-800"
+                  onClick={() => setShowPassword(v => !v)}
+                  className="absolute inset-y-0 right-2 flex items-center text-gray-600 hover:text-gray-800 cursor-pointer"
                   tabIndex={-1}
                 >
                   {showPassword ? "👁️" : "👁️‍🗨️"}
@@ -173,22 +177,30 @@ function CreateOrUpdate() {
               <ErrorMessage name="password" component="div" className="text-red-600 text-xs mt-1" />
             </div>
 
-            {/* Buttons */}
-            <div className="flex justify-end space-x-3 mt-4">
-              <button
-                type="button"
-                onClick={() => router.back()}
-                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
-              >
-                {isEditMode ? "Update User" : "Add User"}
-              </button>
+            <div className="flex justify-between items-center mt-6">
+              <div className="flex items-center space-x-3">
+                <Toggle checked={isActive} onChange={setIsActive} />
+                <span className="text-gray-800 text-sm font-medium">
+                  {isActive ? "Active" : "Inactive"}
+                </span>
+              </div>
+
+              <div className="flex space-x-3">
+                <button
+                  type="button"
+                  onClick={() => router.back()}
+                  className="px-4 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+                >
+                  {isEditMode ? "Update User" : "Add User"}
+                </button>
+              </div>
             </div>
           </Form>
         )}

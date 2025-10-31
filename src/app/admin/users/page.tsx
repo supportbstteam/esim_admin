@@ -106,7 +106,7 @@ function Users() {
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-[#16325d]">Customers</h2>
         <button
-          className="rounded px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
+          className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
           onClick={() => router.push("/admin/users/manage?mode=create")}
         >
           + Add Customer

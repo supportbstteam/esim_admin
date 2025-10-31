@@ -12,6 +12,8 @@ import {
 } from "@tanstack/react-table";
 import CustomerAddModal from "@/components/modals/CustomerAddModal";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 type Customer = {
   id: string;
@@ -62,14 +64,17 @@ const CustomerTable: React.FC<Props> = ({
   onToggleBlock,
   onToggleDelete,
 }) => {
+  const router = useRouter();
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null);
 
   const openEditModal = (customer: Customer) => {
-    setEditingCustomer(customer);
-    setModalOpen(true);
+    if (!customer?.id) {
+      return toast.error("User has been deleted");
+    }
+    return router.push(`/admin/users/manage?mode=update&id=${customer.id}`);
   };
 
   const closeModal = () => {
