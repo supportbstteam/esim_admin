@@ -2,17 +2,16 @@
 
 import CustomButton from "@/components/customs/CustomButton";
 import { api } from "@/lib/api";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiEye, HiEyeOff } from "react-icons/hi";
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "@/store";
 import { checkAuth } from "@/store/slice/userSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useAppDispatch } from "@/store";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
@@ -22,16 +21,34 @@ const LoginSchema = Yup.object().shape({
 
 export default function AuthPage() {
   const router = useRouter();
-
   const dispatch = useAppDispatch();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showerorr, setShowerorr] = useState(false);
+
+  // 🔹 Load remembered credentials from cookies
+  const [initialValues, setInitialValues] = useState({
+    username: "",
+    password: "",
+    rememberMe: false,
+  });
+
+  useEffect(() => {
+    const rememberedUsername = Cookies.get("rememberedUsername") || "";
+    const rememberedPassword = Cookies.get("rememberedPassword") || "";
+    const rememberMe = Cookies.get("rememberMe") === "true";
+
+    setInitialValues({
+      username: rememberedUsername,
+      password: rememberedPassword,
+      rememberMe,
+    });
+  }, []);
 
   const handleSubmit = async (values: { username: string; password: string; rememberMe: boolean }) => {
     try {
       const { username, password, rememberMe } = values;
       if (!username || !password) return toast.error("Invalid Credentials");
-
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await api({
         method: "POST",
@@ -43,14 +60,19 @@ export default function AuthPage() {
       if (status === 200) {
         toast.success("Login Successful");
 
-        // ✅ handle remember me logic
+        // ✅ handle remember me logic with cookies
         if (rememberMe) {
-          Cookies.set("token", token, { expires: 7 }); // 7 days persistent
-          router.push("/");
+          Cookies.set("rememberedUsername", username);
+          Cookies.set("rememberedPassword", password);
+          Cookies.set("rememberMe", "true");
         } else {
-          Cookies.set("token", token, { expires: 1 }); // session cookie
-          // router.push("/");
+          Cookies.remove("rememberedUsername");
+          Cookies.remove("rememberedPassword");
+          Cookies.remove("rememberMe");
         }
+
+        // ✅ Save token
+        Cookies.set("token", token, { expires: rememberMe ? 7 : 1 });
 
         await dispatch(checkAuth());
         router.push("/");
@@ -76,16 +98,18 @@ export default function AuthPage() {
           />
           <h2 className="text-2xl font-semibold">Welcome Back</h2>
           <p className="text-center text-sm mt-3 opacity-90 max-w-sm">
-            Log in to access your dashboard, manage your account, and explore all
-            the features.
+            Log in to access your dashboard, manage your account, and explore all the features.
           </p>
         </div>
 
         {/* Right Section */}
         <div className="w-1/2 bg-white flex flex-col justify-center px-10">
           <h2 className="text-2xl font-semibold mb-6 text-gray-800">Login</h2>
+
+          {/* ✅ Formik */}
           <Formik
-            initialValues={{ username: "", password: "", rememberMe: false }}
+            enableReinitialize
+            initialValues={initialValues}
             validationSchema={LoginSchema}
             onSubmit={handleSubmit}
           >
@@ -93,9 +117,7 @@ export default function AuthPage() {
               <Form className="space-y-6">
                 {/* Username */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                   <input
                     name="username"
                     type="text"
@@ -104,18 +126,12 @@ export default function AuthPage() {
                     className="border border-emerald-500 rounded-md w-full px-3 py-2 focus:outline-none bg-white text-gray-900"
                     placeholder="Username"
                   />
-                  <ErrorMessage
-                    name="username"
-                    component="p"
-                    className="mt-1 text-sm text-red-500"
-                  />
+                  <ErrorMessage name="username" component="p" className="mt-1 text-sm text-red-500" />
                 </div>
 
                 {/* Password */}
                 <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Password
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                   <div className="relative">
                     <input
                       name="password"
@@ -133,22 +149,18 @@ export default function AuthPage() {
                       {showPassword ? <HiEyeOff size={20} /> : <HiEye size={20} />}
                     </button>
                   </div>
-                  <ErrorMessage
-                    name="password"
-                    component="p"
-                    className="mt-1 text-sm text-red-500"
-                  />
+                  <ErrorMessage name="password" component="p" className="mt-1 text-sm text-red-500" />
                 </div>
 
                 {/* ✅ Remember Me */}
                 <div className="flex items-center justify-between">
-                  <label className="flex items-center space-x-2 bg-white text-sm text-gray-700">
+                  <label className="flex items-center space-x-2 text-sm text-gray-700">
                     <input
                       type="checkbox"
                       name="rememberMe"
                       checked={values.rememberMe}
                       onChange={handleChange}
-                      className="h-4 w-4 bg-white text-emerald-500 border-emerald-500 rounded"
+                      className="h-4 w-4 text-emerald-600 border-emerald-500 rounded"
                     />
                     <span>Remember me</span>
                   </label>

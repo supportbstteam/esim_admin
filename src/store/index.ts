@@ -18,6 +18,7 @@ import contentSlice from "./slice/contentSlice"
 import orderSlice from "./slice/orderSlice"
 import topUpOrderSlice from "./slice/topUpOrderSlice"
 import blogSlice from "./slice/blogsSlice"
+import querySlice from "./slice/querySlice"
 
 export const store = configureStore({
   reducer: {
@@ -31,6 +32,7 @@ export const store = configureStore({
     plan: planSlice,
     topup: topupSlice,
     customer: customerSlice,
+    query: querySlice,
     contacts: contactSlice,
     socials: socialSlice,
     contents: contentSlice,
