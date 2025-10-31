@@ -1,9 +1,11 @@
-import React from 'react'
+// app/admin/users/manage/page.tsx
+import React, { Suspense } from "react";
+import TestMonialCreate from "./TestMonialCreate";
 
-function page() {
+export default function Page() {
   return (
-    <div>page</div>
-  )
+    <Suspense fallback={<div className="text-center mt-20">Loading...</div>}>
+      <TestMonialCreate />
+    </Suspense>
+  );
 }
-
-export default page

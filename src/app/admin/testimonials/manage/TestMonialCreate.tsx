@@ -1,10 +1,12 @@
-import React from 'react';
+"use client";
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { AppDispatch } from '@/store';
-import { createTestimonial } from '@/store/slice/testimonialsSlice';
+import { AppDispatch, useAppSelector } from '@/store';
+import { createTestimonial, getTestimonialById, updateTestimonial } from '@/store/slice/testimonialsSlice';
 import { Toggle } from '@/components/ui/Toggle';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 // ✅ Validation Schema
 const TestimonialSchema = Yup.object().shape({
@@ -14,16 +16,38 @@ const TestimonialSchema = Yup.object().shape({
   active: Yup.boolean().required(), // ✅ Include toggle in Yup
 });
 
-// ✅ Initial Values
-const initialValues = {
-  name: '',
-  profession: '',
-  content: '',
-  active: true,
-};
+
 
 function TestMonialCreate() {
   const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
+  const id = searchParams.get("id");
+  const { testimonial } = useAppSelector(state => state?.testimonials);
+
+  console.log("---- id ----", id);
+
+  const fetchTestId = async () => {
+    await dispatch(getTestimonialById(id));
+
+  }
+
+  useEffect(() => {
+    if (id && mode === "update")
+      fetchTestId();
+  }, [dispatch]);
+
+
+  console.log("----- testimonial -----", testimonial);
+
+  // ✅ Initial Values
+  const initialValues = {
+    name: (mode === "update" && id && testimonial) ? testimonial?.name : '',
+    profession: (mode === "update" && id && testimonial) ? testimonial?.profession : '',
+    content: (mode === "update" && id && testimonial) ? testimonial?.content : '',
+    active: (mode === "update" && id && testimonial) ? testimonial?.isActive : true,
+  };
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded shadow">
@@ -33,7 +57,13 @@ function TestMonialCreate() {
         initialValues={initialValues}
         validationSchema={TestimonialSchema}
         onSubmit={async (values, { resetForm, setSubmitting }) => {
-          await dispatch(createTestimonial(values));
+          if (!id) {
+            await dispatch(createTestimonial(values));
+          }
+          else {
+            await dispatch(updateTestimonial({ id, data: values }));
+          }
+          router.back();
           setSubmitting(false);
           resetForm();
         }}
@@ -100,7 +130,7 @@ function TestMonialCreate() {
                   ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Submitting...' : 'Create Testimonial'}
+                {isSubmitting ? 'Submitting...' : `${(mode === "update" && id && testimonial) ? "Update" : "Add"} Testimonial`}
               </button>
             </div>
           </Form>

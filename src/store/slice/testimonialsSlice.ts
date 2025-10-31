@@ -13,7 +13,8 @@ export interface Testimonial {
 
 interface TestimonialState {
   testimonials: Testimonial[];
-  testimonial: Testimonial | null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  testimonial: any;
   loading: boolean;
   error: string | null;
 }
