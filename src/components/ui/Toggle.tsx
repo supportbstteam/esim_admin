@@ -8,7 +8,7 @@ export const Toggle = ({
   disabled?: boolean;
 }) => (
   <button
-    className={`relative w-12 h-6 bg-gray-300 rounded-full p-1 transition-colors duration-200 
+    className={`relative w-12 h-6 cursor-pointer bg-gray-300 rounded-full p-1 transition-colors duration-200 
       ${checked ? "bg-green-500" : ""}
       ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
     onClick={() => !disabled && onChange(!checked)}

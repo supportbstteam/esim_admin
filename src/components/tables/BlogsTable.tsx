@@ -115,7 +115,7 @@ const BlogsTable: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push(`/admin/blogs/${row.original.id}`)}
-              className="p-2 rounded hover:bg-gray-700 transition"
+              className="p-2 cursor-pointer rounded hover:bg-gray-700 transition"
               aria-label="Edit blog"
             >
               <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
@@ -125,7 +125,7 @@ const BlogsTable: React.FC = () => {
                 setSelected(row.original);
                 setShowModal(true);
               }}
-              className="p-2 rounded hover:bg-red-700 transition"
+              className="p-2  cursor-pointer rounded hover:bg-red-700 transition"
               aria-label="Delete blog"
             >
               <FiTrash2 className="h-5 w-5 text-red-400 hover:text-white" />

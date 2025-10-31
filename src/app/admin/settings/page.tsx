@@ -108,7 +108,7 @@ function SocialMediaManagement() {
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="text-red-600 font-bold px-2 py-1 hover:bg-red-100 cursor-pointer rounded"
+                        className="text-red-600 cursor-pointer  font-bold px-2 py-1 hover:bg-red-100 cursor-pointer rounded"
                       >
                         <LucideTrash2 />
                       </button>
@@ -117,14 +117,14 @@ function SocialMediaManagement() {
 
                   <button
                     type="button"
-                    className="bg-amber-600 p-2 rounded-md"
+                    className="bg-amber-600 cursor-pointer  p-2 rounded-md"
                     onClick={() => push({ type: "", link: "" })}
                   >
                     + Add Social
                   </button>
                   <button
                     type="submit"
-                    className="bg-[#243c50] p-2 rounded-md absolute right-2 bottom-2 cursor-pointer"
+                    className="bg-[#243c50] cursor-pointer  p-2 rounded-md absolute right-2 bottom-2 cursor-pointer"
                     disabled={!isValid || !dirty}
                   >
                     Submit
@@ -301,7 +301,7 @@ const ContactUsManagement = () => {
                           <Field
                             as="select"
                             name={`contacts[${index}].type`}
-                            className="border border-black text-black px-2 py-1 rounded w-full"
+                            className="border cursor-pointer  border-black text-black px-2 py-1 rounded w-full"
                           >
                             <option value="">Select Type</option>
                             <option value="Email">Email</option>
@@ -348,7 +348,7 @@ const ContactUsManagement = () => {
                         <button
                           type="button"
                           onClick={() => remove(index)}
-                          className="mt-2 sm:mt-0"
+                          className="mt-2 cursor-pointer  sm:mt-0"
                         >
                           <LucideTrash2 className="text-[#ff0000]" />
                         </button>
@@ -370,7 +370,7 @@ const ContactUsManagement = () => {
                       <button
                         type="submit"
                         disabled={!isValid || !dirty || loading}
-                        className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
+                        className={`flex items-center cursor-pointer  justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
                           ? "bg-gray-500 cursor-not-allowed"
                           : "bg-[#243c50] hover:bg-[#1e2f3d] cursor-pointer"
                           }`}

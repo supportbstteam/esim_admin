@@ -95,7 +95,7 @@ export const CommunicationMailManagement = () => {
                                 <button
                                     type="submit"
                                     disabled={!isValid || !dirty || loading}
-                                    className={`flex items-center justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
+                                    className={`flex cursor-pointer  items-center justify-center gap-2 px-4 py-2 rounded-md text-white ${loading
                                         ? "bg-gray-500 cursor-not-allowed"
                                         : "bg-[#243c50] hover:bg-[#1e2f3d]"
                                         }`}
