@@ -107,7 +107,7 @@ function Users() {
         <h2 className="text-2xl font-semibold text-[#16325d]">Customers</h2>
         <button
           className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
-          onClick={() => router.push("/admin/users/manage?mode=create")}
+          onClick={() => router.push("/admin/customers/manage?mode=create")}
         >
           + Add Customer
         </button>

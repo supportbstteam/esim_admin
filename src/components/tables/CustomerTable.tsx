@@ -74,7 +74,7 @@ const CustomerTable: React.FC<Props> = ({
     if (!customer?.id) {
       return toast.error("User has been deleted");
     }
-    return router.push(`/admin/users/manage?mode=update&id=${customer.id}`);
+    return router.push(`/admin/customers/manage?mode=update&id=${customer.id}`);
   };
 
   const closeModal = () => {
