@@ -110,7 +110,7 @@ const CustomerTable: React.FC<Props> = ({
         ),
       }),
       columnHelper.accessor("isBlocked", {
-        header: "Blocked",
+        header: "Status",
         cell: info => (
           <Toggle
             checked={info.getValue()}
