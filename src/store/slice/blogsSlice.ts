@@ -7,6 +7,7 @@ export interface Blog {
   title: string;
   image?: string;
   content: string;
+  summary: string;
   createdAt: string;
   updatedAt: string;
   published: boolean;
@@ -40,11 +41,11 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchAll", async (_, { rejectW
 // 🧩 Create blog
 export const createBlog = createAsyncThunk(
   "blogs/create",
-  async (data: { title: string; content: string; image?: string }, { rejectWithValue }) => {
+  async (data: { title: string; content: string; image?: string, summary:string }, { rejectWithValue }) => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await api({ url: "/admin/blogs", method: "POST", data });
-      toast.success("Blog created successfully");
+      // toast.success("Blog created successfully");
       return res.blog;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -61,7 +62,7 @@ export const updateBlog = createAsyncThunk(
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await api({ url: `/admin/blogs/${id}`, method: "PATCH", data });
-      toast.success("Blog updated successfully");
+      // toast.success("Blog updated successfully");
       return res.blog;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

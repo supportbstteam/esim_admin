@@ -31,6 +31,9 @@ const BlogsTable: React.FC = () => {
   const [selected, setSelected] = useState<Blog | null>(null);
   const [showModal, setShowModal] = useState(false);
 
+
+  console.log("----- blogs ----",blogs);
+
   // 🗑️ Delete handler
   const handleDelete = async () => {
     try {
@@ -69,8 +72,8 @@ const BlogsTable: React.FC = () => {
           <span className="font-medium text-white">{info.getValue()}</span>
         ),
       }),
-      columnHelper.accessor("content", {
-        header: "Content",
+      columnHelper.accessor("summary", {
+        header: "Summary",
         cell: (info) => (
           <div
             className="text-gray-300 line-clamp-2 max-w-xs"

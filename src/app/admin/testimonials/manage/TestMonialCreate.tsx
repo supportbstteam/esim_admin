@@ -113,7 +113,7 @@ function TestMonialCreate() {
             </div>
 
             {/* ✅ Toggle + Submit Button Row */}
-            <div className="flex justify-between items-center mt-6">
+            <div className="mt-6">
               <div className="flex items-center gap-3">
                 <Toggle
                   checked={values.active}
@@ -126,7 +126,7 @@ function TestMonialCreate() {
 
               <button
                 type="submit"
-                className={`bg-green-500 text-white px-4 py-2 rounded font-medium transition
+                className={`bg-green-500 mt-6 text-white px-4 py-2 rounded font-medium transition
                   ${isSubmitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'}`}
                 disabled={isSubmitting}
               >

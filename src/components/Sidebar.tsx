@@ -76,6 +76,7 @@ export default function Sidebar() {
     { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
     { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
+    { href: "/admin/faqs", icon: <Settings size={20} />, label: "Faqs" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 
