@@ -154,7 +154,7 @@ function FaqCreate() {
             </div>
 
             {/* ✅ Active Toggle */}
-            <div className="flex justify-between items-center mt-6">
+            <div className="mt-6">
               <div className="flex items-center gap-3">
                 <Toggle
                   checked={values.active}
@@ -168,7 +168,7 @@ function FaqCreate() {
               <button
                 type="submit"
                 disabled={isSubmitting || loading}
-                className={`bg-green-500 text-white px-5 py-2 rounded-lg font-semibold transition ${
+                className={`bg-green-500 mt-5 text-white px-5 py-2 rounded-lg font-semibold transition ${
                   isSubmitting || loading
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-green-600"
