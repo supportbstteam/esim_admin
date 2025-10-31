@@ -1,6 +1,18 @@
 "use client";
 
-import { Home, Users, Layers, Settings, Cpu, MapPin, FileText, CreditCard, ChevronDown, ChevronRight, LucideSatellite, LucideWorkflow } from "lucide-react";
+import {
+  Home,
+  Users,
+  Layers,
+  Settings,
+  Cpu,
+  FileText,
+  CreditCard,
+  ChevronDown,
+  ChevronRight,
+  LucideSatellite,
+  LucideWorkflow,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,7 +36,7 @@ export default function Sidebar() {
   const handleLogout = async () => {
     await dispatch(logout());
     await dispatch(checkAuth());
-    router.push('/');
+    router.push("/");
   };
 
   useEffect(() => {
@@ -39,8 +51,8 @@ export default function Sidebar() {
     const parts = pathname.split("/").filter(Boolean);
     let section = "";
     let sub = "";
-    if (parts.length >= 2) section = parts[1]; // main section
-    if (parts.length > 2 && parts[2] !== "page") sub = parts[2]; // subpage
+    if (parts.length >= 2) section = parts[1];
+    if (parts.length > 2 && parts[2] !== "page") sub = parts[2];
     const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
     return { sectionTitle: capitalize(section), subTitle: sub ? capitalize(sub) : "" };
   }, [pathname]);
@@ -48,7 +60,6 @@ export default function Sidebar() {
   const navItems = [
     { href: "/admin/dashboard", icon: <Home size={20} />, label: "Dashboard" },
     { href: "/admin/customers", icon: <Users size={20} />, label: "Customers" },
-    // { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
     { href: "/admin/country", icon: <FiAirplay size={20} />, label: "Country" },
     { href: "/admin/plans", icon: <Layers size={20} />, label: "Plans" },
     { href: "/admin/topup", icon: <MdOutlineMobileFriendly size={20} />, label: "Top Up" },
@@ -65,7 +76,6 @@ export default function Sidebar() {
     { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
     { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
-    // { href: "/admin/query", icon: <BsCardHeading size={20} />, label: "Queries" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
   ];
 
@@ -90,13 +100,20 @@ export default function Sidebar() {
           {subTitle && <p className="text-gray-500 dark:text-gray-400 text-sm">{subTitle}</p>}
         </div>
       </div>
-      <nav className="flex-1 p-4 space-y-2">
+
+      {/* ✅ Scrollable nav with hidden scrollbar */}
+      <nav
+        className="flex-1 p-4 space-y-2 overflow-y-auto no-scrollbar"
+      >
         {navItems.map((item) => (
           <div key={item.href}>
             <div
               className={`flex items-center justify-between gap-3 p-2 rounded-lg cursor-pointer transition 
-                ${isActive(item.href) ? "bg-gray-100 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}`}
-              onClick={() => item.subItems ? toggleMenu(item.href) : router.push(item.href)}
+                ${isActive(item.href)
+                  ? "bg-gray-100 dark:bg-gray-700"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                }`}
+              onClick={() => (item.subItems ? toggleMenu(item.href) : router.push(item.href))}
             >
               <div className="flex items-center gap-3">
                 {item.icon} {item.label}
@@ -114,7 +131,10 @@ export default function Sidebar() {
                     key={sub.href}
                     href={sub.href}
                     className={`flex items-center gap-2 p-2 rounded-lg text-sm transition
-                      ${isActive(sub.href) ? "bg-gray-200 dark:bg-gray-700" : "hover:bg-gray-100 dark:hover:bg-gray-700"}`}
+                      ${isActive(sub.href)
+                        ? "bg-gray-200 dark:bg-gray-700"
+                        : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                      }`}
                   >
                     {sub.icon} {sub.label}
                   </Link>
@@ -124,6 +144,27 @@ export default function Sidebar() {
           </div>
         ))}
       </nav>
+
+      {/* ✅ Logout Button fixed at bottom */}
+      {/* <div className="border-t dark:border-gray-700 p-4">
+        <button
+          onClick={handleLogout}
+          className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition"
+        >
+          Logout
+        </button>
+      </div> */}
+
+      {/* ✅ Hidden scrollbar styling */}
+      <style jsx>{`
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none; /* IE and Edge */
+          scrollbar-width: none; /* Firefox */
+        }
+      `}</style>
     </aside>
   );
 }

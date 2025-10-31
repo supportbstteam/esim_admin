@@ -16,10 +16,10 @@ import contactSlice from "./slice/contactSlice"
 import socialSlice from "./slice/socialSlice"
 import contentSlice from "./slice/contentSlice"
 import orderSlice from "./slice/orderSlice"
-import topUpOrderSlice from "./slice/topUpOrderSlice"
 import blogSlice from "./slice/blogsSlice"
 import querySlice from "./slice/querySlice"
 import testimonialSlice from "./slice/testimonialsSlice"
+import topupOrderSlice from "./slice/topupOrderSlice"
 
 export const store = configureStore({
   reducer: {
@@ -38,9 +38,9 @@ export const store = configureStore({
     socials: socialSlice,
     contents: contentSlice,
     orders: orderSlice,
-    topUpOrders: topUpOrderSlice,
     blogs: blogSlice,
-    testimonials: testimonialSlice
+    testimonials: testimonialSlice,
+    topupOrders: topupOrderSlice
   },
 });
 

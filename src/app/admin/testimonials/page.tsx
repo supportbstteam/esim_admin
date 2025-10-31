@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Testimonials() {
-    return (
-        <div>Testimonials</div>
-    )
+function page() {
+  return (
+    <div>page</div>
+  )
 }
 
-export default Testimonials
+export default page

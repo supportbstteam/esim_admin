@@ -23,12 +23,15 @@ export interface ESIM {
 
 interface ESimState {
     eSims: ESIM[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    eSimDetails: any; // ✅ added
     loading: boolean;
     error: string | null;
 }
 
 const initialState: ESimState = {
     eSims: [],
+    eSimDetails: null, // ✅ added
     loading: false,
     error: null,
 };
@@ -57,7 +60,7 @@ export const createESim = createAsyncThunk(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const payload: any = { sims: eSimData };
 
-            console.log("---- payload -----",payload)
+            console.log("---- payload -----", payload)
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const data: any = await api<{ message: string; data: any[] }, typeof payload>({
@@ -67,6 +70,21 @@ export const createESim = createAsyncThunk(
             });
 
             return data.data; // this is an array of created SIMs
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
+        }
+    }
+);
+
+// ✅ Fetch single eSIM details
+export const fetchESimDetails = createAsyncThunk(
+    "eSim/fetchESimDetails",
+    async (id: string, thunkAPI) => {
+        try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data: any = await api<ESIM>({ url: `/admin/e-sim/${id}`, method: "GET" });
+            return data.data;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
@@ -129,6 +147,21 @@ const eSimSlice = createSlice({
         });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         builder.addCase(fetchESims.rejected, (state, action: PayloadAction<any>) => {
+            state.loading = false;
+            state.error = action.payload;
+        });
+
+        builder.addCase(fetchESimDetails.pending, (state) => {
+            state.loading = true;
+            state.error = null;
+        });
+
+        builder.addCase(fetchESimDetails.fulfilled, (state, action: PayloadAction<ESIM>) => {
+            state.loading = false;
+            state.eSimDetails = action.payload;
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        builder.addCase(fetchESimDetails.rejected, (state, action: PayloadAction<any>) => {
             state.loading = false;
             state.error = action.payload;
         });

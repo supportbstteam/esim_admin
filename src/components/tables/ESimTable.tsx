@@ -122,54 +122,56 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                                 </td>
                             </tr>
                         )}
-                        {paginatedESims.map(esim => (
-                            <tr key={esim.id} className="hover:bg-gray-800/50 transition">
-                                <td className="px-6 py-4 text-sm text-gray-400 font-mono">{(esim.iccid ?? "—").slice(0, 16)}...</td>
-                                <td className="px-6 py-4 text-gray-300">
-                                    {esim.user?.firstName + " " + esim.user?.lastName || "User Deleted"}
-                                    <div className="text-xs text-gray-400">{esim.user?.email}</div>
-                                </td>
-                                {/* <td className="px-6 py-4 text-gray-300">{esim.productName}</td> */}
-                                <td className="px-6 py-4 text-[#37c74f] font-medium">{esim.dataAmount} GB</td>
-                                <td className="px-6 py-4 text-gray-400">{esim.price} {esim.currency}</td>
-                                <td className="px-6 py-4">
-                                    <span
-                                        className={`px-2 py-1 rounded-full text-xs font-semibold ${esim.statusText === "completed"
-                                            ? "bg-green-100 text-green-800"
-                                            : esim.statusText === "waiting"
-                                                ? "bg-yellow-100 text-yellow-800"
-                                                : "bg-red-100 text-red-800"
-                                            }`}
-                                    >
-                                        {esim.statusText}
-                                    </span>
-                                </td>
-                                <td className="px-6 py-4">
-                                    {esim.isActive ? (
-                                        <span className="text-green-400 font-semibold">Yes</span>
-                                    ) : (
-                                        <span className="text-red-400">No</span>
-                                    )}
-                                </td>
-                                <td className="px-6 py-4 text-gray-400">
-                                    {new Date(esim.createdAt).toLocaleString("en-IN", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })}
-                                </td>
-                                <td className="px-6 py-4 text-center">
-                                    <div className="flex items-center justify-center gap-3">
-                                        <Link
-                                            href={`/admin/esim/${esim.id}`}
-                                            className="p-2 rounded hover:bg-gray-700 cursor-pointer transition"
-                                            aria-label="View eSIM"
+                        {paginatedESims.map(esim => {
+                          
+                            return (
+                                <tr key={esim.id} className="hover:bg-gray-800/50 transition">
+                                    <td className="px-6 py-4 text-sm text-gray-400 font-mono">{(esim.iccid ?? "—").slice(0, 16)}...</td>
+                                    <td className="px-6 py-4 text-gray-300">
+                                        {esim.user?.firstName + " " + esim.user?.lastName || "User Deleted"}
+                                        <div className="text-xs text-gray-400">{esim.user?.email}</div>
+                                    </td>
+                                    {/* <td className="px-6 py-4 text-gray-300">{esim.productName}</td> */}
+                                    <td className="px-6 py-4 text-[#37c74f] font-medium">{esim.dataAmount} GB</td>
+                                    <td className="px-6 py-4 text-gray-400">{esim.price} {esim.currency}</td>
+                                    <td className="px-6 py-4">
+                                        <span
+                                            className={`px-2 py-1 rounded-full text-xs font-semibold ${esim.statusText === "completed"
+                                                ? "bg-green-100 text-green-800"
+                                                : esim.statusText === "waiting"
+                                                    ? "bg-yellow-100 text-yellow-800"
+                                                    : "bg-red-100 text-red-800"
+                                                }`}
                                         >
-                                            <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
-                                        </Link>
-                                        {/* <button
+                                            {esim.statusText}
+                                        </span>
+                                    </td>
+                                    <td className="px-6 py-4">
+                                        {esim.isActive ? (
+                                            <span className="text-green-400 font-semibold">Yes</span>
+                                        ) : (
+                                            <span className="text-red-400">No</span>
+                                        )}
+                                    </td>
+                                    <td className="px-6 py-4 text-gray-400">
+                                        {new Date(esim.createdAt).toLocaleString("en-IN", {
+                                            day: "2-digit",
+                                            month: "short",
+                                            year: "numeric",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
+                                    </td>
+                                    <td className="px-6 py-4 text-center">
+                                        <div className="flex items-center justify-center gap-3">
+                                            <Link
+                                                href={`/admin/esim/${esim.id}`}
+                                                className="p-2 rounded hover:bg-gray-700 cursor-pointer transition"
+                                                aria-label="View eSIM"
+                                            >
+                                                <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
+                                            </Link>
+                                            {/* <button
                                             onClick={() => {
                                                 setSelectedESim(esim);
                                                 setShowModal(true);
@@ -179,10 +181,11 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                                         >
                                             <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
                                         </button> */}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                                        </div>
+                                    </td>
+                                </tr>
+                            )
+                        })}
                     </tbody>
                 </table>
             </div>
