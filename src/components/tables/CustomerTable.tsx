@@ -113,7 +113,7 @@ const CustomerTable: React.FC<Props> = ({
         header: "Status",
         cell: info => (
           <Toggle
-            checked={info.getValue()}
+            checked={!info.getValue()}
             onChange={val => onToggleBlock(info.row.original.id, val)}
           />
         ),

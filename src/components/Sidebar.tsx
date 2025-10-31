@@ -47,7 +47,7 @@ export default function Sidebar() {
 
   const navItems = [
     { href: "/admin/dashboard", icon: <Home size={20} />, label: "Dashboard" },
-    { href: "/admin/users", icon: <Users size={20} />, label: "Customers" },
+    { href: "/admin/customers", icon: <Users size={20} />, label: "Customers" },
     // { href: "/admin/operators", icon: <MapPin size={20} />, label: "Operators" },
     { href: "/admin/country", icon: <FiAirplay size={20} />, label: "Country" },
     { href: "/admin/plans", icon: <Layers size={20} />, label: "Plans" },

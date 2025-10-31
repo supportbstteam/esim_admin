@@ -1,111 +1,201 @@
-import { api } from "@/lib/api";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { api } from "@/lib/api";
+import toast from "react-hot-toast";
 
-// ===========================
-// Async Thunks
-// ===========================
+export interface Testimonial {
+  id: string;
+  name: string;
+  profession?: string;
+  content: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 
-// Create testimonial
-export const createTestimonial = createAsyncThunk(
-  "testimonials/create",
-  async (data: { name: string; profession?: string; content: string }, { rejectWithValue }) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await api({ url: "/admin/testimonials", method: "POST", data });
-      return res.data.testimonial;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to create testimonial");
-    }
-  }
-);
-
-// Get all testimonials
-export const getAllTestimonials = createAsyncThunk(
-  "testimonials/getAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await api({ url: "/admin/testimonials", method: "GET" });
-      return res.data.testimonials;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch testimonials");
-    }
-  }
-);
-
-// Get single testimonial
-export const getTestimonialById = createAsyncThunk(
-  "testimonials/getById",
-  async (id: string, { rejectWithValue }) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await api({ url: `/admin/testimonials/${id}`, method: "GET" });
-      return res.data.testimonial;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to fetch testimonial");
-    }
-  }
-);
-
-// Update testimonial
-export const updateTestimonial = createAsyncThunk(
-  "testimonials/update",
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async ({ id, data }: { id: string; data: any }, { rejectWithValue }) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await api({ url: `/admin/testimonials/${id}`, method: "PUT", data });
-      return res.data.testimonial;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to update testimonial");
-    }
-  }
-);
-
-// Delete testimonial
-export const deleteTestimonial = createAsyncThunk(
-  "testimonials/delete",
-  async (id: string, { rejectWithValue }) => {
-    try {
-      await api({ url: `/admin/testimonials/${id}`, method: "DELETE" });
-      return id;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data?.message || "Failed to delete testimonial");
-    }
-  }
-);
-
-// ===========================
-// Slice
-// ===========================
 interface TestimonialState {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  testimonials: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  current: any | null;
+  testimonials: Testimonial[];
+  testimonial: Testimonial | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: TestimonialState = {
   testimonials: [],
-  current: null,
+  testimonial: null,
   loading: false,
   error: null,
 };
 
+// ✅ Get all testimonials
+export const getAllTestimonials = createAsyncThunk(
+  "testimonials/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/testimonials`,
+        method: "GET",
+      });
+      return res.testimonials || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message || "Failed to fetch testimonials");
+    }
+  }
+);
+
+// ✅ Get testimonial by ID
+export const getTestimonialById = createAsyncThunk(
+  "testimonials/getById",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/testimonials/${id}`,
+        method: "GET",
+      });
+      return res.testimonial;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message || "Failed to fetch testimonial");
+    }
+  }
+);
+
+// ✅ Create testimonial
+export const createTestimonial = createAsyncThunk(
+  "testimonials/create",
+  async (data: { name: string; profession?: string; content: string }, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/testimonials`,
+        method: "POST",
+        data,
+      });
+      toast.success("Testimonial created successfully");
+      return res.testimonial;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to create testimonial");
+      return rejectWithValue(err?.response?.data?.message || "Failed to create testimonial");
+    }
+  }
+);
+
+// ✅ Update testimonial
+export const updateTestimonial = createAsyncThunk(
+  "testimonials/update",
+  async ({ id, data }: { id: string; data: Partial<Testimonial> }, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/testimonials/${id}`,
+        method: "PUT",
+        data,
+      });
+      toast.success("Testimonial updated successfully");
+      return res.testimonial;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to update testimonial");
+      return rejectWithValue(err?.response?.data?.message || "Failed to update testimonial");
+    }
+  }
+);
+
+// ✅ Delete testimonial
+export const deleteTestimonial = createAsyncThunk(
+  "testimonials/delete",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await api({
+        url: `/admin/testimonials/${id}`,
+        method: "DELETE",
+      });
+      toast.success("Testimonial deleted successfully");
+      return id;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to delete testimonial");
+      return rejectWithValue(err?.response?.data?.message || "Failed to delete testimonial");
+    }
+  }
+);
+
+// ✅ Toggle Active/Inactive
+export const updateTestimonialStatus = createAsyncThunk(
+  "testimonials/updateStatus",
+  async ({ id, isActive }: { id: string; isActive: boolean }, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/testimonials/${id}/status`,
+        method: "PATCH",
+        data: { isActive },
+      });
+      toast.success(`Testimonial ${isActive ? "activated" : "deactivated"} successfully`);
+      return res.testimonial;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to update testimonial status");
+      return rejectWithValue(err?.response?.data?.message || "Failed to update testimonial status");
+    }
+  }
+);
+
 const testimonialSlice = createSlice({
   name: "testimonials",
   initialState,
-  reducers: {},
+  reducers: {
+    clearTestimonial: (state) => {
+      state.testimonial = null;
+    },
+  },
   extraReducers: (builder) => {
-    // Create
     builder
+      // ✅ Get All
+      .addCase(getAllTestimonials.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllTestimonials.fulfilled, (state, action) => {
+        state.loading = false;
+        state.testimonials = action.payload;
+      })
+      .addCase(getAllTestimonials.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateTestimonialStatus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTestimonialStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.testimonials.findIndex(t => t.id === action.payload.id);
+        if (index !== -1) {
+          state.testimonials[index] = action.payload;
+        }
+      })
+      .addCase(updateTestimonialStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // ✅ Get By ID
+      .addCase(getTestimonialById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getTestimonialById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.testimonial = action.payload;
+      })
+      .addCase(getTestimonialById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // ✅ Create
       .addCase(createTestimonial.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -117,46 +207,38 @@ const testimonialSlice = createSlice({
       .addCase(createTestimonial.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
-      });
+      })
 
-    // Get All
-    builder
-      .addCase(getAllTestimonials.pending, (state) => {
+      // ✅ Update
+      .addCase(updateTestimonial.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
-      .addCase(getAllTestimonials.fulfilled, (state, action) => {
-        state.loading = false;
-        state.testimonials = action.payload;
-      })
-      .addCase(getAllTestimonials.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Get by ID
-    builder
-      .addCase(getTestimonialById.fulfilled, (state, action) => {
-        state.current = action.payload;
-      });
-
-    // Update
-    builder
       .addCase(updateTestimonial.fulfilled, (state, action) => {
         state.loading = false;
-        state.testimonials = state.testimonials.map((t) =>
-          t.id === action.payload.id ? action.payload : t
-        );
+        const index = state.testimonials.findIndex(t => t.id === action.payload.id);
+        if (index !== -1) state.testimonials[index] = action.payload;
       })
       .addCase(updateTestimonial.rejected, (state, action) => {
+        state.loading = false;
         state.error = action.payload as string;
-      });
+      })
 
-    // Delete
-    builder
+      // ✅ Delete
+      .addCase(deleteTestimonial.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(deleteTestimonial.fulfilled, (state, action) => {
-        state.testimonials = state.testimonials.filter((t) => t.id !== action.payload);
+        state.loading = false;
+        state.testimonials = state.testimonials.filter(t => t.id !== action.payload);
+      })
+      .addCase(deleteTestimonial.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
+export const { clearTestimonial } = testimonialSlice.actions;
 export default testimonialSlice.reducer;
