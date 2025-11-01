@@ -42,7 +42,7 @@ export const fetchOrders = createAsyncThunk("adminOrders/fetchAll", async (_, th
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response: any = await api<Order[]>({ url: "/admin/orders", method: "GET" });
-        console.log("---- orders in redux ----", response);
+        // console.log("---- orders in redux ----", response);
         return response?.data;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +59,7 @@ export const fetchOrderById = createAsyncThunk(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await api<Order[]>({ url: `/admin/orders/${id}`, method: "GET" });
 
-            return response?.order;
+            return response?.data;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             return thunkAPI.rejectWithValue(err.response?.data?.message || err.message);
