@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -12,132 +12,124 @@ import {
   SortingState,
 } from "@tanstack/react-table";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-import { Blog, deleteBlog, updateBlog } from "@/store/slice/blogsSlice";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
-import { Toggle } from "../ui/Toggle"; // ✅ import your custom toggle
 import { ddmmyyyy } from "@/utils/dateTime";
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const columnHelper = createColumnHelper<any>();
 
-const columnHelper = createColumnHelper<Blog>();
-
-const BlogsTable: React.FC = () => {
+const CmsTable: React.FC = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { blogs, loading } = useAppSelector((state) => state.blogs);
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { contents, loading }: any = useAppSelector((state) => state?.contents);
 
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [selected, setSelected] = useState<Blog | null>(null);
+   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selected, setSelected] = useState<any | null>(null);
   const [showModal, setShowModal] = useState(false);
-
-
-  console.log("----- blogs ----",blogs);
 
   // 🗑️ Delete handler
   const handleDelete = async () => {
     try {
       if (!selected?.id) return;
-      await dispatch(deleteBlog(selected.id)).unwrap();
-      toast.success("Blog deleted successfully!");
+      // await dispatch(deleteContent(selected.id)).unwrap();
+      toast.success("Content deleted successfully!");
       setShowModal(false);
     } catch {
-      toast.error("Failed to delete blog");
+      toast.error("Failed to delete content");
     }
   };
 
-  // 🟢 Publish toggle handler
-  const handleTogglePublish = async (blog: Blog) => {
-    try {
-      // toast.loading("Updating publish status...");
-      await dispatch(
-        updateBlog({ id: blog.id, data: { ...blog, published: !blog.published } })
-      ).unwrap();
-      toast.dismiss();
-      toast.success(
-        `Blog ${blog.published ? "unpublished" : "published"} successfully!`
-      );
-    } catch {
-      toast.dismiss();
-      toast.error("Failed to update publish status");
-    }
-  };
+  // ✅ Use your already-available data
+  const contentArray = useMemo(() => {
+    if (!contents) return [];
+    return Object.values(contents); // each entry has html, page, title, etc.
+  }, [contents]);
 
   // 🧱 Table Columns
   const columns = useMemo(
     () => [
-      columnHelper.accessor("title", {
-        header: "Title",
+      columnHelper.accessor("page", {
+        header: "Page",
         cell: (info) => (
-          <span className="font-medium text-white">{info.getValue()}</span>
-        ),
-      }),
-      columnHelper.accessor("summary", {
-        header: "Summary",
-        cell: (info) => (
-          <div
-            className="text-gray-300 line-clamp-2 max-w-xs"
-            dangerouslySetInnerHTML={{
-              __html: info.getValue() || "",
-            }}
-          />
-        ),
-      }),
-      columnHelper.accessor("createdAt", {
-        header: "Created At",
-        cell: (info) => (
-          <span className="text-gray-400">
-            {ddmmyyyy(info.getValue())}
+          <span className="capitalize font-medium text-white">
+            {info.getValue()}
           </span>
         ),
       }),
-      columnHelper.accessor("published", {
-        header: "Published",
-        cell: ({ row }) => {
-          const blog = row.original;
+      columnHelper.accessor("title", {
+        header: "Title",
+        cell: (info) => (
+          <span className="text-gray-200">{info.getValue()}</span>
+        ),
+      }),
+      columnHelper.accessor("html", {
+        header: "Preview",
+        cell: (info) => {
+          const text = info
+            .getValue()
+            ?.replace(/<[^>]*>/g, "")
+            .replace(/\s+/g, " ")
+            .trim()
+            .slice(0, 80);
           return (
-            <div className="flex items-center justify-center">
-              <Toggle
-                checked={blog.published}
-                onChange={() => handleTogglePublish(blog)}
-              />
-            </div>
+            <span className="text-gray-400 text-sm">
+              {text || "—"}...
+            </span>
           );
         },
       }),
+    //   columnHelper.accessor("createdAt", {
+    //     header: "Created At",
+    //     cell: (info) => (
+    //       <span className="text-gray-400">
+    //         {ddmmyyyy(info.getValue())}
+    //       </span>
+    //     ),
+    //   }),
+    //   columnHelper.accessor("updatedAt", {
+    //     header: "Updated At",
+    //     cell: (info) => (
+    //       <span className="text-gray-400">
+    //         {ddmmyyyy(info.getValue())}
+    //       </span>
+    //     ),
+    //   }),
       columnHelper.display({
         id: "actions",
         header: "Actions",
-        cell: ({ row }) => (
+        cell: ({ row }) => {
+            return(
           <div className="flex items-center gap-2">
             <button
-              onClick={() => router.push(`/admin/blogs/${row.original.id}`)}
-              className="p-2 cursor-pointer rounded hover:bg-gray-700 transition"
-              aria-label="Edit blog"
+              onClick={() => router.push(`/admin/cms/${row.original.page}`)}
+              className="p-2 rounded cursor-pointer hover:bg-gray-700 transition"
             >
               <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
             </button>
-            <button
+            {/* <button
               onClick={() => {
                 setSelected(row.original);
                 setShowModal(true);
               }}
-              className="p-2  cursor-pointer rounded hover:bg-red-700 transition"
-              aria-label="Delete blog"
+              className="p-2 rounded hover:bg-red-700 transition"
             >
               <FiTrash2 className="h-5 w-5 text-red-400 hover:text-white" />
-            </button>
+            </button> */}
           </div>
-        ),
+        )},
       }),
     ],
     [router]
   );
 
-  // 🧮 React Table Setup
+  // ⚙️ Table setup
   const table = useReactTable({
-    data: blogs || [],
+    data: contentArray,
     columns,
     state: { globalFilter, sorting },
     onGlobalFilterChange: setGlobalFilter,
@@ -151,7 +143,9 @@ const BlogsTable: React.FC = () => {
 
   if (loading)
     return (
-      <div className="text-center text-gray-400 py-6">Loading blogs...</div>
+      <div className="text-center text-gray-400 py-6">
+        Loading content...
+      </div>
     );
 
   return (
@@ -177,7 +171,7 @@ const BlogsTable: React.FC = () => {
           <input
             value={globalFilter ?? ""}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder="Search blogs..."
+            placeholder="Search CMS pages..."
             className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#37c74f]"
           />
         </div>
@@ -187,13 +181,13 @@ const BlogsTable: React.FC = () => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#16325d] to-[#37c74f]">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id}>
+                {hg.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-black/20"
                     onClick={header.column.getToggleSortingHandler()}
+                    className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-black/20"
                   >
                     <div className="flex items-center gap-2">
                       {flexRender(
@@ -244,8 +238,14 @@ const BlogsTable: React.FC = () => {
               table.getRowModel().rows.map((row) => (
                 <tr key={row.id} className="hover:bg-gray-800/50 transition">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-6 py-4 text-sm text-gray-300">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <td
+                      key={cell.id}
+                      className="px-6 py-4 text-sm text-gray-300"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -256,7 +256,7 @@ const BlogsTable: React.FC = () => {
                   colSpan={columns.length}
                   className="text-center text-gray-400 py-6"
                 >
-                  No blogs found.
+                  No CMS content found.
                 </td>
               </tr>
             )}
@@ -274,7 +274,7 @@ const BlogsTable: React.FC = () => {
           –
           {Math.min(
             (table.getState().pagination.pageIndex + 1) *
-            table.getState().pagination.pageSize,
+              table.getState().pagination.pageSize,
             table.getFilteredRowModel().rows.length
           )}{" "}
           of {table.getFilteredRowModel().rows.length}
@@ -312,4 +312,4 @@ const BlogsTable: React.FC = () => {
   );
 };
 
-export default BlogsTable;
+export default CmsTable;

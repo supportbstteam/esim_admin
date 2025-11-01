@@ -8,6 +8,7 @@ import { createTopupPlans, deleteTopupPlan, fetchTopupPlans, postInActiveTopupPl
 import { fetchThirdPartyTopupPlans } from "@/store/slice/ThirdPartyTopupSlice";
 import TopupTable from "@/components/tables/TopUpTable";
 import { Loader2 } from "lucide-react";
+import SubHeader from "@/components/common/SubHeader";
 
 function Topup() {
     const dispatch = useAppDispatch();
@@ -28,7 +29,7 @@ function Topup() {
     // Modal open state
     const [isModalOpen, setIsModalOpen] = useState(false);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const handleAddPlan = async (values: any) => {
+    const handleAddPlan = async () => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await dispatch(createTopupPlans());
@@ -81,22 +82,17 @@ function Topup() {
 
     return (
         <div>
-            <div className="flex justify-between items-center w-full">
-                <h1 className="text-xl  font-semibold mb-4 text-black ">Top Up</h1>
-                <button
-                    disabled={loading}
-                    className="bg-[#16325d] flex row items-center justify-center cursor-pointer text-white rounded px-4 py-2 mb-4"
-                    onClick={handleAddPlan}
-                >
-
-                    {loading && <Loader2 className="h-4 w-4 animate-spin text-white" />}
-                    {loading ? "Importing..." : "Import Topup Plans"}
-                </button>
-            </div>
-            <ModalTopupForm
-                open={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleAddPlan}
+            <SubHeader
+                title="Top Up"
+                disable={loading}
+                onClick={() => {
+                    if (!loading)
+                        handleAddPlan()
+                }}
+                showBackButton={false}
+                addButtonText={
+                    loading ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : "Import Top Up"
+                }
             />
 
             {/* TopupTable integration */}

@@ -1,4 +1,5 @@
 "use client";
+import PageHeader from '@/components/common/PageHeader';
 import CustomerAddModal from '@/components/modals/CustomerAddModal';
 import CustomerDeleteModal from '@/components/modals/CustomerDeleteModal';
 import CustomerTable from '@/components/tables/CustomerTable';
@@ -103,15 +104,12 @@ function Users() {
 
   return (
     <div className="px-4 mt-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-semibold text-[#16325d]">Customers</h2>
-        <button
-          className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
-          onClick={() => router.push("/admin/customers/manage?mode=create")}
-        >
-          + Add Customer
-        </button>
-      </div>
+      <PageHeader
+        showBackButton={false}
+        title="Customers"
+        addButtonText="+ Add Customer"
+        addButtonRoute="/admin/customers/manage?mode=create"
+      />
 
       <CustomerTable
         customers={filteredCustomers}

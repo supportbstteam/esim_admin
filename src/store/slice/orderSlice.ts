@@ -22,8 +22,10 @@ interface Order {
 }
 
 interface OrderState {
-    orders: Order[];
-    order: Order | null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    orders: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    order: any | null;
     loading: boolean;
     error: string | null;
 }
@@ -40,7 +42,8 @@ export const fetchOrders = createAsyncThunk("adminOrders/fetchAll", async (_, th
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const response: any = await api<Order[]>({ url: "/admin/orders", method: "GET" });
-        return response?.orders;
+        console.log("---- orders in redux ----", response);
+        return response?.data;
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

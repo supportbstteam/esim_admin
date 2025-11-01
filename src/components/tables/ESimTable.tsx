@@ -4,6 +4,8 @@ import Link from "next/link";
 import { FaTrash, FaEye } from "react-icons/fa";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
+import moment from "moment";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 // Type your eSIM data as needed
 type ESim = {
@@ -123,10 +125,10 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                             </tr>
                         )}
                         {paginatedESims.map(esim => {
-                          
+
                             return (
                                 <tr key={esim.id} className="hover:bg-gray-800/50 transition">
-                                    <td className="px-6 py-4 text-sm text-gray-400 font-mono">{(esim.iccid ?? "—").slice(0, 16)}...</td>
+                                    <td className="px-6 py-4 text-sm text-gray-400 font-mono">{(esim.iccid ?? "—").slice(0, 16)}</td>
                                     <td className="px-6 py-4 text-gray-300">
                                         {esim.user?.firstName + " " + esim.user?.lastName || "User Deleted"}
                                         <div className="text-xs text-gray-400">{esim.user?.email}</div>
@@ -154,13 +156,15 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                                         )}
                                     </td>
                                     <td className="px-6 py-4 text-gray-400">
-                                        {new Date(esim.createdAt).toLocaleString("en-IN", {
+                                        {/* {new Date(esim.createdAt).toLocaleString("en-IN", {
                                             day: "2-digit",
                                             month: "short",
                                             year: "numeric",
                                             hour: "2-digit",
                                             minute: "2-digit",
-                                        })}
+                                        })} */}
+                                        {ddmmyyyy(esim.createdAt)}
+
                                     </td>
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex items-center justify-center gap-3">

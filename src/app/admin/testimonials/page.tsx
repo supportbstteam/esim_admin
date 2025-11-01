@@ -1,4 +1,5 @@
 "use client";
+import PageHeader from '@/components/common/PageHeader';
 import TestimonialsTable from '@/components/tables/TestimonialsTable';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { getAllTestimonials } from '@/store/slice/testimonialsSlice';
@@ -7,7 +8,7 @@ import React, { useEffect } from 'react'
 
 function Testimonial() {
 
-    const {testimonials} = useAppSelector(state => state?.testimonials);
+    const { testimonials } = useAppSelector(state => state?.testimonials);
     const router = useRouter();
     const dispatch = useAppDispatch();
     const fetchTest = async () => {
@@ -17,20 +18,17 @@ function Testimonial() {
         fetchTest();
     }, [dispatch]);
 
-    console.log("----- testimonials -----",testimonials);
+    console.log("----- testimonials -----", testimonials);
 
     return (
         <div>
-            <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-semibold text-[#16325d]">Testimonials</h2>
-                <button
-                    className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
-                    onClick={() => router.push("/admin/testimonials/manage?mode=create")}
-                >
-                    + Add Testimonial
-                </button>
-            </div>
-            <TestimonialsTable/>
+            <PageHeader
+                title="Testimonials"
+                addButtonText="+ Add Testimonial"
+                showBackButton={false}
+                addButtonRoute="/admin/testimonials/manage?mode=create"
+            />
+            <TestimonialsTable />
         </div>
     )
 }

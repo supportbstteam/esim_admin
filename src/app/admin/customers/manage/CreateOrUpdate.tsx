@@ -12,6 +12,7 @@ import {
 import toast from "react-hot-toast";
 import { Toggle } from "@/components/ui/Toggle";
 import { api } from "@/lib/api";
+import PageHeader from "@/components/common/PageHeader";
 
 function CreateOrUpdate() {
   const dispatch = useAppDispatch();
@@ -93,7 +94,7 @@ function CreateOrUpdate() {
     }
   };
 
-  console.log("----- user data ----", userData);
+  // console.log("----- user data ----", userData);
 
   // ✅ Skeleton component for loading state
   const SkeletonField = () => (
@@ -116,9 +117,10 @@ function CreateOrUpdate() {
 
   return (
     <div className="max-w-lg mx-auto mt-10 bg-white shadow-md rounded-xl p-8">
-      <h2 className="text-2xl font-semibold mb-6 text-gray-900">
-        {isEditMode ? "Edit Customer" : "Add New Customer"}
-      </h2>
+      <PageHeader
+        title={isEditMode ? "Edit Customer" : "Add New Customer"}
+        showAddButton={false}
+      />
 
       {loading ? (
         <SkeletonField />

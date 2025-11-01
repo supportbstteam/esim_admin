@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Loader from "@/components/loader";
 import { useAppDispatch, useAppSelector } from "@/store";
 import ESimTable from "@/components/tables/ESimTable";
+import PageHeader from "@/components/common/PageHeader";
 
 export default function ESim() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -74,28 +75,13 @@ export default function ESim() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#000]">E-SIMs</h1>
-        {/* <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-6 py-3 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-          Add E-SIM
-        </button> */}
-      </div>
+      <PageHeader
+        showAddButton={false}
+        showBackButton={false}
+        title="E-Sims"
+        addButtonText="+ Add Testimonial"
+        addButtonRoute="/admin/testimonials/manage?mode=create"
+      />
 
       <ESimModal
         open={modalOpen}

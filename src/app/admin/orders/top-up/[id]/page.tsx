@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import moment from "moment";
-import { SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { useAppDispatch, useAppSelector } from "@/store";
@@ -13,6 +12,7 @@ import { ActivateCard } from "@/components/Cards/EsimScanner";
 import OrderSummary from "@/components/Cards/OrderSummaryCard";
 import RechargeHistory from "@/components/tables/RechargeHistory";
 import { fetchTopUpOrderById } from "@/store/slice/topupOrderSlice";
+import PageHeader from "@/components/common/PageHeader";
 
 function TopUpOrderDetails() {
   const { id } = useParams();
@@ -40,41 +40,44 @@ function TopUpOrderDetails() {
   return (
     <div className=" mx-auto px-4 md:px-10 py-6">
       {/* ✅ eSIM Carousel Section */}
-      <label className="text-black text-2xl font-semibold" >E-SIM Details</label>
-          {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            topUpOrder.esims.map((esim: any, index: number) => (
-              <SwiperSlide key={index}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
-                  <div className="md:col-span-2 mx-10">
-                    <EsimInfo
-                      countryName={esim?.country?.name || topUpOrder?.country?.name || "Unknown"}
-                      countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
-                      planType={esim?.productName?.replace(/-$/, "") || "N/A"}
-                      expired={false}
-                      simNo={esim?.iccid || "N/A"}
-                      purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                      activationDate={moment(esim?.startDate).format("MMM Do YY")}
-                      validityDays={String(esim?.validityDays || 0)}
-                      dataUsed={0}
-                      dataTotal={esim?.dataAmount || 0}
-                      price={`${currencySymbol} ${esim?.price || "0.00"}`}
-                      planStart={moment(esim?.startDate).format("MMM Do YY")}
-                      planEnd={moment(esim?.endDate).format("MMM Do YY")}
-                      onRecharge={() => alert("Recharge clicked!")}
-                    />
-                  </div>
+      <PageHeader
+        title="Top Up Details"
+        addButtonText="+ Add Testimonial"
+        showAddButton={false}
+        addButtonRoute="/admin/testimonials/manage?mode=create"
+      />
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        topUpOrder.esims.map((esim: any, index: number) => (
+          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
+            <div className="md:col-span-2 ">
+              <EsimInfo
+                countryName={esim?.country?.name || topUpOrder?.country?.name || "Unknown"}
+                countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
+                planType={esim?.productName?.replace(/-$/, "") || "N/A"}
+                expired={false}
+                simNo={esim?.iccid || "N/A"}
+                purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
+                activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                validityDays={String(esim?.validityDays || 0)}
+                dataUsed={0}
+                dataTotal={esim?.dataAmount || 0}
+                price={`${currencySymbol} ${esim?.price || "0.00"}`}
+                planStart={moment(esim?.startDate).format("MMM Do YY")}
+                planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                onRecharge={() => alert("Recharge clicked!")}
+              />
+            </div>
 
-                  <div className="md:col-span-1 flex justify-center">
-                    <ActivateCard qrValue={esim?.qrCodeUrl} code={esim?.qrCodeUrl} />
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
+            <div className="md:col-span-1 flex justify-center">
+              <ActivateCard qrValue={esim?.qrCodeUrl} code={esim?.qrCodeUrl} />
+            </div>
+          </div>
+        ))}
 
       {/* ✅ Recharge History */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
-        <div className="md:col-span-2 mx-10">
+        <div className="md:col-span-2">
           {activeSim?.topUps?.length ? (
             <RechargeHistory
               // eslint-disable-next-line @typescript-eslint/no-explicit-any

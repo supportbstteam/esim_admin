@@ -22,6 +22,7 @@ import {
     deleteFaq,
     updateFaqStatus,
 } from "@/store/slice/faqSlice";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columnHelper = createColumnHelper<any>();
@@ -42,7 +43,7 @@ const FaqTable: React.FC = () => {
         dispatch(getAllFaqs());
     }, [dispatch]);
 
-    console.log("----- fays ----",faqs);
+    console.log("----- fays ----", faqs);
 
     // 🗑️ Delete handler
     const handleDelete = async () => {
@@ -77,14 +78,14 @@ const FaqTable: React.FC = () => {
             columnHelper.accessor("question", {
                 header: "Question",
                 cell: (info) => (
-                    <span className="font-medium text-white">{info.getValue()}</span>
+                    <span className="font-medium text-white">{info.getValue().length > 10 ? `${info.getValue().slice(0, 30)}...` : info.getValue()}</span>
                 ),
             }),
             columnHelper.accessor("answer", {
                 header: "Answer",
                 cell: (info) => (
                     <div className="text-gray-300 line-clamp-2 max-w-md">
-                        {info.getValue()}
+                        {info.getValue().length > 10 ? `${info.getValue().slice(0, 30)}...` : info.getValue()}
                     </div>
                 ),
             }),
@@ -98,13 +99,7 @@ const FaqTable: React.FC = () => {
                 header: "Created At",
                 cell: (info) => (
                     <span className="text-gray-400">
-                        {new Date(info.getValue()).toLocaleString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        })}
+                        {ddmmyyyy(info.getValue())}
                     </span>
                 ),
             }),

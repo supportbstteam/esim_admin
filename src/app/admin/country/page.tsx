@@ -8,6 +8,7 @@ import AddCountryModal from '@/components/modals/AddCountryModal';
 import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
+import PageHeader from '@/components/common/PageHeader';
 
 function Country() {
   const router = useRouter();
@@ -74,18 +75,11 @@ function Country() {
   return (
     <div className="p-6">
       {/* Header with Add Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#000]">Countries</h1>
-        {/* <button
-          onClick={() => {
-            setEditCountry(null);
-            setIsAddModalOpen(true);
-          }}
-          className="bg-[#16325d] text-white rounded px-4 py-2 mb-4"
-        >
-          Add Country
-        </button> */}
-      </div>
+      <PageHeader
+        title="Countries"
+        showAddButton={false}
+        showBackButton={false}
+      />
 
       {/* Countries Table */}
       <CountryTable

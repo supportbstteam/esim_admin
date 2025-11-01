@@ -8,6 +8,7 @@ import { addFeaturePlan, createPlansDb, deletePlanDb, fetchPlansDb, togglePlanSt
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 import { Loader2 } from "lucide-react";
+import SubHeader from "@/components/common/SubHeader";
 
 function Plans() {
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ function Plans() {
   // Step 1: Modal open state
   const [isModalOpen, setIsModalOpen] = useState(false);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleAddPlan = async (values: any) => {
+  const handleAddPlan = async () => {
     // setLoading(true)
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -101,22 +102,16 @@ function Plans() {
 
   return (
     <div>
-      <div className="flex justify-between w-full items-center">
-        <h1 className="text-xl font-semibold mb-4 text-black">Plans</h1>
-        <button
-          disabled={loading}
-          className="bg-[#16325d] flex row justify-center items-center gap-2 cursor-pointer text-white rounded px-4 py-2 mb-4"
-          onClick={handleAddPlan}
-        >
-          {loading && <Loader2 className="h-4 w-4 animate-spin text-white" />}
-          {loading ? "Importing..." : "Import Plans"}
-        </button>
-      </div>
-
-      <ModalPlanForm
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddPlan}
+      <SubHeader
+        title="Plans"
+        disable={loading}
+        onClick={() => {
+          handleAddPlan()
+        }}
+        showBackButton={false}
+        addButtonText={
+          loading ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : "Import Plans"
+        }
       />
 
       {/* Add PlanTable here */}

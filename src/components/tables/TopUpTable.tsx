@@ -10,6 +10,7 @@ import {
     createColumnHelper,
     SortingState,
 } from "@tanstack/react-table";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 interface Topup {
     id: string;
@@ -83,11 +84,7 @@ const TopupTable: React.FC<TopupTableProps> = ({
                 header: "Created",
                 cell: (info) => (
                     <div className="text-gray-400">
-                        {new Date(info.getValue()).toLocaleDateString("en-GB", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                        })}
+                        {ddmmyyyy(info.getValue())}
                     </div>
                 ),
             }),

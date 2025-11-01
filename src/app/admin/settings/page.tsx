@@ -10,6 +10,7 @@ import { createContacts, getContacts, updateContact } from '@/store/slice/contac
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { CommunicationMailManagement } from '@/components/container/CommunicationMail';
+import PageHeader from '@/components/common/PageHeader';
 // Profile component remains unchanged -- updated the vercel
 
 const socialSchema = Yup.object().shape({
@@ -414,8 +415,13 @@ function Settings() {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6 text-[#16325d]">Settings</h2>
-
+      <PageHeader
+        title="Settings"
+        showAddButton={false}
+        showBackButton={false}
+        addButtonText="+ Add Testimonial"
+        addButtonRoute="/admin/testimonials/manage?mode=create"
+      />
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         activity.map((item): any => (

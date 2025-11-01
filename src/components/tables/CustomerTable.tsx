@@ -14,6 +14,7 @@ import CustomerAddModal from "@/components/modals/CustomerAddModal";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 type Customer = {
   id: string;
@@ -122,13 +123,7 @@ const CustomerTable: React.FC<Props> = ({
         header: "Created At",
         cell: info => (
           <span className="text-gray-300">
-            {new Date(info.getValue()).toLocaleString("en-IN", {
-              day: "2-digit",
-              month: "short",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
+            {ddmmyyyy(info.getValue())}
           </span>
         ),
         sortingFn: "datetime",

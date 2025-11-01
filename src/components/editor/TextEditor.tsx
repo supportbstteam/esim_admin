@@ -9,7 +9,9 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchContent, fetchAllContent, saveContentThunk } from "@/store/slice/contentSlice";
 import type { EditorProps } from "react-draft-wysiwyg";
 import toast from "react-hot-toast";
-import { FiAlertTriangle, FiCheckCircle, FiXCircle } from "react-icons/fi";
+import { FiAlertTriangle, FiArrowLeft, FiCheckCircle, FiXCircle } from "react-icons/fi";
+import PageHeader from "../common/PageHeader";
+import { useRouter } from "next/navigation";
 
 export const Editor = dynamic<EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -22,9 +24,11 @@ interface ContentEditorProps {
 
 export default function ContentEditor({ page }: ContentEditorProps) {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const content = useAppSelector((state) => state.contents.contents[page]);
   const loading = useAppSelector((state) => state.contents.loading);
   const error = useAppSelector((state) => state.contents.error);
+
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [title, setTitle] = useState(page !== "other" ? content?.title || page : "");
@@ -134,9 +138,13 @@ export default function ContentEditor({ page }: ContentEditorProps) {
   return (
     <div className="p-6 max-w-full mx-auto">
       <div className="flex items-center justify-between gap-4 mb-4">
-        <h1 className="text-3xl font-bold text-[#16325d] capitalize">
-          {page === "other" ? "Add New CMS Page" : `${title}`}
-        </h1>
+        <div className="flex items-center gap-3">
+          <FiArrowLeft
+            className="text-[#16325d] text-xl cursor-pointer hover:text-[#28a23a] transition"
+            onClick={() => router.back()}
+          />
+          <h2 className="text-2xl font-semibold text-[#16325d]">{page === "other" ? "Add New CMS Page" : `${title}`}</h2>
+        </div>
 
         <div className="flex items-center gap-2">
           <button
@@ -156,6 +164,7 @@ export default function ContentEditor({ page }: ContentEditorProps) {
           )}
         </div>
       </div>
+
 
       {/* Input for "other" page */}
       {page === "other" && (

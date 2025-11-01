@@ -2,6 +2,7 @@
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { FaEye } from "react-icons/fa";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 type Transaction = {
     id: string;
@@ -173,13 +174,7 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                                     )}
                                 </td>
                                 <td className="px-6 py-4 text-gray-400">
-                                    {new Date(order.createdAt).toLocaleString("en-IN", {
-                                        day: "2-digit",
-                                        month: "short",
-                                        year: "numeric",
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                    })}
+                                    {ddmmyyyy(order?.createdAt)}
                                 </td>
                                 <td className="px-6 py-4 text-center">
                                     <Link

@@ -7,6 +7,7 @@ import { AppDispatch, useAppSelector } from '@/store';
 import { createTestimonial, getTestimonialById, updateTestimonial } from '@/store/slice/testimonialsSlice';
 import { Toggle } from '@/components/ui/Toggle';
 import { useRouter, useSearchParams } from 'next/navigation';
+import PageHeader from '@/components/common/PageHeader';
 
 // ✅ Validation Schema
 const TestimonialSchema = Yup.object().shape({
@@ -51,7 +52,10 @@ function TestMonialCreate() {
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded shadow">
-      <h2 className="text-xl font-bold mb-4 text-black">Add Testimonial</h2>
+      <PageHeader
+        title={mode === "update" ? "Update Testimonial" : "Add Testimonial"}
+        showAddButton={false}
+      />
 
       <Formik
         initialValues={initialValues}

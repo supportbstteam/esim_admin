@@ -23,6 +23,7 @@ import {
     updateTestimonial,
     updateTestimonialStatus,
 } from "@/store/slice/testimonialsSlice";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columnHelper = createColumnHelper<any>();
@@ -83,7 +84,7 @@ const TestimonialsTable: React.FC = () => {
                 header: "Content",
                 cell: (info) => (
                     <div className="text-gray-300 line-clamp-2 max-w-xs">
-                        {info.getValue()}
+                        {info.getValue().length > 10 ? `${info.getValue().slice(0, 30)}...` : info.getValue()}
                     </div>
                 ),
             }),
@@ -91,13 +92,7 @@ const TestimonialsTable: React.FC = () => {
                 header: "Created At",
                 cell: (info) => (
                     <span className="text-gray-400">
-                        {new Date(info.getValue()).toLocaleString("en-IN", {
-                            day: "2-digit",
-                            month: "short",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        })}
+                        {ddmmyyyy(info.getValue())}
                     </span>
                 ),
             }),

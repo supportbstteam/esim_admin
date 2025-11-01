@@ -7,7 +7,7 @@ import draftToHtml from "draftjs-to-html";
 import htmlToDraft from "html-to-draftjs";
 import { useAppDispatch } from "@/store";
 import toast from "react-hot-toast";
-import { FiAlertTriangle, FiCheckCircle } from "react-icons/fi";
+import { FiAlertTriangle, FiArrowLeft, FiCheckCircle } from "react-icons/fi";
 import { createBlog, updateBlog } from "@/store/slice/blogsSlice";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
@@ -140,9 +140,15 @@ export default function BlogEditor({ blogId }: BlogEditorProps) {
         <Form className="p-6 max-w-full mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
-            <h1 className="text-3xl font-bold text-[#16325d]">
-              {blogId ? "Edit Blog" : "Add Blog"}
-            </h1>
+            <div className="flex items-center gap-3">
+              <FiArrowLeft
+                className="text-[#16325d] text-xl cursor-pointer hover:text-[#28a23a] transition"
+                onClick={() => router.back()}
+              />
+              <h2 className="text-2xl font-semibold text-[#16325d]">{blogId ? "Edit Blog" : "Add Blog"}</h2>
+            </div>
+
+
             <button
               type="button"
               onClick={() => setShowHtml((p) => !p)}

@@ -3,6 +3,7 @@
 export const dynamic = "force-dynamic";
 export const fetchCache = "force-no-store";
 
+import PageHeader from "@/components/common/PageHeader";
 import BlogsTable from "@/components/tables/BlogsTable";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchBlogs } from "@/store/slice/blogsSlice";
@@ -22,7 +23,7 @@ export default function Blogs() {
 
   return (
     <div className="px-4 mt-6">
-      <div className="flex items-center justify-between mb-6">
+      {/* <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-semibold text-[#16325d]">Blogs</h2>
         <button
           className="rounded cursor-pointer  px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
@@ -30,7 +31,13 @@ export default function Blogs() {
         >
           + Add Blog
         </button>
-      </div>
+      </div> */}
+      <PageHeader
+        title="Blogs"
+        addButtonText="+ Add Blog"
+        addButtonRoute="/admin/blogs/create"
+        showBackButton={false}
+      />
 
       <BlogsTable />
     </div>

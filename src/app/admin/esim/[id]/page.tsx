@@ -14,6 +14,7 @@ import { ActivateCard } from "@/components/Cards/EsimScanner";
 import OrderSummary from "@/components/Cards/OrderSummaryCard";
 import RechargeHistory from "@/components/tables/RechargeHistory";
 import { fetchESimDetails } from "@/store/slice/eSimSlice";
+import PageHeader from "@/components/common/PageHeader";
 
 function ESimDetails() {
   const { id } = useParams();
@@ -36,37 +37,42 @@ function ESimDetails() {
   return (
     <div className=" mx-auto px-4 md:px-10 py-6">
       {/* ✅ eSIM Carousel Section */}
-      <label className="text-black text-2xl font-semibold" >E-SIM Details</label>
-          {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            eSimDetails.esims.map((esim: any, index: number) => (
-              <SwiperSlide key={index}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
-                  <div className="md:col-span-2 mx-10">
-                    <EsimInfo
-                      countryName={esim?.country?.name || eSimDetails?.country?.name || "Unknown"}
-                      countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
-                      planType={esim?.productName?.replace(/-$/, "") || "N/A"}
-                      expired={false}
-                      simNo={esim?.iccid || "N/A"}
-                      purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                      activationDate={moment(esim?.startDate).format("MMM Do YY")}
-                      validityDays={String(esim?.validityDays || 0)}
-                      dataUsed={0}
-                      dataTotal={esim?.dataAmount || 0}
-                      price={`${currencySymbol} ${esim?.price || "0.00"}`}
-                      planStart={moment(esim?.startDate).format("MMM Do YY")}
-                      planEnd={moment(esim?.endDate).format("MMM Do YY")}
-                      onRecharge={() => alert("Recharge clicked!")}
-                    />
-                  </div>
+      <PageHeader
+        title="E-SIM Details"
+        addButtonText="+ Add Testimonial"
+        showAddButton={false}
+        addButtonRoute="/admin/testimonials/manage?mode=create"
+      />
+      {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        eSimDetails.esims.map((esim: any, index: number) => (
+          <SwiperSlide key={index}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
+              <div className="md:col-span-2 mx-10">
+                <EsimInfo
+                  countryName={esim?.country?.name || eSimDetails?.country?.name || "Unknown"}
+                  countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
+                  planType={esim?.productName?.replace(/-$/, "") || "N/A"}
+                  expired={false}
+                  simNo={esim?.iccid || "N/A"}
+                  purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
+                  activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                  validityDays={String(esim?.validityDays || 0)}
+                  dataUsed={0}
+                  dataTotal={esim?.dataAmount || 0}
+                  price={`${currencySymbol} ${esim?.price || "0.00"}`}
+                  planStart={moment(esim?.startDate).format("MMM Do YY")}
+                  planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                  onRecharge={() => alert("Recharge clicked!")}
+                />
+              </div>
 
-                  <div className="md:col-span-1 flex justify-center">
-                    <ActivateCard qrValue={esim?.qrCodeUrl} code={esim?.qrCodeUrl} />
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
+              <div className="md:col-span-1 flex justify-center">
+                <ActivateCard qrValue={esim?.qrCodeUrl} code={esim?.qrCodeUrl} />
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
 
       {/* ✅ Recharge History */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">

@@ -4,12 +4,13 @@ import React, { useEffect } from "react";
 import OrderTable from "@/components/tables/OrderTable";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchOrders } from "@/store/slice/orderSlice";
+import PageHeader from "@/components/common/PageHeader";
 
 function Orders() {
     const dispatch = useAppDispatch();
     const { orders } = useAppSelector((state) => state?.orders || { orders: [] });
 
-    console.log("=----- orders ------", orders);
+    // console.log("=----- orders ------", orders);
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -18,11 +19,17 @@ function Orders() {
         fetchOrder();
     }, [dispatch]);
 
-    console.log("--- orders ---", orders);
+    // console.log("--- orders ---", orders);
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold text-black mb-4">Orders</h1>
+            <PageHeader
+                title="Orders"
+                showAddButton={false}
+                showBackButton={false}
+                // addButtonText="+ Add CMS"
+                // addButtonRoute={`/admin/cms/other`}
+            />
             {orders && orders.length > 0 ? (
                 <OrderTable
                     orders={orders}

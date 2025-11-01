@@ -13,6 +13,7 @@ import {
 import { Toggle } from "@/components/ui/Toggle";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
+import PageHeader from "@/components/common/PageHeader";
 
 // ✅ Validation Schema
 const FaqSchema = Yup.object().shape({
@@ -52,9 +53,10 @@ function FaqCreate() {
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow">
-      <h2 className="text-xl font-bold mb-4 text-gray-900">
-        {mode === "update" ? "Update FAQ" : "Add FAQ"}
-      </h2>
+      <PageHeader
+        title={mode === "update" ? "Update FAQ" : "Add FAQ"}
+        showAddButton={false}
+      />
 
       <Formik
         enableReinitialize
@@ -168,17 +170,16 @@ function FaqCreate() {
               <button
                 type="submit"
                 disabled={isSubmitting || loading}
-                className={`bg-green-500 mt-5 text-white px-5 py-2 rounded-lg font-semibold transition ${
-                  isSubmitting || loading
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-green-600"
-                }`}
+                className={`bg-green-500 mt-5 text-white px-5 py-2 rounded-lg font-semibold transition ${isSubmitting || loading
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-green-600"
+                  }`}
               >
                 {isSubmitting || loading
                   ? "Saving..."
                   : mode === "update"
-                  ? "Update FAQ"
-                  : "Add FAQ"}
+                    ? "Update FAQ"
+                    : "Add FAQ"}
               </button>
             </div>
           </Form>

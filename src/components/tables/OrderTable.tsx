@@ -5,6 +5,7 @@ import { FaTrash, FaEye } from "react-icons/fa";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
 import { api } from "@/lib/api";
+import { ddmmyyyy } from "@/utils/dateTime";
 
 type Props = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,7 +26,11 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
         return orders.map(order => ({
             orderId: order.orderCode,
             id: order?.id,
-            user: order.user,
+            user: {
+                firstName: ((order?.name).toString()).split(" ")[0],
+                lastName:  ((order?.name).toString()).split(" ")[1],
+                email:order?.email
+            },
             createdAt: order.createdAt,
             totalAmount: order.totalAmount,
             status: order.status,
@@ -159,11 +164,10 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                         )}
 
                         {paginatedOrders.map(o => {
-                            // console.log("----- pagination order ----", o);
                             return (
                                 <tr key={o.orderId} className="hover:bg-gray-800/50 transition">
                                     <td className="px-6 py-4 text-sm text-gray-400 font-mono">
-                                        {o.orderId.slice(0, 8)}
+                                        {o?.orderId ? o?.orderId.slice(0, 8) : ""}
                                     </td>
                                     <td className="px-6 py-4 text-gray-300">
                                         {o?.user ? (
@@ -199,13 +203,7 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-gray-400">
-                                        {new Date(o.createdAt).toLocaleString("en-IN", {
-                                            day: "2-digit",
-                                            month: "short",
-                                            year: "numeric",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
+                                        {ddmmyyyy(o.createdAt)}
                                     </td>
                                     <td className="px-6 py-4 text-center">
                                         <div className="flex items-center justify-center gap-3">
