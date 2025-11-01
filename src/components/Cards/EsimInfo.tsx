@@ -67,7 +67,7 @@ const EsimInfo: React.FC<EsimInfoProps> = ({
         <p className="text-neutral-700">{price}</p>
       </div>
 
-      {/* <div className="mt-5">
+      <div className="mt-5">
         <div className="flex items-center text-sm mb-1">
           <FiDatabase className="mr-2 text-neutral-400" />
           <span className="text-neutral-600 mr-2">Data Usage</span>
@@ -81,7 +81,7 @@ const EsimInfo: React.FC<EsimInfoProps> = ({
             style={{ width: `${progressPercent}%` }}
           />
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

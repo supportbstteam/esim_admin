@@ -40,7 +40,7 @@ export default function OrderDetails() {
 
     //   console.log("----")
     const fetchOrderDetails = async () => {
-        console.log("--- api calling ---")
+        // console.log("--- api calling ---")
         // await dispatch()
         await dispatch(clearSelectedOrder());
         await dispatch(fetchOrderById(id.toString()));
@@ -53,7 +53,7 @@ export default function OrderDetails() {
             fetchOrderDetails();
     }, [dispatch]);
 
-    console.log("---- order details ----", order);
+    // console.log("---- order details ----", order);
 
     return (
         <div className=" mx-auto px-4 md:px-10 py-6">

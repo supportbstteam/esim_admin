@@ -1,7 +1,9 @@
+"use client";
 import React, { useRef } from "react";
 import QRCode from "react-qr-code";
 import { FiCopy, FiDownload } from "react-icons/fi";
 import * as htmlToImage from 'html-to-image';
+import toast from "react-hot-toast";
 
 interface ActivateCardProps {
     qrValue: string;
@@ -11,9 +13,29 @@ interface ActivateCardProps {
 export const ActivateCard: React.FC<ActivateCardProps> = ({ qrValue, code }) => {
     const qrRef = useRef<HTMLDivElement>(null);
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(code);
+    const handleCopy = async () => {
+        try {
+            if (typeof navigator !== "undefined" && navigator.clipboard) {
+                await navigator.clipboard.writeText(code);
+                toast.success("Copied")
+                console.log("✅ Copied to clipboard:", code);
+            } else {
+                // Fallback for older browsers or SSR
+                const textarea = document.createElement("textarea");
+                textarea.value = code;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textarea);
+                toast.success("Copied")
+                console.log("✅ Copied (fallback):", code);
+            }
+        } catch (err) {
+            console.error("❌ Failed to copy:", err);
+            toast.success("Copied Failed")
+        }
     };
+
 
     const handleDownload = async () => {
         if (qrRef.current) {
@@ -35,7 +57,7 @@ export const ActivateCard: React.FC<ActivateCardProps> = ({ qrValue, code }) => 
             </h2>
             <div className="flex items-center mb-4 bg-neutral-100  rounded px-3 py-2">
                 <span className="font-mono text-sm text-neutral-700 ">{code}</span>
-                <button className="ml-2 p-1 hover:bg-neutral-200  rounded" onClick={handleCopy}>
+                <button className="ml-2 p-1 cursor-pointer hover:bg-neutral-200  rounded" onClick={handleCopy}>
                     <FiCopy className="w-5 h-5 text-neutral-500" />
                 </button>
             </div>

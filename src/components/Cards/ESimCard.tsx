@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 
 interface ESimCardProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   esim: any;
   onDelete: (id: string) => void;
 }
