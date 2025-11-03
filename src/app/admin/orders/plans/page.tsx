@@ -30,16 +30,16 @@ function Orders() {
                 // addButtonText="+ Add CMS"
                 // addButtonRoute={`/admin/cms/other`}
             />
-            {orders && orders.length > 0 ? (
                 <OrderTable
                     orders={orders}
                     onDeleteOrder={async () => {
                         await dispatch(fetchOrders());
                     }}
                 />
+            {/* {orders && orders.length > 0 ? (
             ) : (
                 <p className="text-gray-500">No orders found.</p>
-            )}
+            )} */}
         </div>
     );
 }
