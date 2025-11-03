@@ -202,7 +202,7 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                     <button
                         onClick={handlePrev}
                         disabled={pageIndex === 0}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 cursor-pointer text-gray-400 hover:text-white disabled:opacity-50"
                     >
                         Prev
                     </button>
@@ -212,7 +212,7 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                     <button
                         onClick={handleNext}
                         disabled={pageIndex >= pageCount - 1}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 cursor-pointer text-gray-400 hover:text-white disabled:opacity-50"
                     >
                         Next
                     </button>

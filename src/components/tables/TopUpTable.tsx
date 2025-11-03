@@ -303,7 +303,7 @@ const TopupTable: React.FC<TopupTableProps> = ({
                         <button
                             onClick={() => table.setPageIndex(0)}
                             disabled={!table.getCanPreviousPage()}
-                            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 text-gray-400 cursor-pointer hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             title="First page"
                         >
                             <svg
@@ -323,7 +323,7 @@ const TopupTable: React.FC<TopupTableProps> = ({
                         <button
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}
-                            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 text-gray-400 cursor-pointer hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             title="Previous page"
                         >
                             <svg
@@ -347,7 +347,7 @@ const TopupTable: React.FC<TopupTableProps> = ({
                         <button
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}
-                            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 text-gray-400 cursor-pointer hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             title="Next page"
                         >
                             <svg
@@ -367,7 +367,7 @@ const TopupTable: React.FC<TopupTableProps> = ({
                         <button
                             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
                             disabled={!table.getCanNextPage()}
-                            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="p-2 text-gray-400 cursor-pointer hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                             title="Last page"
                         >
                             <svg

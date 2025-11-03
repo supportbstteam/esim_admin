@@ -103,8 +103,11 @@ export default function BlogEditor({ blogId }: BlogEditorProps) {
           content: htmlContent,
           coverImage: values.coverImage || undefined,
           summary: values.summary || undefined,
-          isActive: values.isActive,
+          published: values.isActive,
         };
+
+        console.log("---- pyaload summary ----", payload);
+        // return;
 
         try {
           setLoading(true);

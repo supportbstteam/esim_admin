@@ -269,7 +269,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             Prev
           </button>
@@ -279,7 +279,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="p-2 text-gray-400 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
             Next
           </button>

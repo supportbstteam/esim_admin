@@ -41,10 +41,21 @@ export const fetchBlogs = createAsyncThunk("blogs/fetchAll", async (_, { rejectW
 // 🧩 Create blog
 export const createBlog = createAsyncThunk(
   "blogs/create",
-  async (data: { title: string; content: string; image?: string, summary:string }, { rejectWithValue }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (data: any, { rejectWithValue }) => {
+
+    console.log("----- post blog admin ----", data);
     try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const res: any = await api({ url: "/admin/blogs", method: "POST", data });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: "/admin/blogs", method: "POST", data: {
+          title: data?.title,
+          content: data?.content,
+          coverImage: data?.coverImage || null,
+          published: data?.published ,
+          summary: data?.summary ? data?.summary : ""
+        }
+      });
       // toast.success("Blog created successfully");
       return res.blog;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,7 +71,7 @@ export const updateBlog = createAsyncThunk(
   "blogs/update",
   async ({ id, data }: { id: string; data: Partial<Blog> }, { rejectWithValue }) => {
     try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await api({ url: `/admin/blogs/${id}`, method: "PATCH", data });
       // toast.success("Blog updated successfully");
       return res.blog;
@@ -76,11 +87,11 @@ export const updateBlog = createAsyncThunk(
 export const deleteBlog = createAsyncThunk("blogs/delete", async (id: string, { rejectWithValue }) => {
   try {
     await api({ url: `/admin/blogs/${id}`, method: "DELETE" });
-    toast.success("Blog deleted successfully");
+    // toast.success("Blog deleted successfully");
     return id;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
-    toast.error(err.response?.data?.message || "Failed to delete blog");
+    // toast.error(err.response?.data?.message || "Failed to delete blog");
     return rejectWithValue(err.message);
   }
 });

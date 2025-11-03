@@ -300,7 +300,7 @@ const FaqTable: React.FC = () => {
                     <button
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 cursor-pointer text-gray-400 hover:text-white disabled:opacity-50"
                     >
                         Prev
                     </button>
@@ -311,7 +311,7 @@ const FaqTable: React.FC = () => {
                     <button
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 cursor-pointer text-gray-400 hover:text-white disabled:opacity-50"
                     >
                         Next
                     </button>

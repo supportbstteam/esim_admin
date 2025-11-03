@@ -33,7 +33,7 @@ const BlogsTable: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
 
-  console.log("----- blogs ----",blogs);
+  // console.log("----- blogs ----",blogs);
 
   // 🗑️ Delete handler
   const handleDelete = async () => {
@@ -284,7 +284,7 @@ const BlogsTable: React.FC = () => {
           <button
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+            className="p-2 text-gray-400 hover:text-white cursor-pointer disabled:opacity-50"
           >
             Prev
           </button>
@@ -295,7 +295,7 @@ const BlogsTable: React.FC = () => {
           <button
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+            className="p-2 text-gray-400 hover:text-white cursor-pointer disabled:opacity-50"
           >
             Next
           </button>

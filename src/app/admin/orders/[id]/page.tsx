@@ -60,9 +60,7 @@ export default function OrderDetails() {
             {/* ✅ eSIM Carousel Section */}
             <PageHeader
                 title="Order Details"
-                addButtonText="+ Add Testimonial"
                 showAddButton={false}
-                addButtonRoute="/admin/testimonials/manage?mode=create"
             />
             {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any

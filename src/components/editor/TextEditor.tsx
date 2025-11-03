@@ -167,20 +167,18 @@ export default function ContentEditor({ page }: ContentEditorProps) {
 
 
       {/* Input for "other" page */}
-      {page === "other" && (
-        <div className="mb-4">
-          <label className="block font-semibold mb-1 text-[#16325d]">
-            Page Key (e.g., refund, disclaimer):
-          </label>
-          <input
-            type="text"
-            placeholder="Enter page key..."
-            className="border border-gray-300 rounded p-2 w-full text-black"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </div>
-      )}
+      <div className="mb-4">
+        <label className="block font-semibold mb-1 text-[#16325d]">
+          Page Key {page === "other" && <>(e.g., refund, disclaimer):</>}
+        </label>
+        <input
+          type="text"
+          placeholder="Enter page key..."
+          className="border border-gray-300 rounded p-2 w-full text-black"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </div>
 
       {/* Editor or Raw HTML */}
       <div>

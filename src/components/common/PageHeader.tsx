@@ -2,14 +2,13 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { FiArrowLeft } from "react-icons/fi";
 
 interface PageHeaderProps {
   title: string;
   addButtonText?: string;
-  addButtonRoute?: string; // optional route for Add button
+  addButtonRoute?: string;
   showAddButton?: boolean;
-  showBackButton?: boolean
+  showBackButton?: boolean;
 }
 
 const PageHeader: React.FC<PageHeaderProps> = ({
@@ -23,30 +22,31 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
   return (
     <div className="flex items-center justify-between mb-6">
-      {/* Back + Title */}
-      <div className="flex items-center gap-3">
-        {
-          showBackButton && (
-            <FiArrowLeft
-              className="text-[#16325d] text-xl cursor-pointer hover:text-[#28a23a] transition"
-              onClick={() => router.back()}
-            />
-          )
-        }
-        <h2 className="text-2xl font-semibold text-[#16325d]">{title}</h2>
-      </div>
+      {/* Title */}
+      <h2 className="text-2xl font-semibold text-[#16325d]">{title}</h2>
 
-      {/* Add Button */}
-      {showAddButton && (
-        <button
-          className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none"
-          onClick={() => {
-            if (addButtonRoute) router.push(addButtonRoute);
-          }}
-        >
-          {addButtonText}
-        </button>
-      )}
+      {/* Right side buttons */}
+      <div className="flex items-center gap-3">
+        {showAddButton && (
+          <button
+            className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] transition focus:outline-none"
+            onClick={() => {
+              if (addButtonRoute) router.push(addButtonRoute);
+            }}
+          >
+            {addButtonText}
+          </button>
+        )}
+
+        {showBackButton && (
+          <button
+            className="rounded cursor-pointer px-5 py-2 text-[#16325d] border border-[#16325d] hover:bg-[#16325d] hover:text-white transition focus:outline-none"
+            onClick={() => router.back()}
+          >
+            Back
+          </button>
+        )}
+      </div>
     </div>
   );
 };

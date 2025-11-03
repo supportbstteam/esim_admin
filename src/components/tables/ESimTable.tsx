@@ -204,7 +204,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                     <button
                         onClick={handlePrev}
                         disabled={pageIndex === 0}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2  text-gray-400 hover:text-white disabled:opacity-50 cursor-pointer"
                     >
                         Prev
                     </button>
@@ -212,7 +212,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                     <button
                         onClick={handleNext}
                         disabled={pageIndex >= pageCount - 1}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50 cursor-pointer"
                     >
                         Next
                     </button>

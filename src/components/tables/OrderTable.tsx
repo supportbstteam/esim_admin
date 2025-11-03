@@ -244,7 +244,7 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                     <button
                         onClick={handlePrev}
                         disabled={pageIndex === 0}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 text-gray-400 hover:text-white cursor-pointer disabled:opacity-50"
                     >
                         Prev
                     </button>
@@ -254,7 +254,7 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
                     <button
                         onClick={handleNext}
                         disabled={pageIndex >= pageCount - 1}
-                        className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                        className="p-2 text-gray-400 hover:text-white cursor-pointer disabled:opacity-50"
                     >
                         Next
                     </button>
