@@ -72,7 +72,7 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await api({
-                url: `/admin/orders/delete/${selectedOrder?.orderId}`,
+                url: `/admin/orders/delete/${selectedOrder?.id}`,
                 method: "DELETE",
             });
 
@@ -85,6 +85,8 @@ const OrderTable: React.FC<Props> = ({ orders, onDeleteOrder }) => {
             toast.error("Something went wrong");
         }
     };
+
+    // console.log("---- selected order -----", selectedOrder);
 
     return (
         <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">

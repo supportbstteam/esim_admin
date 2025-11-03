@@ -75,9 +75,9 @@ const EsimInfo: React.FC<EsimInfoProps> = ({
             {dataUsed} GB / {dataTotal} GB
           </span>
         </div>
-        <div className="h-2 bg-neutral-100 rounded overflow-hidden">
+        <div className={`h-2  ${dataTotal > 0 ? "bg-neutral-100" : "bg-red-500"} rounded overflow-hidden`}>
           <div
-            className="h-full bg-green-500 transition-all duration-300"
+            className={`h-full ${dataTotal > 0 ? "bg-green-500" : "bg-red-500"} transition-all duration-300`}
             style={{ width: `${progressPercent}%` }}
           />
         </div>
