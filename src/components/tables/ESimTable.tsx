@@ -6,6 +6,8 @@ import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { ddmmyyyy } from "@/utils/dateTime";
+import { useAppDispatch } from "@/store";
+import { deleteESim } from "@/store/slice/eSimSlice";
 
 // Type your eSIM data as needed
 type ESim = {
@@ -31,6 +33,7 @@ type Props = {
 };
 
 const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
+    const dispatch = useAppDispatch();
     const [globalFilter, setGlobalFilter] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedESim, setSelectedESim] = useState<ESim | null>(null);
@@ -60,9 +63,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
 
     const handleDelete = async () => {
         try {
-            // Replace with your actual DELETE API for eSIMs
-            // Example: await api({ url: `/admin/esims/delete/${selectedESim?.id}`, method: "DELETE" });
-            // For demo, showing success directly
+            dispatch(deleteESim(selectedESim?.id));
             toast.success("eSIM deleted successfully");
             onDeleteESim();
             setShowModal(false);
@@ -175,16 +176,16 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                                             >
                                                 <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
                                             </Link>
-                                            {/* <button
-                                            onClick={() => {
-                                                setSelectedESim(esim);
-                                                setShowModal(true);
-                                            }}
-                                            aria-label="Delete eSIM"
-                                            className="p-2 rounded cursor-pointer hover:bg-red-700 transition"
-                                        >
-                                            <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
-                                        </button> */}
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedESim(esim);
+                                                    setShowModal(true);
+                                                }}
+                                                aria-label="Delete eSIM"
+                                                className="p-2 rounded cursor-pointer hover:bg-red-700 transition"
+                                            >
+                                                <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>

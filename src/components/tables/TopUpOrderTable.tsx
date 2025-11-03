@@ -1,8 +1,12 @@
 "use client";
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaTrash } from "react-icons/fa";
 import { ddmmyyyy } from "@/utils/dateTime";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import { useAppDispatch } from "@/store";
+import { deleteTopUpOrder } from "@/store/slice/topupOrderSlice";
+import toast from "react-hot-toast";
 
 type Transaction = {
     id: string;
@@ -40,9 +44,12 @@ type Props = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const TopUpOrdersTable: any = ({ topUpOrders }) => {
+    const dispatch = useAppDispatch();
     const [globalFilter, setGlobalFilter] = useState("");
     const [pageIndex, setPageIndex] = useState(0);
     const pageSize = 10;
+    const [topUpModal, setTopUpModal] = useState(false);
+    const [selectedTopUp, setSelectedTopUp] = useState(null);
 
     const filteredOrders = useMemo(() => {
         const search = globalFilter.toLowerCase();
@@ -64,6 +71,12 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
 
     const handlePrev = () => pageIndex > 0 && setPageIndex(pageIndex - 1);
     const handleNext = () => pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);
+
+
+    const handleDelete = async () => {
+        await dispatch(deleteTopUpOrder(selectedTopUp?.id))
+        toast.success("Top Up Order Deleted Successfully");
+    }
 
     return (
         <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
@@ -157,10 +170,10 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                                 <td className="px-6 py-4">
                                     <span
                                         className={`px-2 py-1 rounded-full text-xs font-semibold ${order.status === "COMPLETED"
-                                                ? "bg-green-100 text-green-800"
-                                                : order.status === "PENDING"
-                                                    ? "bg-yellow-100 text-yellow-800"
-                                                    : "bg-red-100 text-red-800"
+                                            ? "bg-green-100 text-green-800"
+                                            : order.status === "PENDING"
+                                                ? "bg-yellow-100 text-yellow-800"
+                                                : "bg-red-100 text-red-800"
                                             }`}
                                     >
                                         {order.status}
@@ -177,13 +190,27 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                                     {ddmmyyyy(order?.createdAt)}
                                 </td>
                                 <td className="px-6 py-4 text-center">
-                                    <Link
-                                        href={`/admin/orders/top-up/${order.id}`}
-                                        className="p-2 rounded hover:bg-gray-700 cursor-pointer transition"
-                                        aria-label="View Order"
-                                    >
-                                        <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
-                                    </Link>
+                                    <div className="flex items-center justify-center gap-3">
+
+                                        <Link
+                                            href={`/admin/orders/top-up/${order.id}`}
+                                            className="p-2 rounded hover:bg-gray-700 cursor-pointer transition"
+                                            aria-label="View Order"
+                                        >
+                                            <FaEye className="h-5 w-5 text-blue-400 hover:text-white" />
+                                        </Link>
+
+                                        <button
+                                            onClick={() => {
+                                                setSelectedTopUp(order);
+                                                setTopUpModal(true);
+                                            }}
+                                            aria-label="Delete Order"
+                                            className="p-2 rounded hover:bg-red-700 cursor-pointer transition"
+                                        >
+                                            <FaTrash className="h-5 w-5 text-red-400 hover:text-white" />
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
@@ -218,6 +245,12 @@ const TopUpOrdersTable: any = ({ topUpOrders }) => {
                     </button>
                 </div>
             </div>
+
+            <ConfirmDeleteModal
+                onClose={() => setTopUpModal(false)}
+                open={topUpModal}
+                onConfirm={handleDelete}
+            />
         </div>
     );
 };
