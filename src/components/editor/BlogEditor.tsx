@@ -13,6 +13,7 @@ import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import PageHeader from "../common/PageHeader";
 
 const Editor = dynamic<import("react-draft-wysiwyg").EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -142,24 +143,10 @@ export default function BlogEditor({ blogId }: BlogEditorProps) {
       {({ values, setFieldValue }) => (
         <Form className="p-6 max-w-full mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center gap-3">
-              <FiArrowLeft
-                className="text-[#16325d] text-xl cursor-pointer hover:text-[#28a23a] transition"
-                onClick={() => router.back()}
-              />
-              <h2 className="text-2xl font-semibold text-[#16325d]">{blogId ? "Edit Blog" : "Add Blog"}</h2>
-            </div>
-
-
-            <button
-              type="button"
-              onClick={() => setShowHtml((p) => !p)}
-              className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-white text-sm"
-            >
-              {showHtml ? "Switch to Editor" : "Edit HTML"}
-            </button>
-          </div>
+          <PageHeader
+            title={blogId ? "Edit Blog" : "Add Blog"}
+            showAddButton={false}
+          />
 
           {/* Title */}
           <div className="mb-3">
@@ -184,6 +171,18 @@ export default function BlogEditor({ blogId }: BlogEditorProps) {
               className="border text-black p-2 w-full rounded"
             />
             <ErrorMessage name="summary" component="p" className="text-red-600 text-sm mt-1" />
+          </div>
+
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex-1" ></div>
+
+            <button
+              type="button"
+              onClick={() => setShowHtml((p) => !p)}
+              className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-white text-sm"
+            >
+              {showHtml ? "Switch to Editor" : "Edit HTML"}
+            </button>
           </div>
 
           {/* Editor / HTML */}

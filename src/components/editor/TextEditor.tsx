@@ -137,34 +137,10 @@ export default function ContentEditor({ page }: ContentEditorProps) {
 
   return (
     <div className="p-6 max-w-full mx-auto">
-      <div className="flex items-center justify-between gap-4 mb-4">
-        <div className="flex items-center gap-3">
-          <FiArrowLeft
-            className="text-[#16325d] text-xl cursor-pointer hover:text-[#28a23a] transition"
-            onClick={() => router.back()}
-          />
-          <h2 className="text-2xl font-semibold text-[#16325d]">{page === "other" ? "Add New CMS Page" : `${title}`}</h2>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleToggleHtml}
-            className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-sm border"
-          >
-            {showHtml ? "Switch to WYSIWYG" : "View / Edit HTML"}
-          </button>
-
-          {showHtml && (
-            <button
-              onClick={loadHtmlIntoEditor}
-              className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-white text-sm"
-            >
-              Load HTML into Editor
-            </button>
-          )}
-        </div>
-      </div>
-
+      <PageHeader
+        title={page === "other" ? "Add New CMS Page" : `${title}`}
+        showAddButton={false}
+      />
 
       {/* Input for "other" page */}
       <div className="mb-4">
@@ -181,6 +157,26 @@ export default function ContentEditor({ page }: ContentEditorProps) {
       </div>
 
       {/* Editor or Raw HTML */}
+
+      <div className="flex items-center gap-2 mb-2">
+        <div className="flex-1" ></div>
+        <button
+          onClick={handleToggleHtml}
+          className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-sm border"
+        >
+          {showHtml ? "Switch to WYSIWYG" : "View / Edit HTML"}
+        </button>
+
+        {showHtml && (
+          <button
+            onClick={loadHtmlIntoEditor}
+            className="px-3 py-2 rounded bg-green-500 hover:bg-green-600 text-white text-sm"
+          >
+            Load HTML into Editor
+          </button>
+        )}
+      </div>
+
       <div>
         {showHtml ? (
           <textarea
