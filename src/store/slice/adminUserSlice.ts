@@ -18,7 +18,7 @@ export const createAdminUser = createAsyncThunk(
                 data: userData,
             });
 
-            console.log("---- repsonse in the creating the user ----", res);
+            // console.log("---- repsonse in the creating the user ----", res);
             return res?.user;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -39,7 +39,7 @@ export const updateAdminUser = createAsyncThunk(
                 data: userData,
             });
 
-            console.log("---- repsonse in the creating the user ----", res);
+            // console.log("---- repsonse in the creating the user ----", res);
             return res?.user;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -100,11 +100,11 @@ export const blockAdminUser = createAsyncThunk(
             });
             toast.success(res?.message);
 
-            console.log("----- response in the block user ----", res);
+            // console.log("----- response in the block user ----", res);
             return res;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
-            console.log("---- error in the block customer by admin ---", err);
+            console.error("---- error in the block customer by admin ---", err);
             return rejectWithValue(err.response || err.message);
         }
     }
@@ -115,7 +115,7 @@ export const deleteAdminUser = createAsyncThunk(
     "adminUser/delete",
     async (id: string, { rejectWithValue }) => {
 
-        console.log("---- admin user delete process ----", id);
+        // console.log("---- admin user delete process ----", id);
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const res: any = await api({

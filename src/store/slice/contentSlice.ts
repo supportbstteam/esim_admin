@@ -65,7 +65,7 @@ export const saveContentThunk = createAsyncThunk<Content, Content>(
         data: { page, html, title },
       });
 
-      console.log("---- save content ----", res);
+      // console.log("---- save content ----", res);
       return res;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

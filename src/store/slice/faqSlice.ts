@@ -10,7 +10,7 @@ export const getAllFaqs = createAsyncThunk("faq/getAll", async (_, { rejectWithV
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const res:any = await api({ url: baseUrl, method: "GET" });
-        console.log("----fa ys  sda ----",res);
+        // console.log("----fa ys  sda ----",res);
         return res;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -23,7 +23,7 @@ export const getFaqById = createAsyncThunk("faq/getById", async (id: string, { r
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const res:any = await api({ url: `${baseUrl}/${id}`, method: "GET" });
-        console.log("----- res ----",res);
+        // console.log("----- res ----",res);
         return res;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {

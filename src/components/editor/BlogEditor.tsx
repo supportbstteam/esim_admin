@@ -107,7 +107,7 @@ export default function BlogEditor({ blogId }: BlogEditorProps) {
           published: values.isActive,
         };
 
-        console.log("---- pyaload summary ----", payload);
+        // console.log("---- pyaload summary ----", payload);
         // return;
 
         try {

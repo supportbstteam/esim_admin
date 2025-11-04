@@ -43,7 +43,7 @@ const FaqTable: React.FC = () => {
         dispatch(getAllFaqs());
     }, [dispatch]);
 
-    console.log("----- fays ----", faqs);
+    // console.log("----- fays ----", faqs);
 
     // 🗑️ Delete handler
     const handleDelete = async () => {

@@ -36,7 +36,7 @@ export const OrderCard: React.FC<{ order: any }> = ({ order }) => {
     const hasEsim = !!order?.esim;
     const isFailedOrder = order?.status === "failed";
 
-    console.log("---- order ----", order);
+    // console.log("---- order ----", order);
 
     return (
         <Card title="Order Information" contentClassName="space-y-6 text-gray-900">

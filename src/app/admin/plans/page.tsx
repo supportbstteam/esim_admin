@@ -55,7 +55,7 @@ function Plans() {
         await dispatch(fetchPlansDb());
       }
 
-      console.log("---- response in the toggle handle ----", response);
+      // console.log("---- response in the toggle handle ----", response);
 
       // if(response?.type === "")
     }
@@ -77,7 +77,7 @@ function Plans() {
         await dispatch(fetchPlansDb());
       }
 
-      console.log("---- response in the toggle handle ----", response);
+      // console.log("---- response in the toggle handle ----", response);
 
       // if(response?.type === "")
     }

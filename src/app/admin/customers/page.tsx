@@ -61,7 +61,7 @@ function Users() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(blockAdminUser(id));
 
-      console.log("--- response in the user blocking ---", response);
+      // console.log("--- response in the user blocking ---", response);
       if (response?.type === 'adminUser/block/fulfilled') {
         // toast.success('User Blocked Status Changed Sucessfully');
         fetchData();

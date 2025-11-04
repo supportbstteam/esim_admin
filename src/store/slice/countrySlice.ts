@@ -68,7 +68,7 @@ export const updateCountry = createAsyncThunk<Country, { id: string; data: Parti
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     async ({ id, data }: any, thunkAPI) => {
 
-        console.log("---- update data response ----", { id, data });
+        // console.log("---- update data response ----", { id, data });
         try {
             return await api<Country>({ url: `${countryUrl}/update/${id}`, method: "PUT", data });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

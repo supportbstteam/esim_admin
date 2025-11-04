@@ -21,7 +21,7 @@ export const CommunicationMailManagement = () => {
     const [loading, setLoading] = useState(false);
     const [initialEmail, setInitialEmail] = useState("");
 
-    console.log("---- user ----", user);
+    // console.log("---- user ----", user);
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -51,14 +51,14 @@ export const CommunicationMailManagement = () => {
                     });
                     // await dispatch(checkAuth());
 
-                    console.log("---- response in the mail change ----", response);
+                    // console.log("---- response in the mail change ----", response);
 
                     if (response?.message === "Notification mail updated successfully for all admins") {
                         toast.success("Notification mail Updated");
                     }
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 } catch (err: any) {
-                    console.log("----error in the communication mail ----", err);
+                    console.error("----error in the communication mail ----", err);
                     toast.error(err?.message || "Something went wrong ❌");
                 } finally {
                     setLoading(false);

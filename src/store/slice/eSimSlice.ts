@@ -43,7 +43,7 @@ export const fetchESims = createAsyncThunk("eSim/fetchESims", async (_, thunkAPI
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const data: any = await api<ESIM[]>({ url: "/admin/e-sim/all", method: "GET" });
 
-        console.log("---- data in the esims ----", data);
+        // console.log("---- data in the esims ----", data);
         return data.data;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
@@ -60,7 +60,7 @@ export const createESim = createAsyncThunk(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const payload: any = { sims: eSimData };
 
-            console.log("---- payload -----", payload)
+            // console.log("---- payload -----", payload)
 
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const data: any = await api<{ message: string; data: any[] }, typeof payload>({
@@ -117,7 +117,7 @@ export const deleteESim = createAsyncThunk(
     async (id: string, thunkAPI) => {
         try {
             const response = await api<void>({ url: `/admin/e-sim/${id}`, method: "DELETE" });
-            console.log("---- removing e-sim -----", response);
+            // console.log("---- removing e-sim -----", response);
             return id;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {

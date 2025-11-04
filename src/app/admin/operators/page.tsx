@@ -47,7 +47,7 @@ export default function Operators() {
           updateOperator({ operatorId: selectedOperator.id, updates: values.operators[0] })
         );
 
-        console.log("---- response in the edit operator form ---", response);
+        // console.log("---- response in the edit operator form ---", response);
         if (response?.type === 'operators/updateOperator/fulfilled') toast.success("Operator updated successfully");
       } else {
         const response = await dispatch(addOperators(values));

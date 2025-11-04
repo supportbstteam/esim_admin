@@ -13,6 +13,7 @@ import OrderSummary from "@/components/Cards/OrderSummaryCard";
 import RechargeHistory from "@/components/tables/RechargeHistory";
 import { fetchTopUpOrderById } from "@/store/slice/topupOrderSlice";
 import PageHeader from "@/components/common/PageHeader";
+import CustomerInfo from "@/components/Cards/CustomerInfo";
 
 function TopUpOrderDetails() {
   const { id } = useParams();
@@ -26,7 +27,7 @@ function TopUpOrderDetails() {
   }, [id, dispatch]);
 
 
-  console.log("----- console.log ----", topUpOrder);
+  // console.log("----- console.log ----", topUpOrder);
 
   if (loading) return <p className="text-center py-10">Loading...</p>;
   if (!topUpOrder || !topUpOrder.esims?.length)
@@ -35,7 +36,7 @@ function TopUpOrderDetails() {
   const activeSim = topUpOrder.esims[activeSimIndex];
   const currencySymbol = activeSim?.currency === "USD" ? "$" : activeSim?.currency || "";
 
-
+  // console.log("---- top up order -----", topUpOrder);
 
   return (
     <div className=" mx-auto px-4 md:px-10 py-6">
@@ -45,6 +46,12 @@ function TopUpOrderDetails() {
         addButtonText="+ Add Testimonial"
         showAddButton={false}
         addButtonRoute="/admin/testimonials/manage?mode=create"
+      />
+
+      <CustomerInfo
+        name={topUpOrder?.name}
+        email={topUpOrder?.email}
+        phone={topUpOrder?.phone}
       />
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

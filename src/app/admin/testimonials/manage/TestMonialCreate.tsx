@@ -27,7 +27,7 @@ function TestMonialCreate() {
   const id = searchParams.get("id");
   const { testimonial } = useAppSelector(state => state?.testimonials);
 
-  console.log("---- id ----", id);
+  // console.log("---- id ----", id);
 
   const fetchTestId = async () => {
     await dispatch(getTestimonialById(id));
@@ -40,7 +40,7 @@ function TestMonialCreate() {
   }, [dispatch]);
 
 
-  console.log("----- testimonial -----", testimonial);
+  // console.log("----- testimonial -----", testimonial);
 
   // ✅ Initial Values
   const initialValues = {

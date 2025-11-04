@@ -20,7 +20,7 @@ function Faqs() {
         fetchTest();
     }, [dispatch]);
 
-    console.log("----- testimonials -----", faqs);
+    // console.log("----- testimonials -----", faqs);
 
     return (
         <div>

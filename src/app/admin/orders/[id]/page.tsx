@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { clearSelectedOrder, fetchOrderById } from "@/store/slice/orderSlice";
-import { UserCard } from "@/components/Cards/UserCard";
-import { OrderCard } from "@/components/Cards/OrderCard";
 import PageHeader from "@/components/common/PageHeader";
 import EsimInfo from "@/components/Cards/EsimInfo";
 import { ActivateCard } from "@/components/Cards/EsimScanner";
-import RechargeHistory from "@/components/tables/RechargeHistory";
 import moment from "moment";
 import OrderSummary from "@/components/Cards/OrderSummaryCard";
+import { CiUser, CiMail, CiPhone } from "react-icons/ci";
+import CustomerInfo from "@/components/Cards/CustomerInfo";
 
 type Order = {
     id: string;
@@ -53,7 +52,7 @@ export default function OrderDetails() {
             fetchOrderDetails();
     }, [dispatch]);
 
-    console.log("---- order details ----", order);
+    // console.log("---- order details ----", order);
 
     return (
         <div className=" mx-auto px-4 md:px-10 py-6">
@@ -63,6 +62,7 @@ export default function OrderDetails() {
                 showAddButton={false}
             />
 
+            {/* ------------------------        order partial success ---------------------------------------- */}
             {order?.status?.toLowerCase() === "failed" && (
                 <div className="flex w-full items-center justify-center my-6">
                     <div className="bg-red-100 flex-1 w-full border border-red-300 text-red-800 px-6 py-4 rounded-2xl shadow-md w-full max-w-2xl text-center">
@@ -84,6 +84,7 @@ export default function OrderDetails() {
                 </div>
             )}
 
+            {/* -------------------------       order failed -------------------------------------------------- */}
             {order?.status?.toLowerCase() === "partial" && (
                 <div className="flex items-center justify-center my-6">
                     <div className="bg-yellow-50 border border-yellow-300 text-yellow-800 px-6 py-4 rounded-2xl shadow-md w-full max-w-2xl text-center">
@@ -106,36 +107,43 @@ export default function OrderDetails() {
                 </div>
             )}
 
+            {/* ----------------------------------------------------------------------------------------------- */}
+            <CustomerInfo
+                name={`${order?.customer?.firstName} ${order?.customer?.lastName}`}
+                email={order?.customer?.email}
+                phone={order?.customer?.phone}
+            />
             {
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 order?.esims && order?.esims.map((esim: any, index: number) => {
-                    console.log("---- esim ----",esim);
-                    return(
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
-                        <div className="md:col-span-2 ">
-                            <EsimInfo
-                                countryName={esim?.country?.name || order?.country?.name || "Unknown"}
-                                countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
-                                planType={esim?.productName?.replace(/-$/, "") || "N/A"}
-                                expired={false}
-                                simNo={esim?.iccid || "N/A"}
-                                purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                                activationDate={moment(esim?.startDate).format("MMM Do YY")}
-                                validityDays={String(esim?.validityDays || 0)}
-                                dataUsed={0}
-                                dataTotal={esim?.dataAmount || 0}
-                                price={`${order?.country?.currency} ${esim?.price || "0.00"}`}
-                                planStart={moment(esim?.startDate).format("MMM Do YY")}
-                                planEnd={moment(esim?.endDate).format("MMM Do YY")}
-                                onRecharge={() => alert("Recharge clicked!")}
-                            />
-                        </div>
+                    // console.log("---- esim ----",esim);
+                    return (
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-5 mt-8 items-start">
+                            <div className="md:col-span-2 ">
+                                <EsimInfo
+                                    countryName={esim?.country?.name || order?.country?.name || "Unknown"}
+                                    countryFlagUrl={`https://cdn.jsdelivr.net/gh/hjnilsson/country-flags/svg/${(esim?.country?.isoCode || "us").toLowerCase()}.svg`}
+                                    planType={esim?.productName?.replace(/-$/, "") || "N/A"}
+                                    expired={false}
+                                    simNo={esim?.iccid || "N/A"}
+                                    purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
+                                    activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                                    validityDays={String(esim?.validityDays || 0)}
+                                    dataUsed={0}
+                                    dataTotal={esim?.dataAmount || 0}
+                                    price={`${order?.country?.currency} ${esim?.price || "0.00"}`}
+                                    planStart={moment(esim?.startDate).format("MMM Do YY")}
+                                    planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                                    onRecharge={() => alert("Recharge clicked!")}
+                                />
+                            </div>
 
-                        <div className="md:col-span-1 flex justify-center">
-                            <ActivateCard qrValue={esim?.qrCodeUrl || ""} code={esim?.qrCodeUrl || ""} />
+                            <div className="md:col-span-1 flex justify-center">
+                                <ActivateCard qrValue={esim?.qrCodeUrl || ""} code={esim?.qrCodeUrl || ""} />
+                            </div>
                         </div>
-                    </div>
-                )})
+                    )
+                })
             }
 
 

@@ -18,7 +18,7 @@ function Testimonial() {
         fetchTest();
     }, [dispatch]);
 
-    console.log("----- testimonials -----", testimonials);
+    // console.log("----- testimonials -----", testimonials);
 
     return (
         <div>

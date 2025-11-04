@@ -126,7 +126,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                             </tr>
                         )}
                         {paginatedESims.map(esim => {
-                            console.log("----- esim in pagination ----", esim);
+                            // console.log("----- esim in pagination ----", esim);
                             return esim?.dataAmount !== null && (
                                 <tr key={esim.id} className="hover:bg-gray-800/50 transition">
                                     <td className="px-6 py-4 text-sm text-gray-400 font-mono">{(esim.iccid ?? "—").slice(0, 16)}</td>

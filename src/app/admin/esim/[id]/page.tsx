@@ -15,6 +15,7 @@ import OrderSummary from "@/components/Cards/OrderSummaryCard";
 import RechargeHistory from "@/components/tables/RechargeHistory";
 import { fetchESimDetails } from "@/store/slice/eSimSlice";
 import PageHeader from "@/components/common/PageHeader";
+import CustomerInfo from "@/components/Cards/CustomerInfo";
 
 function ESimDetails() {
   const { id } = useParams();
@@ -34,6 +35,9 @@ function ESimDetails() {
   const activeSim = eSimDetails.esims[activeSimIndex];
   const currencySymbol = activeSim?.currency === "USD" ? "$" : activeSim?.currency || "";
 
+
+  // console.log("----- esim details -----", eSimDetails);
+
   return (
     <div className=" mx-auto px-4 md:px-10 py-6">
       {/* ✅ eSIM Carousel Section */}
@@ -43,6 +47,13 @@ function ESimDetails() {
         showAddButton={false}
         addButtonRoute="/admin/testimonials/manage?mode=create"
       />
+
+      <CustomerInfo
+        name={eSimDetails?.name}
+        email={eSimDetails?.email}
+        phone={eSimDetails?.phone}
+      />
+
       {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         eSimDetails.esims.map((esim: any, index: number) => (

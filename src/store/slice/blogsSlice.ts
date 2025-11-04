@@ -44,7 +44,7 @@ export const createBlog = createAsyncThunk(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async (data: any, { rejectWithValue }) => {
 
-    console.log("----- post blog admin ----", data);
+    // console.log("----- post blog admin ----", data);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await api({

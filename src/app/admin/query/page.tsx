@@ -16,7 +16,7 @@ function Query() {
     }, [dispatch]);
 
 
-    console.log("---- queries -----", queries);
+    // console.log("---- queries -----", queries);
 
     return (
         <div className="px-4 mt-6">

@@ -91,7 +91,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
                     ).unwrap();
 
                     toast.success("Updated successfully");
-                    console.log("✅ Updated country:", result);
+                    // console.log("✅ Updated country:", result);
                   } catch (err) {
                     toast.error(
                       typeof err === "string" ? err : "Failed to update country"

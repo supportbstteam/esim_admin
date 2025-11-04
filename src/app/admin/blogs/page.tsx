@@ -19,7 +19,7 @@ export default function Blogs() {
     dispatch(fetchBlogs());
   }, [dispatch]);
 
-  console.log("=== blogs ===", blogs);
+  // console.log("=== blogs ===", blogs);
 
   return (
     <div className="px-4 mt-6">

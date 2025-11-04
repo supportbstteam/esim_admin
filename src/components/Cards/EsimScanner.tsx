@@ -18,7 +18,7 @@ export const ActivateCard: React.FC<ActivateCardProps> = ({ qrValue, code }) => 
             if (typeof navigator !== "undefined" && navigator.clipboard) {
                 await navigator.clipboard.writeText(code);
                 toast.success("Copied")
-                console.log("✅ Copied to clipboard:", code);
+                // console.log("✅ Copied to clipboard:", code);
             } else {
                 // Fallback for older browsers or SSR
                 const textarea = document.createElement("textarea");
@@ -28,7 +28,7 @@ export const ActivateCard: React.FC<ActivateCardProps> = ({ qrValue, code }) => 
                 document.execCommand("copy");
                 document.body.removeChild(textarea);
                 toast.success("Copied")
-                console.log("✅ Copied (fallback):", code);
+                // console.log("✅ Copied (fallback):", code);
             }
         } catch (err) {
             console.error("❌ Failed to copy:", err);
