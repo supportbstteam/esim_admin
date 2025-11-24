@@ -186,7 +186,7 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                                         isActive: false,
                                                     })
                                                 }
-                                                className="px-4 py-2 rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition shadow"
+                                                className="px-4 py-2 cursor-pointer rounded-lg font-semibold bg-green-600 text-white hover:bg-green-700 transition shadow"
                                             >
                                                 + Add Another eSIM
                                             </button>
@@ -198,14 +198,14 @@ export default function ESimModal({ open, onClose, handleSubmit }: ESimModalProp
                                     <button
                                         type="button"
                                         onClick={onClose}
-                                        className="px-6 py-2 rounded-lg font-semibold bg-gray-200  text-gray-700 hover:bg-gray-300 "
+                                        className="px-6 py-2 cursor-pointer rounded-lg font-semibold bg-gray-200  text-gray-700 hover:bg-gray-300 "
                                         disabled={isSubmitting}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-6 py-2 font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
+                                        className="px-6 py-2 cursor-pointer font-bold rounded-lg bg-green-600 text-white hover:bg-green-700 transition"
                                         // className="px-6 py-2 rounded-lg font-bold bg-blue-600 text-white hover:bg-blue-700 transition shadow"
                                         disabled={isSubmitting}
                                     >

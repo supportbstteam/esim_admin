@@ -29,7 +29,7 @@ const CustomerDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className="px-4 py-2 cursor-pointer rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
           >
             Cancel
           </button>
@@ -38,7 +38,7 @@ const CustomerDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
               onConfirm();
               onClose();
             }}
-            className={`px-4 py-2 rounded ${!isDeleted ? "bg-red-600" : "bg-green-600"} text-white ${!isDeleted ? "hover:bg-red-700" : "hover:bg-green-700"}`}
+            className={`px-4 py-2 cursor-pointer rounded ${!isDeleted ? "bg-red-600" : "bg-green-600"} text-white ${!isDeleted ? "hover:bg-red-700" : "hover:bg-green-700"}`}
           >
             Yes, {!isDeleted ? "Delete" : "Remove"}
           </button>
