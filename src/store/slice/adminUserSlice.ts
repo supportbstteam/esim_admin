@@ -96,7 +96,7 @@ export const blockAdminUser = createAsyncThunk(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const res: any = await api({
                 url: `/admin/users/${id}/block`,
-                method: "PATCH",
+                method: "PUT",
             });
             toast.success(res?.message);
 

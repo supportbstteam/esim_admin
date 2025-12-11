@@ -38,9 +38,11 @@ function CreateOrUpdate() {
           url: `/admin/users/${id}`,
           method: "GET",
         });
+
+        // console.log("-=-=-=-==- user -=-=-=-=-=-=", res?.user);
         if (res?.user) {
           setUserData(res.user);
-          setIsActive(res.user.isVerified ?? true);
+          setIsActive(res.user.isBlocked ? false : true);
         }
       } catch (err) {
         console.error("User fetch error:", err);
@@ -70,7 +72,7 @@ function CreateOrUpdate() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: typeof initialValues, { setSubmitting }: any) => {
     try {
-      const payload = { ...values, isActive };
+      const payload = { ...values, isActive: !isActive };
       let response;
 
       if (isEditMode && userData?.id) {
@@ -82,7 +84,7 @@ function CreateOrUpdate() {
       if (response?.type?.endsWith("/fulfilled")) {
         toast.success(isEditMode ? "User updated successfully" : "User created successfully");
         dispatch(getAllAdminUsers());
-        router.push("/admin/users");
+        router.push("/admin/customers");
       } else {
         toast.error(response?.payload?.data?.message || "Operation failed");
       }
