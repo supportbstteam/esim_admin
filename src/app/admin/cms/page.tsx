@@ -31,6 +31,7 @@ export default function ContentList() {
       <PageHeader
         title="CMS Pages"
         showBackButton={false}
+        showAddButton={false}
         addButtonText="+ Add CMS"
         addButtonRoute={`/admin/cms/other`}
       />

@@ -27,7 +27,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
 
       {/* Right side buttons */}
       <div className="flex items-center gap-3">
-        {/* {showAddButton && (
+        {showAddButton && (
           <button
             className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] transition focus:outline-none"
             onClick={() => {
@@ -36,7 +36,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
           >
             {addButtonText}
           </button>
-        )} */}
+        )}
 
         {showBackButton && (
           <button
