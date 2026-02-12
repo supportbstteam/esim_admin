@@ -1,0 +1,6 @@
+24/12/2025:
+EOD: 
+ESIM USER FRONTEND : Top up paypal integration, Handled the empty data front the frontend to show the response that to the user
+ESIM BACKEND : Top up module fixed for the paypal order and to handle the removing the esim order from the admin website. added catination to delete both esim and order
+ESIM ADMIN : handled deleting modal for all the module added loading animation, and handled date configration, and by deleting the order esim where not deleting handled that as well. only order were deleting and esim was getting name and user information as undefined
+ESIM BACKEND : handled the mail added transactionId of the stripe and paypal for the admin and user

@@ -170,7 +170,7 @@ export default function AuthPage() {
                 <CustomButton
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   {isSubmitting ? "Logging in..." : "Login"}
                 </CustomButton>

@@ -64,14 +64,14 @@ function TopUpOrderDetails() {
                 planType={esim?.productName?.replace(/-$/, "") || "N/A"}
                 expired={false}
                 simNo={esim?.iccid || "N/A"}
-                purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                purchasedOn={moment(esim?.createdAt).format("DD/MM/YYYY")}
+                activationDate={moment(esim?.startDate).format("DD/MM/YYYY")}
                 validityDays={String(esim?.validityDays || 0)}
                 dataUsed={0}
                 dataTotal={esim?.dataAmount || 0}
                 price={`${currencySymbol} ${esim?.price || "0.00"}`}
-                planStart={moment(esim?.startDate).format("MMM Do YY")}
-                planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                planStart={moment(esim?.startDate).format("DD/MM/YYYY")}
+                planEnd={moment(esim?.endDate).format("DD/MM/YYYY")}
                 onRecharge={() => alert("Recharge clicked!")}
               />
             </div>
@@ -107,7 +107,7 @@ function TopUpOrderDetails() {
           <OrderSummary
             orderId={topUpOrder?.orderCode}
             transactionId={topUpOrder?.transaction?.transactionId}
-            orderDate={moment(topUpOrder?.esims[0]?.createdAt).format("MMM Do YY")}
+            orderDate={moment(topUpOrder?.esims[0]?.createdAt).format("DD/MM/YYYY")}
             totalAmount={`${currencySymbol} ${topUpOrder?.totalAmount || "0.00"}`}
             paymentMethod={topUpOrder?.transaction?.paymentGateway?.toUpperCase() || "N/A"}
           />

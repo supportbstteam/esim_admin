@@ -126,14 +126,14 @@ export default function OrderDetails() {
                                     planType={esim?.productName?.replace(/-$/, "") || "N/A"}
                                     expired={false}
                                     simNo={esim?.iccid || "N/A"}
-                                    purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                                    activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                                    purchasedOn={moment(esim?.createdAt).format("DD/MM/YYYY")}
+                                    activationDate={moment(esim?.startDate).format("DD/MM/YYYY")}
                                     validityDays={String(esim?.validityDays || 0)}
                                     dataUsed={0}
                                     dataTotal={esim?.dataAmount || 0}
                                     price={`${order?.country?.currency} ${esim?.price || "0.00"}`}
-                                    planStart={moment(esim?.startDate).format("MMM Do YY")}
-                                    planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                                    planStart={moment(esim?.startDate).format("DD/MM/YYYY")}
+                                    planEnd={moment(esim?.endDate).format("DD/MM/YYYY")}
                                     onRecharge={() => alert("Recharge clicked!")}
                                 />
                             </div>
@@ -174,7 +174,7 @@ export default function OrderDetails() {
                     <OrderSummary
                         orderId={order?.orderCode}
                         transactionId={order?.transaction?.transactionId}
-                        orderDate={moment(order?.esims[0]?.createdAt).format("MMM Do YY")}
+                        orderDate={moment(order?.esims[0]?.createdAt).format("DD/MM/YYYY")}
                         totalAmount={` ${order?.totalAmount || "0.00"}`}
                         paymentMethod={order?.transaction?.paymentGateway?.toUpperCase() || "N/A"}
                     />

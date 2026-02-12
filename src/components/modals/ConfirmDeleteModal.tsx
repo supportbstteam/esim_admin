@@ -1,7 +1,9 @@
+import { Loader2 } from "lucide-react";
 import React from "react";
 
 interface ConfirmDeleteModalProps {
     open: boolean;
+    loading?: boolean;
     onClose: () => void;
     onConfirm: () => void;
     operatorName?: string;
@@ -12,6 +14,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
     onClose,
     onConfirm,
     operatorName,
+    loading = false
 }) => {
     if (!open) return null;
 
@@ -31,11 +34,19 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
                         Cancel
                     </button>
                     <button
-                        className="px-4 py-2 cursor-pointer rounded bg-red-600 text-white hover:bg-red-700"
+                        disabled={loading}
                         onClick={onConfirm}
+                        className={`px-4 py-2 rounded text-white flex items-center justify-center gap-2
+    ${loading
+                                ? "bg-red-400 cursor-not-allowed"
+                                : "bg-red-600 hover:bg-red-700 cursor-pointer"
+                            }`}
                     >
-                        Delete
+                        {
+                            loading ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : "Delete"
+                        }
                     </button>
+
                 </div>
             </div>
         </div>

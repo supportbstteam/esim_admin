@@ -5,8 +5,16 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import ThemeProvider from "@/providers/ThemeProvider";
 import ReduxProvider from "@/providers/ReduxProvider";
+import { useAppSelector } from '@/store';
 
 export default function RootLayoutInner({ children }: { children: React.ReactNode }) {
+
+  const {isAuthenticated} = useAppSelector(state =>state.user);
+
+  if(!isAuthenticated)
+    return null;
+
+
   return (
     // <ReduxProvider>
     //   <ThemeProvider>

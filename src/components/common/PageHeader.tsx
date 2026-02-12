@@ -2,6 +2,8 @@
 
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useAppDispatch } from "@/store";
+import { resetCMSState } from "@/store/slice/cmsPageSlice";
 
 interface PageHeaderProps {
   title: string;
@@ -19,7 +21,7 @@ const PageHeader: React.FC<PageHeaderProps> = ({
   showBackButton = true,
 }) => {
   const router = useRouter();
-
+  const dispatch = useAppDispatch();
   return (
     <div className="flex items-center justify-between mb-6">
       {/* Title */}
@@ -30,7 +32,15 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         {showAddButton && (
           <button
             className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] transition focus:outline-none"
-            onClick={() => {
+            onClick={async() => {
+
+              if(title === "CMS2 Pages"){
+                console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
+                await dispatch(resetCMSState());
+                // if (addButtonRoute) router.push(addButtonRoute);
+                // return;
+              }
+
               if (addButtonRoute) router.push(addButtonRoute);
             }}
           >

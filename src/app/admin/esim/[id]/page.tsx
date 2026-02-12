@@ -16,6 +16,8 @@ import RechargeHistory from "@/components/tables/RechargeHistory";
 import { fetchESimDetails } from "@/store/slice/eSimSlice";
 import PageHeader from "@/components/common/PageHeader";
 import CustomerInfo from "@/components/Cards/CustomerInfo";
+import Image from "next/image";
+import Empty from "@/components/Empty";
 
 function ESimDetails() {
   const { id } = useParams();
@@ -66,14 +68,14 @@ function ESimDetails() {
                   planType={esim?.productName?.replace(/-$/, "") || "N/A"}
                   expired={false}
                   simNo={esim?.iccid || "N/A"}
-                  purchasedOn={moment(esim?.createdAt).format("MMM Do YY")}
-                  activationDate={moment(esim?.startDate).format("MMM Do YY")}
+                  purchasedOn={moment(esim?.createdAt).format("DD/MM/YYYY")}
+                  activationDate={moment(esim?.startDate).format("DD/MM/YYYY")}
                   validityDays={String(esim?.validityDays || 0)}
                   dataUsed={0}
                   dataTotal={esim?.dataAmount || 0}
                   price={`${currencySymbol} ${esim?.price || "0.00"}`}
-                  planStart={moment(esim?.startDate).format("MMM Do YY")}
-                  planEnd={moment(esim?.endDate).format("MMM Do YY")}
+                  planStart={moment(esim?.startDate).format("DD/MM/YYYY")}
+                  planEnd={moment(esim?.endDate).format("DD/MM/YYYY")}
                   onRecharge={() => alert("Recharge clicked!")}
                 />
               </div>
@@ -101,7 +103,9 @@ function ESimDetails() {
               rowsPerPage={5}
             />
           ) : (
-            <p className="text-sm text-gray-500">No recharge history available.</p>
+            <Empty
+              text="No Recharge Available"
+            />
           )}
         </div>
 
@@ -110,7 +114,7 @@ function ESimDetails() {
           <OrderSummary
             orderId={eSimDetails?.orderCode}
             transactionId={eSimDetails?.transaction?.transactionId}
-            orderDate={moment(eSimDetails?.esims[0]?.createdAt).format("MMM Do YY")}
+            orderDate={moment(eSimDetails?.esims[0]?.createdAt).format("DD/MM/YYYY")}
             totalAmount={`${currencySymbol} ${eSimDetails?.totalAmount || "0.00"}`}
             paymentMethod={eSimDetails?.transaction?.paymentGateway?.toUpperCase() || "N/A"}
           />

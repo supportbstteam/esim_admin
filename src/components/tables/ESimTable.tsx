@@ -36,8 +36,10 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
     const dispatch = useAppDispatch();
     const [globalFilter, setGlobalFilter] = useState("");
     const [showModal, setShowModal] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
     const [selectedESim, setSelectedESim] = useState<ESim | null>(null);
     const [pageIndex, setPageIndex] = useState(0);
+
     const pageSize = 10;
 
     // Filter eSIMs by iccid, productName, user email/name
@@ -62,13 +64,18 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
     const handleNext = () => pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);
 
     const handleDelete = async () => {
+        setDeleteLoading(true);
         try {
             dispatch(deleteESim(selectedESim?.id));
             toast.success("eSIM deleted successfully");
             onDeleteESim();
             setShowModal(false);
+            setDeleteLoading(false);
         } catch (err) {
             toast.error("Something went wrong");
+        }
+        finally {
+            setDeleteLoading(false);
         }
     };
 
@@ -112,7 +119,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                             <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Data</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Price</th>
                             <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Activated</th>
+                            {/* <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Activated</th> */}
                             <th className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Created At</th>
                             <th className="px-6 py-3 text-center text-xs font-medium text-white uppercase tracking-wider">Actions</th>
                         </tr>
@@ -149,13 +156,13 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                                             {esim.statusText}
                                         </span>
                                     </td>
-                                    <td className="px-6 py-4">
+                                    {/* <td className="px-6 py-4">
                                         {esim.isActive ? (
                                             <span className="text-green-400 font-semibold">Yes</span>
                                         ) : (
                                             <span className="text-red-400">No</span>
                                         )}
-                                    </td>
+                                    </td> */}
                                     <td className="px-6 py-4 text-gray-400">
                                         {/* {new Date(esim.createdAt).toLocaleString("en-IN", {
                                             day: "2-digit",
@@ -225,6 +232,7 @@ const ESimTable: React.FC<Props> = ({ esims, onDeleteESim }) => {
                 onClose={() => setShowModal(false)}
                 open={showModal}
                 onConfirm={handleDelete}
+                loading={deleteLoading}
             />
         </div>
     );

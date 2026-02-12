@@ -21,6 +21,9 @@ import querySlice from "./slice/querySlice"
 import testimonialSlice from "./slice/testimonialsSlice"
 import topupOrderSlice from "./slice/topupOrderSlice"
 import faqSlice from "./slice/faqSlice"
+import cmsPageSlice from "./slice/cmsPageSlice"
+import deviceReducer from "./slice/devices/deviceSlice"
+import brandsReducer from "./slice/brands/brandSlice"
 
 export const store = configureStore({
   reducer: {
@@ -42,7 +45,10 @@ export const store = configureStore({
     blogs: blogSlice,
     testimonials: testimonialSlice,
     topupOrders: topupOrderSlice,
-    faqs:faqSlice
+    faqs: faqSlice,
+    cmsPages: cmsPageSlice,
+    devices: deviceReducer,
+    brands: brandsReducer
   },
 });
 

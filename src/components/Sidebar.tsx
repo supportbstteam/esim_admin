@@ -24,6 +24,8 @@ import { FiAirplay } from "react-icons/fi";
 import { BsCardHeading } from "react-icons/bs";
 import { BiBlanket } from "react-icons/bi";
 import { FaQuoteLeft } from "react-icons/fa";
+import { AiFillApi } from "react-icons/ai";
+import { TbDeviceIpadPlus } from "react-icons/tb";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -74,11 +76,21 @@ export default function Sidebar() {
         { href: "/admin/esim", icon: <Cpu size={18} />, label: "E-Sims" },
       ],
     },
+    {
+      href: "/admin/compatible",
+      icon: <AiFillApi size={20} />,
+      label: "Compatiblity",
+      subItems: [
+        { href: "/admin/compatible/brands", label: "Brands", icon: <LucideSatellite size={18} /> },
+        { href: "/admin/compatible/devices", icon: <TbDeviceIpadPlus size={18} />, label: "Devices" },
+      ],
+    },
     { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
     { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
     { href: "/admin/faqs", icon: <FaQuoteLeft size={20} />, label: "Faqs" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
+    { href: "/admin/content", icon: <Settings size={20} />, label: "CMS2" },
   ];
 
   const toggleMenu = (href: string) => {
