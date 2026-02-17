@@ -9,6 +9,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.4.2",
+    "@ckeditor/ckeditor5-react": "^11.0.1",
     "@reduxjs/toolkit": "^2.9.0",
     "@syncfusion/ej2-react-dropdowns": "^31.1.20",
     "@tanstack/react-query": "^5.87.4",
@@ -66,6 +68,7 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4.1.13",
     "@types/bcryptjs": "^2.4.6",
+    "@types/html-to-draftjs": "^1.5.0",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
