@@ -2,157 +2,355 @@
 
 import { Formik, FieldArray } from "formik";
 import { FiTrash2 } from "react-icons/fi";
+
 import { useCMS } from "@/components/useCMS";
 import { template2Schema } from "@/lib/templateSchema";
 import FormikSync from "@/lib/formikSync";
+
+import ParagraphEditor from "@/components/common/ParagraphEditor";
+import HeadingInput from "@/components/common/HeadingInput";
+
 import { resolveImageUrl } from "@/utils/ResolveImage";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function Template2({ section }: any) {
-  const { cmsData, updateSection } = useCMS();
+
+
+/* ================= TYPES ================= */
+
+interface Paragraph {
+  id?: number;
+  content: string;
+}
+
+interface Template2Values {
+  stepNumber: string;
+  heading: string;
+  description: {
+    paragraphs: Paragraph[];
+  };
+  image?: string;
+  imageFile?: File | null;
+  imagePreview?: string;
+}
+
+interface Props {
+  section: {
+    id: string;
+    data: Template2Values;
+  };
+}
+
+
+
+/* ================= MAIN ================= */
+
+export default function Template2({
+  section,
+}: Props) {
+
+  const { updateSection } =
+    useCMS();
 
   return (
-    <Formik
+
+    <Formik<Template2Values>
+
       enableReinitialize
-      validationSchema={template2Schema}
+
+      validationSchema={
+        template2Schema
+      }
+
       initialValues={{
         ...section.data,
-        imageFile: section.data.imageFile ?? null,
-        imagePreview: section.data.imagePreview ?? "",
+
+        imageFile:
+          section.data.imageFile ??
+          null,
+
+        imagePreview:
+          section.data.imagePreview ??
+          "",
+
+        description: {
+          paragraphs:
+            section.data.description
+              ?.paragraphs?.length
+              ? section.data
+                .description
+                .paragraphs
+              : [
+                {
+                  id: Date.now(),
+                  content:
+                    "<p>New paragraph...</p>",
+                },
+              ],
+        },
+
       }}
+
       onSubmit={() => { }}
+
     >
+
       {({
         values,
-        handleChange,
-        handleSubmit,
         setFieldValue,
-        errors,
-        touched,
-      }) => {
-        console.log("-=-=-=-= values.imagePreview || values.image -=--==-=-=-", values);
-        return (
-          <form onSubmit={handleSubmit} className="py-16 bg-gray-50">
-            <FormikSync
-              onChange={(vals) => updateSection(section.id, vals)}
-            />
-            <div className="max-w-6xl mx-auto px-6 space-y-8">
+        handleChange,
+      }) => (
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+        <form className="py-16 bg-gray-50">
 
-                {/* LEFT – CONTENT */}
-                <div className="rounded-xl border bg-white p-6 space-y-6">
+          <FormikSync
+            onChange={(vals) =>
+              updateSection(
+                section.id,
+                vals
+              )
+            }
+          />
 
-                  {/* STEP NUMBER */}
+
+
+          <div className="max-w-6xl mx-auto px-6 space-y-8">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+
+
+
+              {/* ================= LEFT CONTENT ================= */}
+
+              <div className="rounded-xl border bg-white p-6 space-y-6">
+
+
+
+                {/* STEP NUMBER */}
+
+                <div>
+
+                  <label className="text-xs font-bold text-gray-500 uppercase block mb-1">
+                    Step Number
+                  </label>
+
                   <input
                     name="stepNumber"
-                    value={values.stepNumber}
-                    onChange={handleChange}
+                    value={
+                      values.stepNumber
+                    }
+                    onChange={
+                      handleChange
+                    }
                     placeholder="01"
-                    className="w-20 text-black border-gray-300 rounded-full border px-3 py-2 text-center"
+                    className="w-20 text-black border border-gray-300 rounded-full px-3 py-2 text-center"
                   />
 
-                  {/* HEADING */}
-                  <textarea
-                    name="heading"
-                    value={values.heading}
-                    onChange={handleChange}
-                    placeholder="Pick Your Plan"
-                    className="w-full text-black border-gray-300 border px-4 py-3 text-2xl font-bold"
+                </div>
+
+
+
+                {/* HEADING EDITOR */}
+
+                <div>
+
+                  <label className="text-xs font-bold text-gray-500 uppercase block mb-1">
+                    Heading
+                  </label>
+
+                  <HeadingInput
+                    value={
+                      values.heading
+                    }
+                    onChange={(
+                      html
+                    ) =>
+                      setFieldValue(
+                        "heading",
+                        html
+                      )
+                    }
                   />
 
-                  {/* PARAGRAPHS */}
-                  <FieldArray name="description.paragraphs">
-                    {({ push, remove }) => (
-                      <div className="space-y-4">
-                        {values.description.paragraphs.map((_, index) => (
+                </div>
+
+
+
+                {/* PARAGRAPHS */}
+
+                <FieldArray name="description.paragraphs">
+
+                  {({
+                    push,
+                    remove,
+                  }) => (
+
+                    <div className="space-y-4">
+
+                      {values.description.paragraphs.map(
+                        (
+                          paragraph,
+                          index
+                        ) => (
+
                           <div
-                            key={index}
-                            className="flex gap-2 items-start"
+                            key={
+                              paragraph.id ??
+                              index
+                            }
+                            className="border border-gray-200 rounded-lg p-4 relative"
                           >
-                            <textarea
-                              name={`description.paragraphs.${index}.content`}
-                              value={values?.description.paragraphs[index]?.content}
-                              onChange={handleChange}
-                              className="flex-1 text-black border-gray-300 border p-3"
-                              rows={3}
+
+                            {/* Editor */}
+
+                            <ParagraphEditor
+                              value={
+                                paragraph.content
+                              }
+                              onChange={(
+                                html
+                              ) =>
+                                setFieldValue(
+                                  `description.paragraphs.${index}.content`,
+                                  html
+                                )
+                              }
                             />
 
-                            {values.description.paragraphs.length > 1 && (
-                              <button
-                                type="button"
-                                onClick={() => remove(index)}
-                              >
-                                <FiTrash2 className="text-red-500 mt-2" />
-                              </button>
-                            )}
+
+
+                            {/* Remove */}
+
+                            {values.description.paragraphs.length >
+                              1 && (
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    remove(
+                                      index
+                                    )
+                                  }
+                                  className="absolute top-2 right-2"
+                                >
+                                  <FiTrash2 className="text-red-500 hover:text-red-600 cursor-pointer" />
+                                </button>
+
+                              )}
+
                           </div>
-                        ))}
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            push({ id: Date.now(), content: "" })
-                          }
-                          className="text-green-500 cursor-pointer text-sm font-medium"
-                        >
-                          + Add Paragraph
-                        </button>
-                      </div>
-                    )}
-                  </FieldArray>
-                </div>
-
-                {/* RIGHT – IMAGE */}
-                <div className="rounded-xl border bg-white p-6 space-y-4">
-                  <label className="text-sm font-medium text-gray-600">
-                    Upload Image
-                  </label>
-
-                  <label className="relative flex h-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed">
-                    {values.imagePreview || values.image ? (
-                      <img
-                        src={values.imagePreview || resolveImageUrl(values.image)}
-                        className="h-full w-full object-cover rounded-lg"
-                        alt="Preview"
-                      />
-                    ) : (
-                      <span className="text-gray-400">
-                        Click to upload image
-                      </span>
-                    )}
-
-                    <input
-                      type="file"
-                      accept="image/*"
-                      className="absolute inset-0 opacity-0 cursor-pointer"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (!file) return;
-
-                        setFieldValue("imageFile", file);
-                        setFieldValue("imagePreview", URL.createObjectURL(file));
-                      }}
-                    />
-                  </label>
+                        )
+                      )}
 
 
-                </div>
+
+                      {/* Add */}
+
+                      <button
+                        type="button"
+                        onClick={() =>
+                          push({
+                            id: Date.now(),
+                            content:
+                              "<p>New paragraph...</p>",
+                          })
+                        }
+                        className="text-green-600 font-medium"
+                      >
+                        + Add Paragraph
+                      </button>
+
+                    </div>
+
+                  )}
+
+                </FieldArray>
+
+
+
               </div>
 
-              {/* SAVE */}
-              {/* <div className="flex justify-end">
-              <button
-                type="submit"
-                className="bg-green-600 text-white px-8 py-2 rounded-lg"
-              >
-                Save Template 2
-              </button>
-            </div> */}
+
+
+              {/* ================= RIGHT IMAGE ================= */}
+
+              <div className="rounded-xl border bg-white p-6 space-y-4">
+
+                <label className="text-xs font-bold text-gray-500 uppercase block">
+                  Upload Image
+                </label>
+
+
+
+                <label className="relative flex h-64 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed">
+
+                  {values.imagePreview ||
+                    values.image ? (
+
+                    <img
+                      src={
+                        values.imagePreview ||
+                        resolveImageUrl(
+                          values.image
+                        )
+                      }
+                      className="h-full w-full object-cover rounded-lg"
+                      alt="Preview"
+                    />
+
+                  ) : (
+
+                    <span className="text-gray-400">
+                      Click to upload image
+                    </span>
+
+                  )}
+
+
+
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    onChange={(e) => {
+
+                      const file =
+                        e.target
+                          .files?.[0];
+
+                      if (!file)
+                        return;
+
+                      setFieldValue(
+                        "imageFile",
+                        file
+                      );
+
+                      setFieldValue(
+                        "imagePreview",
+                        URL.createObjectURL(
+                          file
+                        )
+                      );
+
+                    }}
+                  />
+
+                </label>
+
+              </div>
+
+
+
             </div>
-          </form>
-        )
-      }}
+
+          </div>
+
+        </form>
+
+      )}
+
     </Formik>
+
   );
+
 }

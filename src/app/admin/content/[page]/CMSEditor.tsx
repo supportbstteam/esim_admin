@@ -18,11 +18,12 @@ import { CMSProvider, useCMS } from "@/components/useCMS";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { savePage } from "@/store/thunks/CmsPageThunk";
 import { handleImageUploadForSection } from "@/utils/handleTemplate6";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiTrash2 } from "react-icons/fi";
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const Renderer = () => {
+    const router = useRouter();
     const { sections, removeSection } = useCMS();
 
     if (!sections.length) {
@@ -86,6 +87,7 @@ const Renderer = () => {
 };
 
 const SaveAll = () => {
+    const router = useRouter();
     const dispatch = useAppDispatch();
     const { sections, page } = useCMS();
 
@@ -120,6 +122,7 @@ const SaveAll = () => {
                     sections: processedSections,
                 })
             );
+            router.back();
         } catch (err) {
             console.error("Save failed:", err);
         }

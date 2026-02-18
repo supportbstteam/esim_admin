@@ -173,3 +173,20 @@ html {
   background: #ffffff !important;
   border: 1px solid #d1d5db !important;
 }
+
+.rdw-dropdown-wrapper {
+  background: white !important;
+  color: black !important;
+}
+
+.rdw-dropdown-optionwrapper {
+  background: white !important;
+}
+
+.rdw-dropdownoption-default {
+  color: black !important;
+}
+
+.rdw-colorpicker-modal {
+  background: white !important;
+}
