@@ -7,8 +7,15 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
   const [initialized, setInitialized] = useState(false);
   const savedRange = useRef<Range | null>(null);
   const [fontSize, setFontSize] = useState("16");
-  
-  // Track active styles for UI highlighting
+
+  // Table Selector States
+  const [showTableGrid, setShowTableGrid] = useState(false);
+  const [hoveredGrid, setHoveredGrid] = useState({ r: 0, c: 0 });
+
+  // Grid dimensions
+  const GRID_ROWS = 10;
+  const GRID_COLS = 10;
+
   const [activeStyles, setActiveStyles] = useState({
     bold: false,
     italic: false,
@@ -28,7 +35,6 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
 
   const checkActiveStyles = () => {
     if (typeof document === "undefined") return;
-    
     setActiveStyles({
       bold: document.queryCommandState("bold"),
       italic: document.queryCommandState("italic"),
@@ -44,7 +50,7 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
     const sel = window.getSelection();
     if (sel && sel.rangeCount > 0) {
       savedRange.current = sel.getRangeAt(0);
-      checkActiveStyles(); // Sync icons when selection changes
+      checkActiveStyles();
     }
   };
 
@@ -61,7 +67,26 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
     restoreSelection();
     document.execCommand(cmd, false, val);
     saveSelection();
-    checkActiveStyles(); // Immediately update UI
+    checkActiveStyles();
+    onChange(editorRef.current?.innerHTML || "");
+  };
+
+  const insertTable = (rows: number, cols: number) => {
+    editorRef.current?.focus();
+    restoreSelection();
+
+    let tableHTML = `<table style="width: 100%; border-collapse: collapse; margin: 10px 0; border: 1px solid #cbd5e1;"><tbody>`;
+    for (let i = 0; i < rows; i++) {
+      tableHTML += "<tr>";
+      for (let j = 0; j < cols; j++) {
+        tableHTML += `<td style="border: 1px solid #cbd5e1; padding: 12px; min-width: 50px;"><br></td>`;
+      }
+      tableHTML += "</tr>";
+    }
+    tableHTML += `</tbody></table><p><br></p>`;
+
+    document.execCommand("insertHTML", false, tableHTML);
+    setShowTableGrid(false);
     onChange(editorRef.current?.innerHTML || "");
   };
 
@@ -84,7 +109,7 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
     } else {
       const span = document.createElement("span");
       span.style.fontSize = `${size}px`;
-      span.innerHTML = "&#8203;"; 
+      span.innerHTML = "&#8203;";
       range.insertNode(span);
       const newRange = document.createRange();
       newRange.setStart(span, 1);
@@ -100,17 +125,14 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
     <div className="border border-gray-300 rounded-lg shadow-sm overflow-hidden bg-white">
       {/* TOOLBAR */}
       <div className="flex flex-wrap gap-1 p-2 bg-gray-50 border-b border-gray-200 items-center">
-        
+
         {/* Style Group */}
         <div className="flex gap-1 pr-2 border-r border-gray-300">
           <ToolbarButton onClick={() => applyStyle("bold")} title="Bold" active={activeStyles.bold}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/><path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"/></svg>
           </ToolbarButton>
           <ToolbarButton onClick={() => applyStyle("italic")} title="Italic" active={activeStyles.italic}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
-          </ToolbarButton>
-          <ToolbarButton onClick={() => applyStyle("underline")} title="Underline" active={activeStyles.underline}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"/><line x1="4" y1="21" x2="20" y2="21"/></svg>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="19" y1="4" x2="10" y2="4"/><line x1="14" y1="20" x2="5" y2="20"/><line x1="15" y1="4" x2="9" y2="20"/></svg>
           </ToolbarButton>
         </div>
 
@@ -137,33 +159,71 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
           </select>
         </div>
 
-        {/* Alignment */}
-        <div className="flex gap-1 px-2 border-r border-gray-300">
-          <ToolbarButton onClick={() => applyStyle("justifyLeft")} title="Align Left" active={activeStyles.justifyLeft}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+        {/* --- WIDER TABLE SELECTOR --- */}
+        <div className="relative px-2 border-r w-1/2 border-gray-300">
+          <ToolbarButton 
+            onClick={() => setShowTableGrid(!showTableGrid)} 
+            title="Insert Table"
+            active={showTableGrid}
+          >
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/>
+            </svg>
           </ToolbarButton>
-          <ToolbarButton onClick={() => applyStyle("justifyCenter")} title="Align Center" active={activeStyles.justifyCenter}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="10" x2="6" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="18" y1="18" x2="6" y2="18"/></svg>
-          </ToolbarButton>
+
+          {showTableGrid && (
+            <div className="absolute top-10 left-0 z-50 bg-white border border-gray-300 p-4 shadow-2xl rounded-lg animate-in fade-in slide-in-from-top-1 ">
+              <div className="flex justify-between items-center mb-3">
+                <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Insert Table</span>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full">
+                  {hoveredGrid.r > 0 ? `${hoveredGrid.r} x ${hoveredGrid.c}` : "Select size"}
+                </span>
+              </div>
+
+              {/* The Grid Container - Adjusted for 10 columns */}
+              <div 
+                className="grid gap-1.5" 
+                style={{ gridTemplateColumns: `repeat(${GRID_COLS}, minmax(0, 1fr))` }}
+                onMouseLeave={() => setHoveredGrid({ r: 0, c: 0 })}
+              >
+                {[...Array(GRID_ROWS * GRID_COLS)].map((_, i) => {
+                  const r = Math.floor(i / GRID_COLS) + 1;
+                  const c = (i % GRID_COLS) + 1;
+                  const isHighlighted = r <= hoveredGrid.r && c <= hoveredGrid.c;
+                  return (
+                    <div 
+                      key={i}
+                      onMouseEnter={() => setHoveredGrid({ r, c })}
+                      onClick={() => insertTable(r, c)}
+                      className={`w-6 h-6 border transition-all  cursor-pointer rounded-sm ${
+                        isHighlighted 
+                          ? "bg-green-500 border-green-600 scale-110 shadow-sm z-10" 
+                          : "bg-gray-50 border-gray-200 hover:border-gray-400"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Lists & Color */}
+        {/* Alignment & Color */}
         <div className="flex gap-1 px-2 items-center">
-          <ToolbarButton onClick={() => applyStyle("insertUnorderedList")} title="Bullet List" active={activeStyles.listUnordered}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <ToolbarButton onClick={() => applyStyle("justifyLeft")} title="Align Left">
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
           </ToolbarButton>
-          
-          <div className="relative flex items-center ml-2 group" title="Text Color">
-             <input 
-              type="color" 
-              onChange={(e) => applyStyle("foreColor", e.target.value)}
-              className="w-6 h-6 p-0 border border-gray-300 rounded overflow-hidden cursor-pointer shadow-sm"
+          <div className="flex items-center ml-2 pl-2 border-l border-gray-300">
+            <input 
+                type="color" 
+                onChange={(e) => applyStyle("foreColor", e.target.value)}
+                className="w-6 h-6 p-0 border border-gray-200 rounded-full cursor-pointer shadow-sm"
             />
           </div>
         </div>
       </div>
 
-      {/* EDITOR */}
+      {/* EDITOR AREA */}
       <div
         ref={editorRef}
         contentEditable
@@ -173,7 +233,10 @@ export default function CustomEditor({ value, onChange }: { value: string, onCha
         }}
         onMouseUp={saveSelection}
         onKeyUp={saveSelection}
-        className="p-4 min-h-[200px] outline-none bg-white text-black prose max-w-none transition-all"
+        className="p-6 min-h-[200px] outline-none bg-white text-black prose max-w-none transition-all 
+                   [&_table]:border-collapse [&_table]:w-full [&_table]:my-6
+                   [&_td]:border [&_td]:border-gray-300 [&_td]:p-3 [&_td]:min-w-[80px] 
+                   [&_td:focus]:outline-none [&_td:focus]:ring-2 [&_td:focus]:ring-blue-400 [&_td:focus]:bg-blue-50/50"
         style={{ fontSize: `${fontSize}px` }}
       />
     </div>
@@ -184,15 +247,14 @@ function ToolbarButton({ children, onClick, title, active }: { children: React.R
   return (
     <button
       type="button"
-      title={title}
       onMouseDown={(e) => { e.preventDefault(); onClick(); }}
-      className={`w-8 h-8 flex items-center justify-center rounded transition-all duration-200 ${
-        active 
-          ? "bg-blue-100 text-blue-600 shadow-inner" 
-          : "text-gray-600 hover:bg-gray-200 hover:text-black"
+      className={`w-9 h-9 flex cursor-pointer items-center justify-center rounded-md transition-all  ${
+        active ? "bg-green-600 text-white shadow-md scale-105" : "text-gray-600 hover:bg-gray-200"
       }`}
+      title={title}
     >
       {children}
     </button>
   );
 }
+

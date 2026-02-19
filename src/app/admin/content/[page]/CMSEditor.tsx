@@ -8,12 +8,14 @@ import Template3Preview from "@/components/templates/previews/TemplatePreview3";
 import Template4Preview from "@/components/templates/previews/TemplatePreview4";
 import Template5Preview from "@/components/templates/previews/TemplatePreview5";
 import Template6Preview from "@/components/templates/previews/TemplatePreview6";
+import Template7Preview from "@/components/templates/previews/TemplatePreview7";
 import Template1 from "@/components/templates/Template1";
 import Template2 from "@/components/templates/Template2";
 import Template3 from "@/components/templates/Template3";
 import Template4 from "@/components/templates/Template4";
 import Template5 from "@/components/templates/Template5";
 import Template6 from "@/components/templates/Template6";
+import Template7 from "@/components/templates/Template7";
 import { CMSProvider, useCMS } from "@/components/useCMS";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { savePage } from "@/store/thunks/CmsPageThunk";
@@ -79,6 +81,10 @@ const Renderer = () => {
 
                     {section.template === "template6" && (
                         <Template6 section={section} />
+                    )}
+
+                    {section.template === "template7" && (
+                        <Template7 section={section} />
                     )}
                 </div>
             ))}
@@ -222,6 +228,11 @@ const TemplateSelector = () => {
             key: "template6",
             title: "Picture Upload",
             Preview: Template6Preview,
+        },
+        {
+            key: "template7",
+            title: "Picture Upload",
+            Preview: Template7Preview,
         },
     ];
 
