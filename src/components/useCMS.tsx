@@ -9,7 +9,8 @@ export type TemplateKey =
   | "template3"
   | "template4"
   | "template5"
-  | "template6";
+  | "template6"
+  | "template7"; // Added template7
 
 export interface Section {
   id: string;
@@ -20,8 +21,6 @@ export interface Section {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CMSContext = createContext<any>(null);
-
-
 
 const getInitialData = (template: TemplateKey) => {
   switch (template) {
@@ -36,19 +35,11 @@ const getInitialData = (template: TemplateKey) => {
       return {
         stepNumber: "",
         heading: "",
-        image: "",          // DB value
-        imageFile: null,    // UI only
-        imagePreview: "",   // UI only
+        image: "",          
+        imageFile: null,    
+        imagePreview: "",   
         description: { paragraphs: [{ content: "" }] },
       };
-    // case "template2":
-    // case "template3":
-    //   return {
-    //     stepNumber: "",
-    //     heading: "",
-    //     image: "",
-    //     description: { paragraphs: [{ content: "" }] },
-    //   };
     case "template4":
       return {
         items: [
@@ -56,7 +47,6 @@ const getInitialData = (template: TemplateKey) => {
         ],
       };
     case "template5":
-      // ✅ Collapsible / Terms / FAQ
       return {
         heading: "",
         isCollapsable: true,
@@ -64,32 +54,28 @@ const getInitialData = (template: TemplateKey) => {
           paragraphs: [{ content: "" }],
         },
       };
+    case "template6":
+      // ✅ Schema for Image Upload Template
+      return {
+        image: "",
+        imageFile: null,
+        imagePreview: "",
+      };
+    case "template7":
+      // ✅ Schema for Block-based Dynamic Template
+      return {
+        blocks: [
+          { id: uuid(), type: "paragraph", content: "" }
+        ],
+      };
     default:
       return {};
   }
 };
 
 export const CMSProvider = ({ children }: { children: React.ReactNode }) => {
-  const [page, setPage] = useState<string>(""); // 🔥 NEW
+  const [page, setPage] = useState<string>(""); 
   const [sections, setSections] = useState<Section[]>([]);
-
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const hydrate = (page: string, sectionsFromApi: any[]) => {
-  //   setPage(page);
-  //   setSections(
-  //     sectionsFromApi.map((s) => {
-
-  //       console.log(" -=-=-=-=-= s in the use CMS -=-==-=-=", s);
-  //       return ({
-  //         id: s.id,
-  //         template: s.template,
-  //         data: s.data,
-  //       })
-  //     })
-  //   );
-  // };
-
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const hydrate = (page: string, sectionsFromApi: any[]) => {
@@ -102,16 +88,15 @@ export const CMSProvider = ({ children }: { children: React.ReactNode }) => {
           id: s.id,
           template: s.template,
           data: {
-            ...defaults,   // ensure missing keys exist
-            ...s.data,     // DB data overrides defaults
-            imageFile: null,      // always reset
-            imagePreview: "",     // always reset
+            ...defaults,   
+            ...s.data,     
+            imageFile: null,      
+            imagePreview: "",     
           },
         };
       })
     );
   };
-
 
   const addSection = (template: TemplateKey) => {
     setSections((prev) => [
@@ -138,9 +123,10 @@ export const CMSProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <CMSContext.Provider
       value={{
-        page,        // 🔥 expose
-        setPage,     // 🔥 expose
+        page,
+        setPage,
         sections,
+        setSections, // 🔥 EXPOSED: Required for dnd-kit reordering
         hydrate,
         addSection,
         updateSection,
