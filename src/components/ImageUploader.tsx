@@ -17,7 +17,7 @@ interface UploadImageProps {
   onChange: (url: string) => void;
 }
 
-const UploadImage: React.FC<UploadImageProps> = ({ label = "Upload Image", value, onChange }) => {
+const ImageUploadOnCloudFair: React.FC<UploadImageProps> = ({ label = "Upload Image", value, onChange }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
 
@@ -156,4 +156,4 @@ const UploadImage: React.FC<UploadImageProps> = ({ label = "Upload Image", value
   );
 };
 
-export default UploadImage;
+export default ImageUploadOnCloudFair;

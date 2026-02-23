@@ -251,6 +251,8 @@ const Renderer = () => {
 
 /* -------- SAVE LOGIC -------- */
 const SaveAll = () => {
+
+    const { id } = useAppSelector(state => state?.cmsPages);
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { sections, page, banner } = useCMS();
@@ -266,8 +268,8 @@ const SaveAll = () => {
                     processedSections.push({ template: section.template, data: section.data });
                 }
             }
-            dispatch(savePage({ page, sections: processedSections }));
-            router.back();
+            dispatch(savePage({ page, sections: processedSections, id: id || "" }));
+            // router.back();
         } catch (err) {
             console.error("Save failed:", err);
         }
@@ -375,9 +377,12 @@ const TemplateSelector = () => {
 };
 
 const CreateCMSInner = () => {
-    const { page, sections, loading } = useAppSelector((state) => state.cmsPages);
+    const { page, sections, loading, id } = useAppSelector((state) => state.cmsPages);
     const { hydrate } = useCMS();
     const hydratedRef = React.useRef(false);
+
+
+    console.log("-=-=- page in the CMS PAGES EDTIOR -=-=-=-", page);
 
     React.useEffect(() => {
         if (!hydratedRef.current && page && sections?.length > 0) {

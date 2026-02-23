@@ -105,7 +105,7 @@ const Cms2Table: React.FC = () => {
               dispatch(fetchPageBySlug(row.original.page));
               router.push(`/admin/content/${row.original.page}`)
             }}
-            className="p-2 rounded hover:bg-gray-700 transition"
+            className="p-2 rounded cursor-pointer hover:bg-gray-700 transition"
           >
             <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
           </button>

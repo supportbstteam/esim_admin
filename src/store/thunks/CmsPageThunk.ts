@@ -12,15 +12,17 @@ export const savePage = createAsyncThunk(
     "cms/savePage",
     async (
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { page, sections }: { page: string; sections: any[] },
+        { page, sections, id }: { page: string; sections: any[], id: string },
         { rejectWithValue }
     ) => {
+        // console.log("-=-=- id in the save page -=-=", id);
+        // return;
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const res: any = await api({
                 url: `/admin/cms/pages/${page}`,
                 method: "PUT", // always PUT
-                data: { sections },
+                data: { sections, id },
             });
 
             if (res.data) {
