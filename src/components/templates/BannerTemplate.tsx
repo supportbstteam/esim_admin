@@ -97,7 +97,7 @@ export default function BannerTemplate({ section }: Props) {
             />
 
             {/* HEADING */}
-            <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
+            {/* <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
 
               <label className="text-xs font-bold text-gray-500 uppercase">
                 Banner Heading
@@ -110,10 +110,35 @@ export default function BannerTemplate({ section }: Props) {
                 }
               />
 
+            </div> */}
+
+            <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
+              <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                Main Heading
+              </label>
+              <input
+                value={values.heading}
+                onChange={(e) => setFieldValue("heading", e.target.value)}
+                placeholder="Enter heading text..."
+                className="w-full border border-gray-300 rounded-md p-3 text-black focus:ring-2 focus:ring-green-500 outline-none transition-all"
+              />
+            </div>
+
+            {/* SUB HEADIND */}
+            <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
+              <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                Sub Heading
+              </label>
+              <input
+                value={values.subHeading}
+                onChange={(e) => setFieldValue("subHeading", e.target.value)}
+                placeholder="Enter heading text..."
+                className="w-full border border-gray-300 rounded-md p-3 text-black focus:ring-2 focus:ring-green-500 outline-none transition-all"
+              />
             </div>
 
             {/* SUBHEADING */}
-            <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
+            {/* <div className="rounded-xl border bg-white p-6 space-y-3 shadow-sm">
 
               <label className="text-xs font-bold text-gray-500 uppercase">
                 Banner Sub Heading
@@ -126,7 +151,7 @@ export default function BannerTemplate({ section }: Props) {
                 }
               />
 
-            </div>
+            </div> */}
 
           </div>
 

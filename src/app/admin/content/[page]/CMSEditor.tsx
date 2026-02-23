@@ -269,7 +269,7 @@ const SaveAll = () => {
                 }
             }
             dispatch(savePage({ page, sections: processedSections, id: id || "" }));
-            // router.back();
+            router.back();
         } catch (err) {
             console.error("Save failed:", err);
         }
