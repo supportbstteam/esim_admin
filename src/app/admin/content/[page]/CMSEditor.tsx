@@ -43,6 +43,7 @@ import { CMSProvider, useCMS } from "@/components/useCMS";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { savePage } from "@/store/thunks/CmsPageThunk";
 import { handleImageUploadForSection } from "@/utils/handleTemplate6";
+import toast from "react-hot-toast";
 
 /* -------- SORTABLE ITEM WRAPPER -------- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -268,8 +269,25 @@ const SaveAll = () => {
                     processedSections.push({ template: section.template, data: section.data });
                 }
             }
-            dispatch(savePage({ page, sections: processedSections, id: id || "" }));
-            router.back();
+
+            // console.log("-=-=-=-= processed Sections -=-=-=-=",processedSections);
+
+            const response = await dispatch(savePage({ page, sections: processedSections, id: id || "" }));
+
+            if (response?.type === 'cms/savePage/fulfilled') {
+
+                if (id.trim().length > 0) {
+                    toast.success("Page Updated Successfully");
+                    router.back()
+                }
+                else {
+                    toast.success("Page Created Successfully")
+                    router.back()
+                }
+            }
+
+            // console.log("-=-=-=- response in the cms editors -=-=-=-=-=-",response);
+            // router.back(); 
         } catch (err) {
             console.error("Save failed:", err);
         }

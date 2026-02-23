@@ -6,6 +6,7 @@ import { api } from "@/lib/api";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { joinUrl } from "@/lib/joinUrl";
 
 interface ImageData {
     name: string;
@@ -209,6 +210,10 @@ export default function UploadImage({
 
             const data = response.data.data;
 
+
+            // console.log("-=-=--= data -=-=-=-=",data);
+            // return;
+
             const savedImage: ImageData = {
                 name: data.originalName,
                 size: data.size,
@@ -216,8 +221,10 @@ export default function UploadImage({
                 fileName: data.fileName,
                 filePath: data.filePath,
                 url:
-                    `${process.env.NEXT_PUBLIC_API_URL}` +
-                    data.filePath,
+                    joinUrl(
+                        process.env.NEXT_PUBLIC_API_URL!,
+                        data.filePath
+                    ),
                 width: tempImage?.width,
                 height: tempImage?.height,
             };
