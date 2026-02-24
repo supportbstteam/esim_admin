@@ -44,6 +44,7 @@ import { useAppDispatch, useAppSelector } from "@/store";
 import { savePage } from "@/store/thunks/CmsPageThunk";
 import { handleImageUploadForSection } from "@/utils/handleTemplate6";
 import toast from "react-hot-toast";
+import FullscreenLoader from "@/components/modals/FullScreenLoading";
 
 /* -------- SORTABLE ITEM WRAPPER -------- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -274,9 +275,11 @@ const SaveAll = () => {
 
             const response = await dispatch(savePage({ page, sections: processedSections, id: id || "" }));
 
+            console.log("--=-=- response in the create dispatch -=-=-=-", response, id);
+
             if (response?.type === 'cms/savePage/fulfilled') {
 
-                if (id.trim().length > 0) {
+                if (id && (id.length > 0)) {
                     toast.success("Page Updated Successfully");
                     router.back()
                 }
@@ -400,7 +403,7 @@ const CreateCMSInner = () => {
     const hydratedRef = React.useRef(false);
 
 
-    console.log("-=-=- page in the CMS PAGES EDTIOR -=-=-=-", page);
+    // console.log("-=-=- page in the CMS PAGES EDTIOR -=-=-=-", page);
 
     React.useEffect(() => {
         if (!hydratedRef.current && page && sections?.length > 0) {
@@ -409,10 +412,11 @@ const CreateCMSInner = () => {
         }
     }, [page, sections, hydrate]);
 
-    if (loading) return null;
+    // if (loading) return null;
 
     return (
         <div className="bg-gray-50 min-h-screen">
+            {loading && <FullscreenLoader text="Loading CMS Editor..." />}
             <PageHeader title="CMS Editor" showBackButton showAddButton={false} />
             <PageInput />
             <TemplateSelector />
