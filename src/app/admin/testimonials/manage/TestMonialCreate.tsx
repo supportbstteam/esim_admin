@@ -40,14 +40,14 @@ function TestMonialCreate() {
   }, [dispatch]);
 
 
-  // console.log("----- testimonial -----", testimonial);
+  // console.log("----- testimonial -----", testimonial?.name);
 
   // ✅ Initial Values
   const initialValues = {
-    name: (mode === "update" && id && testimonial) ? testimonial?.name : '',
-    profession: (mode === "update" && id && testimonial) ? testimonial?.profession : '',
-    content: (mode === "update" && id && testimonial) ? testimonial?.content : '',
-    active: (mode === "update" && id && testimonial) ? testimonial?.isActive : true,
+    name: testimonial?.name || '',
+    profession: testimonial?.profession || '',
+    content: testimonial?.content || '',
+    active: testimonial?.isActive ?? true,
   };
 
   return (

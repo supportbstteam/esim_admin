@@ -76,15 +76,15 @@ const Cms2Table: React.FC = () => {
         ),
       }),
 
-      columnHelper.display({
-        id: "preview",
-        header: "Preview",
-        cell: ({ row }) => (
-          <span className="text-gray-400 text-sm line-clamp-2">
-            {getPreviewText(row.original.sections)}
-          </span>
-        ),
-      }),
+      // columnHelper.display({
+      //   id: "preview",
+      //   header: "Preview",
+      //   cell: ({ row }) => (
+      //     <span className="text-gray-400 text-sm line-clamp-2">
+      //       {getPreviewText(row.original.sections)}
+      //     </span>
+      //   ),
+      // }),
 
       columnHelper.accessor("updatedAt", {
         header: "Updated",

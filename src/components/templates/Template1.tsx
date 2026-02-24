@@ -180,7 +180,7 @@ export default function Template1({ section }: Props) {
                 <button
                   type="button"
                   onClick={addParagraph}
-                  className="flex items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full transition-all shadow-md active:scale-95"
+                  className="flex cursor-pointer items-center gap-2 px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-full transition-all shadow-md active:scale-95"
                 >
                   <span className="text-xl">+</span> Add New Paragraph
                 </button>
