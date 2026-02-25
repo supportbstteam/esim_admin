@@ -118,14 +118,14 @@ function SocialMediaManagement() {
 
                   <button
                     type="button"
-                    className="bg-amber-600 cursor-pointer  p-2 rounded-md"
+                    className="bg-amber-600 cursor-pointer  p-2 text-white rounded-md"
                     onClick={() => push({ type: "", link: "" })}
                   >
                     + Add Social
                   </button>
                   <button
                     type="submit"
-                    className="bg-[#243c50] cursor-pointer  p-2 rounded-md absolute right-2 bottom-2 cursor-pointer"
+                    className="bg-[#243c50] cursor-pointer  text-white p-2 text-white rounded-md absolute right-2 bottom-2 cursor-pointer"
                     disabled={!isValid || !dirty}
                   >
                     Submit
@@ -349,7 +349,7 @@ const ContactUsManagement = () => {
                         <button
                           type="button"
                           onClick={() => remove(index)}
-                          className="mt-2 cursor-pointer  sm:mt-0"
+                          className="mt-2 cursor-pointer   sm:mt-0"
                         >
                           <LucideTrash2 className="text-[#ff0000]" />
                         </button>
@@ -360,7 +360,7 @@ const ContactUsManagement = () => {
                     <div className="flex justify-between mt-4">
                       <button
                         type="button"
-                        className="bg-amber-600 text-white px-3 py-2 rounded-md cursor-pointer"
+                        className="bg-amber-600 text-white px-3  py-2 rounded-md cursor-pointer"
                         onClick={() =>
                           push({ type: "", value: "", position: "" })
                         }
