@@ -38,6 +38,8 @@ export default function AuthPage() {
     const rememberedPassword = Cookies.get("rememberedPassword") || "";
     const rememberMe = Cookies.get("rememberMe") === "true";
 
+    console.log("Loaded from cookies:", { rememberedUsername, rememberMe });
+
     setInitialValues({
       username: rememberedUsername,
       password: rememberedPassword,
@@ -160,7 +162,7 @@ export default function AuthPage() {
                       name="rememberMe"
                       checked={values.rememberMe}
                       onChange={handleChange}
-                      className="h-4 w-4 text-emerald-600 border-emerald-500 rounded"
+                      className="h-4 w-4 cursor-pointer text-emerald-600 border-emerald-500 rounded"
                     />
                     <span>Remember me</span>
                   </label>
