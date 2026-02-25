@@ -1,6 +1,8 @@
-import React from 'react';
-import styled, { keyframes, createGlobalStyle } from 'styled-components';
-import { MdPublic } from 'react-icons/md';
+"use client";
+
+import React from "react";
+import styled, { keyframes, createGlobalStyle } from "styled-components";
+import { useRouter } from "next/navigation";
 
 // Import Bebas Neue font globally
 const GlobalStyle = createGlobalStyle`
@@ -19,11 +21,11 @@ const StatCard = styled.div`
   border-radius: 15px;
   width: 320px;
   height: 220px;
-  background: 
-    linear-gradient(135deg, #f7fafc 100%, #f7fafc 100%) padding-box, /* Light background */
+  background:
+    linear-gradient(135deg, #f7fafc 100%, #f7fafc 100%) padding-box,
     conic-gradient(from var(--angle), #16325d 20%, #37c74f, #16325d 80%) border-box;
-  color: #16325d; /* Dark text for contrast */
-  box-shadow: 0 4px 28px rgba(16,32,60,0.12);
+  color: #16325d;
+  box-shadow: 0 4px 28px rgba(16, 32, 60, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,10 +34,11 @@ const StatCard = styled.div`
   background-clip: padding-box, border-box;
   background-origin: border-box;
   transition: transform 0.18s cubic-bezier(.4,.2,.3,1);
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.04);
-    box-shadow: 0 8px 42px rgba(54,199,79,0.15);
+    box-shadow: 0 8px 42px rgba(54, 199, 79, 0.15);
   }
 `;
 
@@ -44,6 +47,7 @@ const IconBox = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
   svg {
     width: 54px;
     height: 54px;
@@ -53,40 +57,52 @@ const IconBox = styled.div`
 `;
 
 const CardTitle = styled.div`
-  font-family: 'Bebas Neue', cursive, sans-serif;
+  font-family: "Bebas Neue", cursive, sans-serif;
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 0.18rem;
   opacity: 0.95;
   text-align: center;
-  color: #16325d; /* Dark text */
+  color: #16325d;
 `;
 
 const CardValue = styled.div`
-  font-family: 'Bebas Neue', cursive, sans-serif;
+  font-family: "Bebas Neue", cursive, sans-serif;
   font-size: 2.9rem;
   font-weight: bold;
   text-align: center;
-  color: #16325d; /* Dark text */
+  color: #16325d;
 `;
 
 type Props = {
-    title: string;
-    value: number;
-    icon: React.ReactNode;
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+  route?: string; // route is optional
 };
 
-const CardStat = ({ title, value, icon }: Props) => (
+const CardStat = ({ title, value, icon, route }: Props) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (route) {
+      router.push(route);
+    }
+  };
+
+  return (
     <>
-        <GlobalStyle />
-        <StatCard>
-            <div className='flex items-center'  >
-            <IconBox>{icon}</IconBox>
-            <CardTitle>{title}</CardTitle>
-            </div>
-            <CardValue>{value}</CardValue>
-        </StatCard>
+      <GlobalStyle />
+      <StatCard onClick={handleClick}>
+        <div className="flex items-center gap-2">
+          <IconBox>{icon}</IconBox>
+          <CardTitle>{title}</CardTitle>
+        </div>
+
+        <CardValue>{value}</CardValue>
+      </StatCard>
     </>
-);
+  );
+};
 
 export default CardStat;

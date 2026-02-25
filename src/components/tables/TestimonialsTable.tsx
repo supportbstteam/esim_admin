@@ -284,6 +284,7 @@ const TestimonialsTable: React.FC = () => {
                 onClose={() => setShowModal(false)}
                 operatorName={selected?.name}
                 onConfirm={handleDelete}
+                heading="Delete Testimonial"
             />
         </div>
     );

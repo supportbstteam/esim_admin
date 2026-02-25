@@ -7,6 +7,7 @@ interface ConfirmDeleteModalProps {
     onClose: () => void;
     onConfirm: () => void;
     operatorName?: string;
+    heading?: string;
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -14,14 +15,15 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
     onClose,
     onConfirm,
     operatorName,
-    loading = false
+    loading = false,
+    heading = "Delete Operator"
 }) => {
     if (!open) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#00000000] backdrop-blur-md transition-colors">
             <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
-                <h2 className="text-lg font-semibold mb-4 text-gray-900">Delete Operator</h2>
+                <h2 className="text-lg font-semibold mb-4 text-gray-900">{heading}</h2>
                 <p className="mb-6 text-gray-700">
                     Are you sure you want to delete{" "}
                     <span className="font-bold">{operatorName || "this operator"}</span>?

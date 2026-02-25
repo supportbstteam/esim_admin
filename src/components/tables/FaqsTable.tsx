@@ -324,6 +324,7 @@ const FaqTable: React.FC = () => {
                 onClose={() => setShowModal(false)}
                 operatorName={selected?.question}
                 onConfirm={handleDelete}
+                heading="Delete FAQ"
             />
         </div>
     );

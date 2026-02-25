@@ -48,10 +48,10 @@ function Dashboard() {
 
   return (
     <CardGrid>
-      <CardStat title="Countries" value={countries?.length ?? 0} icon={<MdPublic />} />
-      <CardStat title="Plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
-      <CardStat title="Topups" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />
-      <CardStat title="Customers" value={customer?.length ?? 0} icon={<MdPerson />} />
+      <CardStat title="Countries" route="/admin/country" value={countries?.length ?? 0} icon={<MdPublic />} />
+      <CardStat title="Plans" route="/admin/plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
+      <CardStat title="Topups" route="/admin/topup" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />
+      <CardStat title="Customers" route="/admin/customers" value={customer?.length ?? 0} icon={<MdPerson />} />
 
     </CardGrid>
   );
