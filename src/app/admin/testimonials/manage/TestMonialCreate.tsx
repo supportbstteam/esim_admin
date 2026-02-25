@@ -8,6 +8,7 @@ import { createTestimonial, getTestimonialById, updateTestimonial } from '@/stor
 import { Toggle } from '@/components/ui/Toggle';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PageHeader from '@/components/common/PageHeader';
+import TestimonialFormSkeleton from '@/components/skeletons/TestimonialFormSkeleton';
 
 // ✅ Validation Schema
 const TestimonialSchema = Yup.object().shape({
@@ -25,7 +26,7 @@ function TestMonialCreate() {
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
   const id = searchParams.get("id");
-  const { testimonial } = useAppSelector(state => state?.testimonials);
+  const { testimonial, loading } = useAppSelector(state => state?.testimonials);
 
   // console.log("---- id ----", id);
 
@@ -38,6 +39,10 @@ function TestMonialCreate() {
     if (id && mode === "update")
       fetchTestId();
   }, [dispatch]);
+
+  if (mode === "update" && loading) {
+    return <TestimonialFormSkeleton />;
+  }
 
 
   // console.log("----- testimonial -----", testimonial?.name);

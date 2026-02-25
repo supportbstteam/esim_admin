@@ -19,6 +19,7 @@ import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Toggle } from "../ui/Toggle";
 import {
     Testimonial,
+    clearTestimonial,
     deleteTestimonial,
     updateTestimonial,
     updateTestimonialStatus,
@@ -117,9 +118,10 @@ const TestimonialsTable: React.FC = () => {
                 cell: ({ row }) => (
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={() =>
-                                router.push(`/admin/testimonials/manage?mode=update&id=${row.original.id}`)
-                            }
+                            onClick={async() =>{
+                                // dispatch(clearTestimonial())
+                                return router.push(`/admin/testimonials/manage?mode=update&id=${row.original.id}`)
+                            }}
                             className="p-2 cursor-pointer rounded hover:bg-gray-700 transition"
                             aria-label="Edit testimonial"
                         >
