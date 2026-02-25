@@ -170,7 +170,7 @@ function FaqCreate() {
               <button
                 type="submit"
                 disabled={isSubmitting || loading}
-                className={`bg-green-500 mt-5 text-white px-5 py-2 rounded-lg font-semibold transition ${isSubmitting || loading
+                className={`bg-green-500 cursor-pointer mt-5 text-white px-5 py-2 rounded-lg font-semibold transition ${isSubmitting || loading
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-green-600"
                   }`}
