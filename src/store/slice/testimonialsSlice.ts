@@ -66,7 +66,7 @@ export const getTestimonialById = createAsyncThunk(
 // ✅ Create testimonial
 export const createTestimonial = createAsyncThunk(
   "testimonials/create",
-  async (data: { name: string; profession?: string; content: string }, { rejectWithValue }) => {
+  async (data: { name: string; profession?: string; content: string, active:boolean }, { rejectWithValue }) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const res: any = await api({

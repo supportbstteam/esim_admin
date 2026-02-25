@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { AppDispatch, useAppSelector } from '@/store';
-import { createTestimonial, getTestimonialById, updateTestimonial } from '@/store/slice/testimonialsSlice';
+import { clearTestimonial, createTestimonial, getTestimonialById, updateTestimonial } from '@/store/slice/testimonialsSlice';
 import { Toggle } from '@/components/ui/Toggle';
 import { useRouter, useSearchParams } from 'next/navigation';
 import PageHeader from '@/components/common/PageHeader';
@@ -38,6 +38,10 @@ function TestMonialCreate() {
   useEffect(() => {
     if (id && mode === "update")
       fetchTestId();
+
+    // if (mode === "create")
+    //   dispatch(clearTestimonial());
+
   }, [dispatch]);
 
   if (mode === "update" && loading) {
@@ -66,6 +70,9 @@ function TestMonialCreate() {
         initialValues={initialValues}
         validationSchema={TestimonialSchema}
         onSubmit={async (values, { resetForm, setSubmitting }) => {
+
+          // console.log("----- form values -----", values);
+          // return;
           if (!id) {
             await dispatch(createTestimonial(values));
           }

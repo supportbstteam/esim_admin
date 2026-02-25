@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store";
 import { resetCMSState } from "@/store/slice/cmsPageSlice";
+import { clearTestimonial } from "@/store/slice/testimonialsSlice";
 
 interface PageHeaderProps {
   title: string;
@@ -35,8 +36,15 @@ const PageHeader: React.FC<PageHeaderProps> = ({
             onClick={async() => {
 
               if(title === "CMS2 Pages"){
-                console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
+                // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
                 await dispatch(resetCMSState());
+                // if (addButtonRoute) router.push(addButtonRoute);
+                // return;
+              }
+
+              if(title === "Testimonials"){
+                // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
+                await dispatch(clearTestimonial());
                 // if (addButtonRoute) router.push(addButtonRoute);
                 // return;
               }
