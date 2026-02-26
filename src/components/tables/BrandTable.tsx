@@ -26,6 +26,7 @@ import {
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Toggle } from "../ui/Toggle";
 import { Brand } from "@/lib/types";
+import toast from "react-hot-toast";
 
 const columnHelper = createColumnHelper<Brand>();
 
@@ -47,7 +48,14 @@ export default function BrandTable() {
     const confirmDelete = async () => {
         if (!deleteTarget) return;
         setDeleting(true);
-        await dispatch(deleteBrand(deleteTarget.id));
+        const response =await dispatch(deleteBrand(deleteTarget.id));
+
+        if(response?.meta?.requestStatus === "fulfilled"){
+            toast.success("Brand deleted successfully!");
+        } else {
+            toast.error("Failed to delete brand.");
+        }
+
         setDeleting(false);
         setDeleteTarget(null);
     };
@@ -79,12 +87,20 @@ export default function BrandTable() {
                 cell: info => (
                     <Toggle
                         checked={info.getValue()}
-                        onChange={(val) => {
+                        onChange={async (val) => {
                             const id = info.row.original.id;
 
-                            dispatch(
+                            const response = await dispatch(
                                 val ? restoreBrand(id) : disableBrand(id)
                             );
+
+                            // console.log("Toggle Response:", response);
+
+                            if (response?.meta?.requestStatus === "fulfilled") {
+                                toast.success(`Brand ${val ? "restored" : "disabled"} successfully!`);
+                            } else {
+                                toast.error(`Failed to ${val ? "restore" : "disable"} brand.`);
+                            }
                         }}
                     />
                 ),
@@ -101,7 +117,7 @@ export default function BrandTable() {
                             onClick={() =>
                                 router.push(`/admin/compatible/brands/edit/${row.original.id}`)
                             }
-                            className="p-2 rounded hover:bg-gray-700 transition"
+                            className="p-2 rounded cursor-pointer hover:bg-gray-700 transition"
                         >
                             <FiEdit className="h-5 w-5 text-gray-400 hover:text-white" />
                         </button>
@@ -109,7 +125,7 @@ export default function BrandTable() {
                         {/* Hard Delete */}
                         <button
                             onClick={() => setDeleteTarget(row.original)}
-                            className="p-2 rounded hover:bg-red-700 transition"
+                            className="p-2 rounded cursor-pointer hover:bg-red-700 transition"
                         >
                             <FiTrash2 className="h-5 w-5 text-red-400 hover:text-white" />
                         </button>
@@ -141,7 +157,8 @@ export default function BrandTable() {
                 loading={deleting}
                 operatorName={deleteTarget?.name}
                 onClose={() => setDeleteTarget(null)}
-                onConfirm={confirmDelete}
+                onConfirm={confirmDelete} 
+                heading="Brand Delete"
             />
 
             <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">

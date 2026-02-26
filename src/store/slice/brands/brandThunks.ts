@@ -28,27 +28,27 @@ export const fetchBrands = createAsyncThunk(
 // =============================
 // CREATE BRAND(S)
 export const createBrand = createAsyncThunk(
-  "brands/create",
-  async (
-    payload: { name?: string | string[]; brands?: string[] },
-    { dispatch, rejectWithValue }
-  ) => {
-    try {
-      const res = await api({
-        url: "/admin/brands/add",
-        method: "POST",
-        data: payload,
-      });
+    "brands/create",
+    async (
+        payload: { name?: string; brand?: string, status: boolean },
+        { dispatch, rejectWithValue }
+    ) => {
+        try {
+            const res = await api({
+                url: "/admin/brands/add",
+                method: "POST",
+                data: payload,
+            });
 
-      // 🔥 important — refresh list
-      dispatch(fetchBrands());
+            // 🔥 important — refresh list
+            dispatch(fetchBrands());
 
-      return res;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return rejectWithValue(err.response?.data);
+            return res;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            return rejectWithValue(err.response?.data);
+        }
     }
-  }
 );
 
 // =============================
@@ -57,7 +57,7 @@ export const createBrand = createAsyncThunk(
 export const updateBrand = createAsyncThunk(
     "brands/update",
     async (
-        { id, name }: { id: number; name: string },
+        { id, name, status }: { id: number; name: string, status:boolean },
         { rejectWithValue }
     ) => {
         try {
@@ -65,7 +65,7 @@ export const updateBrand = createAsyncThunk(
             return await api<any>({
                 url: `/admin/brands/${id}`,
                 method: "PUT",
-                data: { name },
+                data: { name, status },
             });
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {

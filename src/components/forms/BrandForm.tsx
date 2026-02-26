@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import SubHeader from "../common/SubHeader";
+import { Toggle } from "../ui/Toggle";
+import toast from "react-hot-toast";
 
 interface Props {
     mode: "create" | "edit";
@@ -17,10 +19,14 @@ interface Props {
 export default function BrandForm({ mode, brand }: Props) {
     const dispatch = useAppDispatch();
     const router = useRouter();
+
+
+    console.log("BrandForm Props:", { mode, brand });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const formik: any = useFormik({
         initialValues: {
             name: brand?.name || "",
+            active: brand?.isActive ?? false,
         },
 
         enableReinitialize: true,
@@ -29,6 +35,7 @@ export default function BrandForm({ mode, brand }: Props) {
             name: Yup.string()
                 .min(2, "Too short")
                 .required("Brand name required"),
+            active: Yup.boolean(),
         }),
 
         onSubmit: async (values) => {
@@ -36,17 +43,19 @@ export default function BrandForm({ mode, brand }: Props) {
             let res: any;
 
             if (mode === "create") {
-                res = await dispatch(createBrand({ name: values.name }));
+                res = await dispatch(createBrand({ name: values.name, status: values.active }));
             } else {
                 res = await dispatch(
                     updateBrand({
                         id: brand.id,
                         name: values.name,
+                        status: values.active
                     })
                 );
             }
 
             if (res?.meta?.requestStatus === "fulfilled") {
+                toast.success("Brand saved successfully!");
                 router.push("/admin/compatible/brands");
             }
         },
@@ -96,6 +105,25 @@ export default function BrandForm({ mode, brand }: Props) {
                     {formik.errors.name && (
                         <p className="text-red-500 text-sm mt-1">
                             {formik.errors.name}
+                        </p>
+                    )}
+                </div>
+
+                <div>
+                    <label className="block text-gray-700 font-medium mb-2">
+                        Status
+                    </label>
+
+                    <Toggle
+                        checked={formik.values.active}
+                        onChange={(value: boolean) =>
+                            formik.setFieldValue("active", value)
+                        }
+                    />
+
+                    {formik.errors.active && (
+                        <p className="text-red-500 text-sm mt-1">
+                            {formik.errors.active}
                         </p>
                     )}
                 </div>

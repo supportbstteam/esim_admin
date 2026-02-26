@@ -23,7 +23,7 @@ export interface Device {
 export interface DeviceQuery {
   page?: number;
   limit?: number;
-  search?: string;
+  q?: string;
   os?: DeviceOS;
   active?: boolean;
 }

@@ -52,7 +52,6 @@ function Dashboard() {
       <CardStat title="Plans" route="/admin/plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
       <CardStat title="Topups" route="/admin/topup" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />
       <CardStat title="Customers" route="/admin/customers" value={customer?.length ?? 0} icon={<MdPerson />} />
-
     </CardGrid>
   );
 }

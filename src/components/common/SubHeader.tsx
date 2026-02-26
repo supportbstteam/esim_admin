@@ -46,7 +46,7 @@ const SubHeader: React.FC<PageHeaderProps> = ({
 
         {showBackButton && (
           <button
-            className="rounded px-5 py-2 text-[#16325d] border border-[#16325d] hover:bg-[#16325d] hover:text-white transition focus:outline-none"
+            className="rounded px-5 py-2 cursor-pointer text-[#16325d] border border-[#16325d] hover:bg-[#16325d] hover:text-white transition focus:outline-none"
             onClick={() => router.back()}
           >
             Back

@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useAppDispatch, useAppSelector } from "@/store";
+import debounce from "lodash/debounce";
 
 import {
   deleteDevice,
@@ -24,6 +25,7 @@ import {
 import { Device } from "@/lib/types";
 import { Toggle } from "../ui/Toggle";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import toast from "react-hot-toast";
 
 const columnHelper = createColumnHelper<Device>();
 
@@ -41,22 +43,48 @@ export default function DeviceTable() {
   const [deleteTarget, setDeleteTarget] = useState<Device | null>(null);
   const [deleting, setDeleting] = useState(false);
 
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setCurrentPage(1);
+        dispatch(
+          fetchDevices({
+            page: 1,
+            limit,
+            q: value || undefined,
+          })
+        );
+      }, 500),
+    [dispatch, limit]
+  );
+
   // ================= FETCH =================
   useEffect(() => {
     dispatch(
       fetchDevices({
         page: currentPage,
         limit,
-        search: globalFilter || undefined,
       })
     );
-  }, [dispatch, currentPage, globalFilter]);
+  }, [dispatch, currentPage, limit]);
+
+  useEffect(() => {
+    return () => {
+      debouncedSearch.cancel();
+    };
+  }, [debouncedSearch]);
 
   // ================= DELETE =================
   const confirmDelete = async () => {
     if (!deleteTarget) return;
     setDeleting(true);
-    await dispatch(deleteDevice(deleteTarget.id));
+    const response = await dispatch(deleteDevice(deleteTarget.id));
+    if (response?.meta?.requestStatus === "fulfilled") {
+      toast.success("Device deleted successfully!");
+    } else {
+      toast.error("Failed to delete device.");
+    }
     setDeleting(false);
     setDeleteTarget(null);
   };
@@ -109,14 +137,21 @@ export default function DeviceTable() {
         cell: info => (
           <Toggle
             checked={info.getValue()}
-            onChange={(val) =>
-              dispatch(
+            onChange={async (val) => {
+              const response = await dispatch(
                 toggleDevice({
                   id: info.row.original.id,
                   isActive: val,
                 })
               )
-            }
+
+              if (response?.meta?.requestStatus === "fulfilled") {
+                toast.success(`Device ${val ? "activated" : "deactivated"} successfully!`);
+              } else {
+                toast.error(`Failed to ${val ? "activate" : "deactivate"} device.`);
+              }
+
+            }}
           />
         ),
       }),
@@ -167,6 +202,7 @@ export default function DeviceTable() {
         operatorName={deleteTarget?.name}
         onClose={() => setDeleteTarget(null)}
         onConfirm={confirmDelete}
+        heading="Device Delete"
       />
 
       {/* ⭐ ALIGNMENT FIX CONTAINER */}
@@ -179,8 +215,9 @@ export default function DeviceTable() {
             <input
               value={globalFilter}
               onChange={(e) => {
-                setCurrentPage(1);
-                setGlobalFilter(e.target.value);
+                const value = e.target.value;
+                setGlobalFilter(value);
+                debouncedSearch(value);
               }}
               placeholder="Search devices..."
               className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-[#37c74f]"

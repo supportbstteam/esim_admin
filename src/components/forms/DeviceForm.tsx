@@ -11,6 +11,7 @@ import * as Yup from "yup";
 
 import { Toggle } from "../ui/Toggle";
 import SubHeader from "../common/SubHeader";
+import toast from "react-hot-toast";
 
 interface Props {
     mode: "create" | "edit";
@@ -65,11 +66,20 @@ export default function DeviceForm({ mode, device }: Props) {
 
             // console.log('-=-=- resposne in teh add data =-=-=-', response);
 
-            if (response?.type === 'devices/create/fulfilled')
+            if (response?.type === 'devices/create/fulfilled') {
+                toast.success("Device created successfully!");
                 router.push("/admin/compatible/devices");
+            } else if (response?.type === 'devices/create/rejected') {
+                toast.error("Failed to create device.");
+            }
 
-            if (response?.type === 'devices/update/fulfilled')
+            if (response?.type === 'devices/update/fulfilled') {
+                toast.success("Device updated successfully!");
                 router.push("/admin/compatible/devices");
+            }
+            else if (response?.type === 'devices/update/rejected') {
+                toast.error("Failed to update device.");
+            }
 
         },
     });
