@@ -26,6 +26,7 @@ import { Device } from "@/lib/types";
 import { Toggle } from "../ui/Toggle";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
+import CommonTableSkeleton from "../skeletons/CommonTableSkeleton";
 
 const columnHelper = createColumnHelper<Device>();
 
@@ -33,7 +34,7 @@ export default function DeviceTable() {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { list, page, pages, total, limit } =
+  const { list, page, pages, total, limit, loading } =
     useAppSelector((s) => s.devices);
 
   const [globalFilter, setGlobalFilter] = useState("");
@@ -206,6 +207,11 @@ export default function DeviceTable() {
       />
 
       {/* ⭐ ALIGNMENT FIX CONTAINER */}
+
+      {
+        loading ? (
+          <CommonTableSkeleton/>
+        ):(
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">
@@ -297,6 +303,9 @@ export default function DeviceTable() {
 
         </div>
       </div>
+
+        )
+      }
     </>
   );
 

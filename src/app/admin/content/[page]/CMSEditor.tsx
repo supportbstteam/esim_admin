@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FiTrash2, FiMove } from "react-icons/fi";
+import { IoMdAdd } from "react-icons/io";
 import {
     DndContext,
     closestCenter,
@@ -45,6 +46,9 @@ import { savePage } from "@/store/thunks/CmsPageThunk";
 import { handleImageUploadForSection } from "@/utils/handleTemplate6";
 import toast from "react-hot-toast";
 import FullscreenLoader from "@/components/modals/FullScreenLoading";
+import Template8Preview from "@/components/templates/previews/TemplatePreview8";
+import Template8 from "@/components/templates/Template8";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 /* -------- SORTABLE ITEM WRAPPER -------- */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,6 +121,7 @@ const SortableSection = ({ section, removeSection }: { section: any; removeSecti
                 {section.template === "template5" && <Template5 section={section} />}
                 {section.template === "template6" && <Template6 section={section} />}
                 {section.template === "template7" && <Template7 section={section} />}
+                {section.template === "template8" && <Template8 section={section} />}
 
             </div>
         </div>
@@ -344,6 +349,7 @@ const TemplateSelector = () => {
         { key: "template5", title: "Collapse", Preview: Template5Preview },
         { key: "template6", title: "Image", Preview: Template6Preview },
         { key: "template7", title: "Blocks", Preview: Template7Preview },
+        { key: "template8", title: "Rich Text", Preview: Template8Preview },
     ];
 
     return (
@@ -360,39 +366,73 @@ const TemplateSelector = () => {
             </div>
 
             <div
-                className={`px-6 border-b bg-white sticky top-0 z-40 ${isSticky
-                    ? "py-2 shadow-md bg-white/95 backdrop-blur-sm"
-                    : "py-6 bg-white"
-                    }`}
-            >
-                <div className={`grid gap-3 mx-auto ${isSticky
-                    ? "grid-cols-4 md:grid-cols-7 max-w-5xl"
-                    : "grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 max-w-7xl"
-                    }`}>
-                    {templates.map((t) => (
-                        <div
-                            key={t.key}
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            onClick={() => addSection(t.key as any)}
-                            className={`cursor-pointer border rounded-md group flex flex-col items-center justify-center overflow-hidden ${isSticky
-                                ? "p-1 h-10 border-transparent hover:bg-green-50"
-                                : "p-3 border-gray-200 hover:border-green-500 hover:bg-green-50"
-                                }`}
-                        >
-                            {!isSticky && (
-                                <div className="mb-2 w-full pointer-events-none">
-                                    {t.Preview ? <t.Preview /> : <div className="h-20 bg-gray-100 rounded" />}
-                                </div>
-                            )}
+  className={`sticky top-0 z-40 w-full transition-all duration-300 ease-in-out border-b bg-white/95 backdrop-blur-sm ${
+    isSticky ? "py-2 shadow-md" : "py-6"
+  }`}
+>
+  <div className="max-w-7xl mx-auto px-6">
+    {/* Label for Non-Sticky State */}
+    {!isSticky && (
+      <p className="text-[10px] font-bold uppercase text-gray-400 mb-3 tracking-widest">
+        Available Templates
+      </p>
+    )}
 
-                            <h4 className={`font-bold text-black text-center truncate px-1 ${isSticky ? "text-[14px] uppercase tracking-tighter" : "text-xs"
-                                }`}>
-                                {t.title}
-                            </h4>
-                        </div>
-                    ))}
-                </div>
+    {/* Horizontal Scroll Container */}
+    <div className="flex flex-row items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1">
+      {templates.map((t) => (
+        <div
+          key={t.key}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          onClick={() => addSection(t.key as any)}
+          className={`
+            relative cursor-pointer shrink-0 snap-start transition-all duration-200
+            border rounded-xl flex flex-col items-center justify-center group
+            ${isSticky 
+              ? "w-32 h-12 p-1 border-transparent hover:bg-green-50" 
+              : "w-44 p-3 border-gray-100 shadow-sm hover:border-green-500 hover:shadow-md hover:-translate-y-1 bg-white"
+            }
+          `}
+        >
+          {/* Visual Preview (Hidden in Sticky) */}
+          {!isSticky && (
+            <div className="mb-3 w-full opacity-80 group-hover:opacity-100 transition-opacity">
+              {t.Preview ? (
+                <t.Preview />
+              ) : (
+                <div className="h-20 bg-gray-50 rounded-lg border border-dashed border-gray-200" />
+              )}
             </div>
+          )}
+
+          {/* Title with Badge Style for Sticky */}
+          <h4 className={`
+            font-bold text-black text-center truncate w-full px-2
+            ${isSticky 
+              ? "text-[11px] uppercase tracking-tighter bg-gray-50 py-1.5 rounded-lg group-hover:bg-green-100 group-hover:text-green-700 transition-colors" 
+              : "text-xs group-hover:text-green-600"
+            }
+          `}>
+            {t.title}
+          </h4>
+
+          {/* Hover indicator for adding */}
+          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+             <div className="bg-green-500 text-white rounded-full p-0.5">
+                <IoMdAdd size={12} color="#fff" />
+             </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <style jsx global>{`
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  `}</style>
+</div>
+
         </>
     );
 };

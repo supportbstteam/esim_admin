@@ -10,6 +10,7 @@ import Loader from "@/components/loader";
 import { useAppDispatch, useAppSelector } from "@/store";
 import ESimTable from "@/components/tables/ESimTable";
 import PageHeader from "@/components/common/PageHeader";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
 
 export default function ESim() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -71,7 +72,7 @@ export default function ESim() {
   const handleNext = () =>
     pageIndex < pageCount - 1 && setPageIndex(pageIndex + 1);
 
-  if (loading) return <Loader />;
+  // if (loading) return <Loader />;
 
   return (
     <div className="p-6">
@@ -89,11 +90,11 @@ export default function ESim() {
         handleSubmit={handleAddESim}
       />
 
-      {error && <p className="text-red-500">{error}</p>}
+      {/* {error && <p className="text-red-500">{error}</p>} */}
 
       {/* Search */}
       <div className="rounded-lg shadow-lg overflow-hidden border border-gray-200 bg-white mt-6">
-        <div className="p-4 border-b border-gray-200">
+        {/* <div className="p-4 border-b border-gray-200">
           <input
             type="text"
             value={globalFilter}
@@ -104,13 +105,22 @@ export default function ESim() {
             placeholder="Search eSIMs..."
             className="w-full pl-4 pr-4 py-2 bg-gray-100 border border-gray-300 rounded-lg text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#37c74f]"
           />
-        </div>
+        </div> */}
 
         {/* Table */}
-        <ESimTable
-          esims={eSims}
-          onDeleteESim={handleDeleteESim}
-        />
+        {
+          loading ? (
+            <CommonTableSkeleton
+            columns={7}
+            rows={10}
+            />
+          ) : (
+            <ESimTable
+              esims={eSims}
+              onDeleteESim={handleDeleteESim}
+            />
+          )
+        }
       </div>
     </div>
   );

@@ -25,6 +25,7 @@ import {
     updateTestimonialStatus,
 } from "@/store/slice/testimonialsSlice";
 import { ddmmyyyy } from "@/utils/dateTime";
+import CommonTableSkeleton from "../skeletons/CommonTableSkeleton";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columnHelper = createColumnHelper<any>();
@@ -118,7 +119,7 @@ const TestimonialsTable: React.FC = () => {
                 cell: ({ row }) => (
                     <div className="flex items-center gap-2">
                         <button
-                            onClick={async() =>{
+                            onClick={async () => {
                                 // dispatch(clearTestimonial())
                                 return router.push(`/admin/testimonials/manage?mode=update&id=${row.original.id}`)
                             }}
@@ -160,6 +161,16 @@ const TestimonialsTable: React.FC = () => {
 
     // if (loading)
     //     return <div className="text-center text-gray-400 py-6">Loading testimonials...</div>;
+
+    if (loading) {
+        return (
+            <div className="rounded-lg overflow-hidden border border-gray-700 bg-gray-900">
+                <CommonTableSkeleton columns={6} rows={10} showSearch={true}
+                />
+            </div>
+        );
+    }
+
 
     return (
         <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">

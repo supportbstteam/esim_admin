@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 import { Loader2 } from "lucide-react";
 import SubHeader from "@/components/common/SubHeader";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
 
 function Plans() {
   const dispatch = useAppDispatch();
@@ -115,12 +116,18 @@ function Plans() {
       />
 
       {/* Add PlanTable here */}
-      <PlanTable
-        plans={plans}
-        onToggle={handleToggleStatus}
-        onDelete={handleDeletePlan}
-        addFeature={handleFeaturePlan}
-      />
+      {
+        loading ? (
+          <CommonTableSkeleton columns={10} rows={10} showSearch={true} />
+        ) : (
+          <PlanTable
+            plans={plans}
+            onToggle={handleToggleStatus}
+            onDelete={handleDeletePlan}
+            addFeature={handleFeaturePlan}
+          />
+        )
+      }
     </div>
   );
 }

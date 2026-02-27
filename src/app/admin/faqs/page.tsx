@@ -9,19 +9,6 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 function Faqs() {
-
-    const faqs = useAppSelector(state => state?.faqs);
-    const router = useRouter();
-    const dispatch = useAppDispatch();
-    const fetchTest = async () => {
-        await dispatch(getAllFaqs());
-    }
-    useEffect(() => {
-        fetchTest();
-    }, [dispatch]);
-
-    // console.log("----- testimonials -----", faqs);
-
     return (
         <div>
             <PageHeader

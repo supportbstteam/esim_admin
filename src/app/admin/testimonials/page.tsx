@@ -8,8 +8,8 @@ import React, { useEffect } from 'react'
 
 function Testimonial() {
 
-    const { testimonials } = useAppSelector(state => state?.testimonials);
-    const router = useRouter();
+    // const { testimonials } = useAppSelector(state => state?.testimonials);
+    // const router = useRouter();
     const dispatch = useAppDispatch();
     const fetchTest = async () => {
         await dispatch(getAllTestimonials());

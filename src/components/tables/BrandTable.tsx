@@ -41,9 +41,9 @@ export default function BrandTable() {
     const [deleteTarget, setDeleteTarget] = useState<Brand | null>(null);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-        dispatch(fetchBrands());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(fetchBrands());
+    // }, [dispatch]);
 
     const confirmDelete = async () => {
         if (!deleteTarget) return;

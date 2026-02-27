@@ -9,6 +9,7 @@ import { fetchThirdPartyTopupPlans } from "@/store/slice/ThirdPartyTopupSlice";
 import TopupTable from "@/components/tables/TopUpTable";
 import { Loader2 } from "lucide-react";
 import SubHeader from "@/components/common/SubHeader";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
 
 function Topup() {
     const dispatch = useAppDispatch();
@@ -96,11 +97,17 @@ function Topup() {
             />
 
             {/* TopupTable integration */}
-            <TopupTable
-                topups={items}
-                onToggleStatus={handleToggleStatus}
-                onDelete={handleDeleteTopup}
-            />
+            {
+                loading ? (
+                    <CommonTableSkeleton columns={7} rows={10} />
+                ) : (
+                    <TopupTable
+                        topups={items}
+                        onToggleStatus={handleToggleStatus}
+                        onDelete={handleDeleteTopup}
+                    />
+                )
+            }
         </div>
     );
 }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch } from "@/store";
 import { resetCMSState } from "@/store/slice/cmsPageSlice";
 import { clearTestimonial } from "@/store/slice/testimonialsSlice";
+import { clearFaq, clearFaqError } from "@/store/slice/faqSlice";
 
 interface PageHeaderProps {
   title: string;
@@ -33,18 +34,25 @@ const PageHeader: React.FC<PageHeaderProps> = ({
         {showAddButton && (
           <button
             className="rounded cursor-pointer px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] transition focus:outline-none"
-            onClick={async() => {
+            onClick={async () => {
 
-              if(title === "CMS2 Pages"){
+              if (title === "CMS2 Pages") {
                 // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
                 await dispatch(resetCMSState());
                 // if (addButtonRoute) router.push(addButtonRoute);
                 // return;
               }
 
-              if(title === "Testimonials"){
+              if (title === "Testimonials") {
                 // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
                 await dispatch(clearTestimonial());
+                // if (addButtonRoute) router.push(addButtonRoute);
+                // return;
+              }
+
+              if (title === "FAQs") {
+                // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
+                await dispatch(clearFaq());
                 // if (addButtonRoute) router.push(addButtonRoute);
                 // return;
               }

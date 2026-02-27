@@ -23,6 +23,7 @@ import {
     updateFaqStatus,
 } from "@/store/slice/faqSlice";
 import { ddmmyyyy } from "@/utils/dateTime";
+import CommonTableSkeleton from "../skeletons/CommonTableSkeleton";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const columnHelper = createColumnHelper<any>();
@@ -163,6 +164,17 @@ const FaqTable: React.FC = () => {
         getSortedRowModel: getSortedRowModel(),
         initialState: { pagination: { pageSize: 10 } },
     });
+
+    if (loading) {
+        return (
+            <div className="rounded-lg overflow-hidden border border-gray-700 bg-gray-900">
+                <CommonTableSkeleton
+                columns={6}
+                rows={10}
+                />
+            </div>
+        );
+    }
 
     return (
         <div className="rounded-lg shadow-lg overflow-hidden border border-gray-700 bg-gray-900">

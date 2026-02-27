@@ -85,12 +85,12 @@ export default function Sidebar() {
         { href: "/admin/compatible/devices", icon: <TbDeviceIpadPlus size={18} />, label: "Devices" },
       ],
     },
-    { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
+    { href: "/admin/content", icon: <LucideWorkflow size={20} />, label: "CMS" },
+    // { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     // { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
     { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
     { href: "/admin/faqs", icon: <FaQuoteLeft size={20} />, label: "Faqs" },
     { href: "/admin/settings", icon: <Settings size={20} />, label: "Settings" },
-    { href: "/admin/content", icon: <Settings size={20} />, label: "CMS2" },
   ];
 
   const toggleMenu = (href: string) => {

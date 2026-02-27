@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "@/lib/api";
+import { clear } from "console";
 
 const baseUrl = "/admin/faq";
 
@@ -9,7 +10,7 @@ const baseUrl = "/admin/faq";
 export const getAllFaqs = createAsyncThunk("faq/getAll", async (_, { rejectWithValue }) => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const res:any = await api({ url: baseUrl, method: "GET" });
+        const res: any = await api({ url: baseUrl, method: "GET" });
         // console.log("----fa ys  sda ----",res);
         return res;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +23,7 @@ export const getAllFaqs = createAsyncThunk("faq/getAll", async (_, { rejectWithV
 export const getFaqById = createAsyncThunk("faq/getById", async (id: string, { rejectWithValue }) => {
     try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const res:any = await api({ url: `${baseUrl}/${id}`, method: "GET" });
+        const res: any = await api({ url: `${baseUrl}/${id}`, method: "GET" });
         // console.log("----- res ----",res);
         return res;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,7 +65,7 @@ export const updateFaqStatus = createAsyncThunk(
     async ({ id, isActive }: { id: string; isActive: boolean }, { rejectWithValue }) => {
         try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const res:any = await api({ url: `${baseUrl}/${id}/status`, method: "PATCH", data: { isActive } });
+            const res: any = await api({ url: `${baseUrl}/${id}/status`, method: "PATCH", data: { isActive } });
             return res.data;
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
@@ -109,6 +110,11 @@ const faqSlice = createSlice({
         clearFaqError: (state) => {
             state.error = null;
         },
+        clearFaq: (state) => {
+            state.faq = null;
+            state.loading = false;
+            state.error = null;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -187,5 +193,5 @@ const faqSlice = createSlice({
     },
 });
 
-export const { clearFaqError } = faqSlice.actions;
+export const { clearFaqError, clearFaq } = faqSlice.actions;
 export default faqSlice.reducer;

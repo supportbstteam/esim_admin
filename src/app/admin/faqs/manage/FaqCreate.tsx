@@ -14,6 +14,7 @@ import { Toggle } from "@/components/ui/Toggle";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import PageHeader from "@/components/common/PageHeader";
+import FaqCreateSkeleton from "@/components/skeletons/FaqSkeleton";
 
 // ✅ Validation Schema
 const FaqSchema = Yup.object().shape({
@@ -50,6 +51,10 @@ function FaqCreate() {
     active:
       typeof faq?.isActive === "boolean" ? faq?.isActive : true,
   };
+
+  if (mode === "update" && loading) {
+    return <FaqCreateSkeleton />;
+  }
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow">

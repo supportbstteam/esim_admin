@@ -11,15 +11,16 @@ export type TemplateKey =
   | "template4"
   | "template5"
   | "template6"
-  | "template7";
+  | "template7"
+  | "template8";
 
 export interface Section {
   id: string;
   template: TemplateKey;
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data: any;
 }
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CMSContext = createContext<any>(null);
 
 
@@ -96,6 +97,11 @@ const getInitialData = (template: TemplateKey) => {
         ],
       };
 
+    case "template8":
+      return {
+        content: "<h2>New Section</h2><p>Start writing here...</p>",
+      };
+
     default:
       return {};
   }
@@ -134,7 +140,7 @@ export const CMSProvider = ({
 
   const hydrate = (
     pageFromApi: string,
-     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sectionsFromApi: any[]
   ) => {
 
@@ -149,14 +155,14 @@ export const CMSProvider = ({
 
     const banner =
       sectionsFromApi.find(
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (s: any) =>
           s.template === "templateBanner"
       );
 
     const otherSections =
       sectionsFromApi.filter(
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (s: any) =>
           s.template !== "templateBanner"
       );
@@ -164,23 +170,23 @@ export const CMSProvider = ({
     const hydratedBanner =
       banner
         ? {
-            id:
-              banner.id ||
-              "banner",
-            template:
-              "templateBanner",
-            data: {
-              ...getInitialData(
-                "templateBanner"
-              ),
-              ...banner.data,
-            },
-          }
+          id:
+            banner.id ||
+            "banner",
+          template:
+            "templateBanner",
+          data: {
+            ...getInitialData(
+              "templateBanner"
+            ),
+            ...banner.data,
+          },
+        }
         : createBannerSection();
 
     const hydratedOthers =
       otherSections.map(
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (s: any) => ({
           id:
             s.id ||
@@ -245,7 +251,7 @@ export const CMSProvider = ({
 
   const updateSection = (
     id: string,
-     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any
   ) => {
 
@@ -255,9 +261,9 @@ export const CMSProvider = ({
           (s) =>
             s.id === id
               ? {
-                  ...s,
-                  data,
-                }
+                ...s,
+                data,
+              }
               : s
         )
     );

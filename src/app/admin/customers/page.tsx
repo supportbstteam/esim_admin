@@ -2,6 +2,7 @@
 import PageHeader from '@/components/common/PageHeader';
 import CustomerAddModal from '@/components/modals/CustomerAddModal';
 import CustomerDeleteModal from '@/components/modals/CustomerDeleteModal';
+import CommonTableSkeleton from '@/components/skeletons/CommonTableSkeleton';
 import CustomerTable from '@/components/tables/CustomerTable';
 import { useAppDispatch, useAppSelector } from '@/store';
 import {
@@ -19,7 +20,7 @@ function Users() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { customer } = useAppSelector((state: any) => state?.customer);
+  const { customer, loading } = useAppSelector((state: any) => state?.customer);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { countries } = useAppSelector((state: any) => state?.countries);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -110,12 +111,20 @@ function Users() {
         addButtonText="+ Add Customer"
         addButtonRoute="/admin/customers/manage?mode=create"
       />
-
-      <CustomerTable
-        customers={filteredCustomers}
-        onToggleBlock={handleBlockCustomer}
-        onToggleDelete={handleDeleteClick}
-      />
+      {
+        loading ? (
+          <CommonTableSkeleton
+            rows={10}
+            columns={8}
+          />
+        ) : (
+          <CustomerTable
+            customers={filteredCustomers}
+            onToggleBlock={handleBlockCustomer}
+            onToggleDelete={handleDeleteClick}
+          />
+        )
+      }
 
       <CustomerAddModal isOpen={showModal} onClose={() => setShowModal(false)} />
 

@@ -1,5 +1,6 @@
 "use client";
 import PageHeader from "@/components/common/PageHeader";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
 import TopUpOrdersTable from "@/components/tables/TopUpOrderTable";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchTopUpOrders } from "@/store/slice/topupOrderSlice";
@@ -23,7 +24,11 @@ function TopUpOrder() {
         addButtonRoute="/admin/testimonials/manage?mode=create"
       />
       {loading ? (
-        <p className="text-gray-400">Loading...</p>
+        <CommonTableSkeleton
+          columns={7}
+          rows={10}
+          showSearch={true}
+        />
       ) : (
         <TopUpOrdersTable topUpOrders={topUpOrders || []} />
       )}

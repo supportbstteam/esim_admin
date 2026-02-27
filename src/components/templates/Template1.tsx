@@ -10,6 +10,7 @@ import FormikSync from "@/lib/formikSync";
 
 import ParagraphEditor from "@/components/common/ParagraphEditor";
 import HeadingInput from "@/components/common/HeadingInput";
+import RichTextEditor from "../common/RichTextEditor";
 
 /* ================= TYPES ================= */
 
@@ -57,7 +58,7 @@ export default function Template1({ section }: Props) {
         },
       }}
       validationSchema={template1Schema}
-      onSubmit={() => {}}
+      onSubmit={() => { }}
     >
       {({ values, setFieldValue }) => {
         const paragraphs = values.description.paragraphs;
@@ -102,10 +103,10 @@ export default function Template1({ section }: Props) {
             />
 
             <div className="max-w-7xl mx-auto px-6 space-y-12">
-              
+
               {/* TOP GRID: LEFT & RIGHT */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                
+
                 {/* COLUMN 1 */}
                 <div className="space-y-6">
                   {hasLeft ? (
@@ -194,7 +195,7 @@ export default function Template1({ section }: Props) {
 }
 
 /* ================= HEADING BLOCK ================= */
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function HeadingBlock({ values, setFieldValue }: any) {
   return (
     <div className="space-y-4 p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
@@ -231,7 +232,7 @@ function ParagraphBlock({
   changePosition,
   removeParagraph,
   setFieldValue,
-   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) {
   return (
     <div className="bg-white p-5 border border-gray-300 rounded-xl relative shadow-sm hover:shadow-md transition-shadow group">
@@ -264,12 +265,20 @@ function ParagraphBlock({
 
       {/* EDITOR AREA */}
       <div className="border border-gray-100 rounded-lg overflow-hidden">
-        <ParagraphEditor
+        <RichTextEditor
+          value={paragraph.content}
+          onChange={(html) => {
+            // console.log("Updating paragraph content:", html);
+            // return;
+            setFieldValue(`description.paragraphs.${index}.content`, html)
+          }}
+        />
+        {/* <ParagraphEditor
           value={paragraph.content}
           onChange={(html) =>
             setFieldValue(`description.paragraphs.${index}.content`, html)
           }
-        />
+        /> */}
       </div>
     </div>
   );

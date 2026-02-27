@@ -11,6 +11,7 @@ import { MdAttachMoney, MdPublic, MdSignalCellularAlt, MdPerson } from 'react-ic
 import { getAllAdminUsers } from '@/store/slice/adminUserSlice';
 import { getSocials } from '@/store/slice/socialSlice';
 import { getContacts } from '@/store/slice/contactSlice';
+import CardStatSkeleton from '@/components/skeletons/CardSkeleton';
 
 const CardGrid = styled.div`
   display: flex;
@@ -39,15 +40,27 @@ function Dashboard() {
     fetchData();
   }, [user?.id]);
 
-  const { countries } = useAppSelector((state) => state?.countries);
-  const { plans } = useAppSelector((state) => state.plan);
-  const { items } = useAppSelector((state) => state.topup);
-  const { customer } = useAppSelector((state) => state.customer);
+  const { countries, loading: countLoading } = useAppSelector((state) => state?.countries);
+  const { plans, loading: plansLoading } = useAppSelector((state) => state.plan);
+  const { items, loading: topupLoading } = useAppSelector((state) => state.topup);
+  const { customer, loading: customerLoading } = useAppSelector((state) => state.customer);
 
   // console.log("--- customer ---", customer);
 
+  if (countLoading || plansLoading || topupLoading || customerLoading) {
+    return (
+      <CardGrid>
+        <CardStatSkeleton />
+        <CardStatSkeleton />
+        <CardStatSkeleton />
+        <CardStatSkeleton />
+      </CardGrid>
+    )
+  }
+
   return (
     <CardGrid>
+      
       <CardStat title="Countries" route="/admin/country" value={countries?.length ?? 0} icon={<MdPublic />} />
       <CardStat title="Plans" route="/admin/plans" value={plans?.length ?? 0} icon={<MdAttachMoney />} />
       <CardStat title="Topups" route="/admin/topup" value={items?.length ?? 0} icon={<MdSignalCellularAlt />} />

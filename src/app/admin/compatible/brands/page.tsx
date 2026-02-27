@@ -1,11 +1,21 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BrandTable from "@/components/tables/BrandTable";
+import { useAppDispatch, useAppSelector } from "@/store";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
+import { fetchBrands } from "@/store/slice/brands/brandThunks";
 
 const BrandPage = () => {
     const router = useRouter();
+    const dispatch = useAppDispatch();
+    const { list, loading } = useAppSelector((s) => s.brands);
+
+
+    useEffect(() => {
+        dispatch(fetchBrands());
+    }, [dispatch]);
 
     return (
         <div className="p-6 min-h-screen ">
@@ -39,7 +49,17 @@ const BrandPage = () => {
             </div>
 
             {/* Table Card Wrapper */}
-            <BrandTable />
+            {
+                loading ? (
+                    <CommonTableSkeleton
+                        columns={4}
+                        rows={10}
+                        showSearch={true}
+                    />
+                ) : (
+                    <BrandTable />
+                )
+            }
 
         </div>
     );

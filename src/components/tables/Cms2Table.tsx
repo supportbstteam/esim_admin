@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { ddmmyyyy } from "@/utils/dateTime";
 import { fetchPageBySlug } from "@/store/thunks/CmsPageThunk";
 import { resetCMSState } from "@/store/slice/cmsPageSlice";
+import CommonTableSkeleton from "../skeletons/CommonTableSkeleton";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const columnHelper = createColumnHelper<any>();
@@ -100,7 +101,7 @@ const Cms2Table: React.FC = () => {
         header: "Actions",
         cell: ({ row }) => (
           <button
-            onClick={() =>{
+            onClick={() => {
               dispatch(resetCMSState());
               dispatch(fetchPageBySlug(row.original.page));
               router.push(`/admin/content/${row.original.page}`)
@@ -131,8 +132,9 @@ const Cms2Table: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="text-center text-gray-400 py-10">
-        Loading CMS pages...
+      <div className="rounded-lg overflow-hidden border border-gray-700 bg-gray-900">
+        <CommonTableSkeleton
+        />
       </div>
     );
   }

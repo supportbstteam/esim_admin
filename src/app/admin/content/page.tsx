@@ -24,14 +24,14 @@ export default function ContentCMS() {
 
 
   // Loading state
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-[60vh] text-[#16325d]">
-        <FileText className="w-6 h-6 animate-spin mr-2" />
-        <p className="text-lg font-medium">Loading CMS pages...</p>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex justify-center items-center h-[60vh] text-[#16325d]">
+  //       <FileText className="w-6 h-6 animate-spin mr-2" />
+  //       <p className="text-lg font-medium">Loading CMS pages...</p>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="px-4 mt-6">

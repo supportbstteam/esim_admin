@@ -9,6 +9,7 @@ import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
 import toast from "react-hot-toast";
 import { useRouter } from 'next/navigation';
 import PageHeader from '@/components/common/PageHeader';
+import CommonTableSkeleton from '@/components/skeletons/CommonTableSkeleton';
 
 function Country() {
   const router = useRouter();
@@ -70,7 +71,7 @@ function Country() {
     return router.push(`/admin/country/${country?.id}`);
   };
 
-  if (loading) return <Loader />
+  if (loading) return <CommonTableSkeleton />
 
   return (
     <div className="p-6">
