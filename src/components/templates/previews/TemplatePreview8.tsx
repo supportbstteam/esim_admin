@@ -26,7 +26,7 @@ export default function Template8Preview() {
 
       {/* Label for the User */}
       <div className="pt-2 flex justify-between items-center border-t border-gray-50">
-        <span className="text-[9px] font-bold text-blue-500 uppercase tracking-tight">Full Rich Text Editor</span>
+        <span className="text-[9px] font-bold text-green-500 uppercase tracking-tight">Full Rich Text Editor</span>
         <div className="flex gap-1">
             <div className="w-2 h-2 rounded-full bg-gray-300" />
             <div className="w-2 h-2 rounded-full bg-gray-300" />
