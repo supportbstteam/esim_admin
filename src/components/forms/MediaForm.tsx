@@ -10,6 +10,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { FaTrash, FaSpinner } from "react-icons/fa";
 import { joinUrl } from "@/lib/joinUrl";
+import PageHeader from "../common/PageHeader";
 
 interface Props {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -118,80 +119,88 @@ export default function MediaForm({ initialData, isEdit }: Props) {
                     };
 
                     return (
-                        <form onSubmit={handleSubmit} className="space-y-6">
-                            {/* Title */}
-                            <div>
-                                <h2 className="text-2xl font-semibold text-gray-900">
-                                    {isEdit ? "Edit Media" : "Add Media"}
-                                </h2>
-                            </div>
+                        <div>
+                            <PageHeader
+                                title={isEdit ? "Edit Media" : "Add Media"}
+                                showAddButton={false}
+                            />
+                            <form onSubmit={handleSubmit} className="space-y-6">
+                                {/* Title */}
+                                {/* <div>
+                                    <h2 className="text-2xl font-semibold text-gray-900">
+                                        {isEdit ? "Edit Media" : "Add Media"}
+                                    </h2>
+                                    
+                                </div> */}
 
-                            {/* Name Input */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Image Name
-                                </label>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    value={values.name}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-green-500 outline-none"
-                                    placeholder="Enter image name"
-                                />
-                            </div>
 
-                            {/* Upload Area */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Media Image
-                                </label>
-
-                                <div className="relative group h-72 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center overflow-hidden hover:border-gray-400 transition">
-
-                                    {previewSrc ? (
-                                        <>
-                                            <img
-                                                src={previewSrc}
-                                                alt="Preview"
-                                                className="h-full w-full object-cover"
-                                            />
-
-                                            <button
-                                                type="button"
-                                                onClick={handleRemove}
-                                                className="absolute top-3 right-3 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100"
-                                            >
-                                                <FaTrash size={14} />
-                                            </button>
-                                        </>
-                                    ) : (
-                                        <span className="text-gray-400">
-                                            Click to upload image
-                                        </span>
-                                    )}
-
+                                {/* Name Input */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Image Name
+                                    </label>
                                     <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFileChange}
-                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                        type="text"
+                                        name="name"
+                                        value={values.name}
+                                        onChange={handleChange}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-green-500 outline-none"
+                                        placeholder="Enter image name"
                                     />
                                 </div>
-                            </div>
 
-                            {/* Submit */}
-                            <button
-                                type="submit"
-                                disabled={saving}
-                                className="px-6 py-3 cursor-pointer bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center gap-2"
-                            >
-                                {saving && (
-                                    <FaSpinner className="animate-spin" size={14} />
-                                )}
-                                {isEdit ? "Update Image" : "Save Image"}
-                            </button>
-                        </form>
+                                {/* Upload Area */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                        Media Image
+                                    </label>
+
+                                    <div className="relative group h-72 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center overflow-hidden hover:border-gray-400 transition">
+
+                                        {previewSrc ? (
+                                            <>
+                                                <img
+                                                    src={previewSrc}
+                                                    alt="Preview"
+                                                    className="h-full w-full object-cover"
+                                                />
+
+                                                <button
+                                                    type="button"
+                                                    onClick={handleRemove}
+                                                    className="absolute top-3 right-3 bg-red-600 text-white p-2 rounded-full opacity-0 group-hover:opacity-100"
+                                                >
+                                                    <FaTrash size={14} />
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <span className="text-gray-400">
+                                                Click to upload image
+                                            </span>
+                                        )}
+
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                            className="absolute inset-0 opacity-0 cursor-pointer"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Submit */}
+                                <button
+                                    type="submit"
+                                    disabled={saving}
+                                    className="px-6 py-3 cursor-pointer bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium flex items-center gap-2"
+                                >
+                                    {saving && (
+                                        <FaSpinner className="animate-spin" size={14} />
+                                    )}
+                                    {isEdit ? "Update Image" : "Save Image"}
+                                </button>
+                            </form>
+                        </div>
                     );
                 }}
             </Formik>
