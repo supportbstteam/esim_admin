@@ -342,14 +342,14 @@ const TemplateSelector = () => {
     }, []);
 
     const templates = [
+        { key: "template8", title: "Rich Text", Preview: Template8Preview },
+        { key: "template5", title: "Collapse", Preview: Template5Preview },
         { key: "template1", title: "How it works", Preview: Template1Preview },
         { key: "template2", title: "Step (Right)", Preview: Template2Preview },
         { key: "template3", title: "Step (Left)", Preview: Template3Preview },
         { key: "template4", title: "Features", Preview: Template4Preview },
-        { key: "template5", title: "Collapse", Preview: Template5Preview },
         { key: "template6", title: "Image", Preview: Template6Preview },
         { key: "template7", title: "Blocks", Preview: Template7Preview },
-        { key: "template8", title: "Rich Text", Preview: Template8Preview },
     ];
 
     return (

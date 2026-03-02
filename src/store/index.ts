@@ -24,6 +24,7 @@ import faqSlice from "./slice/faqSlice"
 import cmsPageSlice from "./slice/cmsPageSlice"
 import deviceReducer from "./slice/devices/deviceSlice"
 import brandsReducer from "./slice/brands/brandSlice"
+import mediaReducer from "./slice/mediaSlice";
 
 export const store = configureStore({
   reducer: {
@@ -48,7 +49,8 @@ export const store = configureStore({
     faqs: faqSlice,
     cmsPages: cmsPageSlice,
     devices: deviceReducer,
-    brands: brandsReducer
+    brands: brandsReducer,
+    media: mediaReducer
   },
 });
 

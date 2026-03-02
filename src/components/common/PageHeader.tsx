@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/store";
 import { resetCMSState } from "@/store/slice/cmsPageSlice";
 import { clearTestimonial } from "@/store/slice/testimonialsSlice";
 import { clearFaq, clearFaqError } from "@/store/slice/faqSlice";
+import { clearMediaState } from "@/store/slice/mediaSlice";
 
 interface PageHeaderProps {
   title: string;
@@ -53,6 +54,13 @@ const PageHeader: React.FC<PageHeaderProps> = ({
               if (title === "FAQs") {
                 // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
                 await dispatch(clearFaq());
+                // if (addButtonRoute) router.push(addButtonRoute);
+                // return;
+              }
+
+              if (title === "Media") {
+                // console.log("-=-=-=-=-=-=-=- ADD CMS 2 PAGE ADDED -=-=-=-=",title === "CMS2 Pages");
+                await dispatch(clearMediaState());
                 // if (addButtonRoute) router.push(addButtonRoute);
                 // return;
               }

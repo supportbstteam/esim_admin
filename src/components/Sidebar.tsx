@@ -19,7 +19,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth, logout } from "@/store/slice/userSlice";
-import { MdOutlineMobileFriendly } from "react-icons/md";
+import { MdOutlineMobileFriendly, MdOutlinePermMedia } from "react-icons/md";
 import { FiAirplay } from "react-icons/fi";
 import { BsCardHeading } from "react-icons/bs";
 import { BiBlanket } from "react-icons/bi";
@@ -86,6 +86,7 @@ export default function Sidebar() {
       ],
     },
     { href: "/admin/content", icon: <LucideWorkflow size={20} />, label: "CMS" },
+    { href: "/admin/media", icon: <MdOutlinePermMedia size={20} />, label: "Media" },
     // { href: "/admin/cms", icon: <LucideWorkflow size={20} />, label: "CMS" },
     // { href: "/admin/blogs", icon: <BsCardHeading size={20} />, label: "Blogs" },
     { href: "/admin/testimonials", icon: <BiBlanket size={20} />, label: "Testimonials" },
