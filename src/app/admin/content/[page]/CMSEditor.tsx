@@ -20,6 +20,7 @@ import {
     verticalListSortingStrategy,
     useSortable
 } from "@dnd-kit/sortable";
+import { FiChevronUp, FiChevronDown } from "react-icons/fi";
 import { CSS } from "@dnd-kit/utilities";
 
 /* --- COMPONENT IMPORTS --- */
@@ -317,17 +318,16 @@ const SaveAll = () => {
 const TemplateSelector = () => {
     const { addSection } = useCMS();
     const [isSticky, setIsSticky] = useState(false);
+    const [shrink, setShrink] = useState(false);
     const sentinelRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                // Determine stickiness based on whether the sentinel is above the viewport
                 setIsSticky(entry.boundingClientRect.top < 10);
             },
             {
                 threshold: [1],
-                // Root margin detects the intersection slightly above the actual top
                 rootMargin: "0px 10px 0px 0px"
             }
         );
@@ -353,87 +353,84 @@ const TemplateSelector = () => {
     ];
 
     return (
-        <>
-            {/* THE SENTINEL 
-                Positioned absolutely relative to a zero-height container 
-                so it doesn't move when the sticky bar changes size.
-            */}
-            <div className="relative w-full">
-                <div
-                    ref={sentinelRef}
-                    className="absolute top-[-1px] left-0 w-full h-px pointer-events-none"
-                />
-            </div>
-
-            <div
-  className={`sticky top-0 z-40 w-full transition-all duration-300 ease-in-out border-b bg-white/95 backdrop-blur-sm ${
-    isSticky ? "py-2 shadow-md" : "py-6"
-  }`}
->
-  <div className="max-w-7xl mx-auto px-6">
-    {/* Label for Non-Sticky State */}
-    {!isSticky && (
-      <p className="text-[10px] font-bold uppercase text-gray-400 mb-3 tracking-widest">
-        Available Templates
-      </p>
-    )}
-
-    {/* Horizontal Scroll Container */}
-    <div className="flex flex-row items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1">
-      {templates.map((t) => (
         <div
-          key={t.key}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onClick={() => addSection(t.key as any)}
-          className={`
-            relative cursor-pointer shrink-0 snap-start transition-all duration-200
-            border rounded-xl flex flex-col items-center justify-center group
-            ${isSticky 
-              ? "w-32 h-12 p-1 border-transparent hover:bg-green-50" 
-              : "w-44 p-3 border-gray-100 shadow-sm hover:border-green-500 hover:shadow-md hover:-translate-y-1 bg-white"
-            }
-          `}
+            className={`sticky top-0 z-40 w-full border-b bg-white ${isSticky ? "py-2 shadow-md" : "py-6"
+                }`}
         >
-          {/* Visual Preview (Hidden in Sticky) */}
-          {!isSticky && (
-            <div className="mb-3 w-full opacity-80 group-hover:opacity-100 transition-opacity">
-              {t.Preview ? (
-                <t.Preview />
-              ) : (
-                <div className="h-20 bg-gray-50 rounded-lg border border-dashed border-gray-200" />
-              )}
+            <div className="max-w-7xl mx-auto px-6">
+
+                {/* Header Row */}
+                <div className="flex items-center">
+                    {!isSticky && !shrink && (
+                        <p className="text-[10px] font-bold uppercase text-gray-400 tracking-widest">
+                            Available Templates
+                        </p>
+                    )}
+
+                    <button
+                        onClick={() => setShrink(!shrink)}
+                        className="ml-auto cursor-pointer text-md font-semibold text-green-600 hover:text-green-800"
+                    >
+                        {shrink ? "Show Templates" : "Hide"}
+                    </button>
+                </div>
+
+                {/* HARD COLLAPSE — NO ANIMATION */}
+                {!shrink && (
+                    <div className="mt-4 flex flex-row items-stretch gap-3 overflow-x-auto no-scrollbar snap-x snap-mandatory pb-1">
+                        {templates.map((t) => (
+                            <div
+                                key={t.key}
+                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                onClick={() => addSection(t.key as any)}
+                                className={`
+                            relative cursor-pointer shrink-0 snap-start
+                            border rounded-xl flex flex-col items-center justify-center group
+                            ${isSticky
+                                        ? "w-32 h-12 p-1 border-transparent hover:bg-green-50"
+                                        : "w-44 p-3 border-gray-100 shadow-sm hover:border-green-500 hover:shadow-md bg-white"
+                                    }
+                        `}
+                            >
+                                {!isSticky && (
+                                    <div className="mb-3 w-full">
+                                        {t.Preview ? (
+                                            <t.Preview />
+                                        ) : (
+                                            <div className="h-20 bg-gray-50 rounded-lg border border-dashed border-gray-200" />
+                                        )}
+                                    </div>
+                                )}
+
+                                <h4
+                                    className={`
+                                font-bold text-black text-center truncate w-full px-2
+                                ${isSticky
+                                            ? "text-[11px] uppercase tracking-tighter bg-gray-50 py-1.5 rounded-lg"
+                                            : "text-xs"
+                                        }
+                            `}
+                                >
+                                    {t.title}
+                                </h4>
+
+                                <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100">
+                                    <div className="bg-green-500 text-white rounded-full p-0.5">
+                                        <IoMdAdd size={12} color="#fff" />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+
             </div>
-          )}
 
-          {/* Title with Badge Style for Sticky */}
-          <h4 className={`
-            font-bold text-black text-center truncate w-full px-2
-            ${isSticky 
-              ? "text-[11px] uppercase tracking-tighter bg-gray-50 py-1.5 rounded-lg group-hover:bg-green-100 group-hover:text-green-700 transition-colors" 
-              : "text-xs group-hover:text-green-600"
-            }
-          `}>
-            {t.title}
-          </h4>
-
-          {/* Hover indicator for adding */}
-          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-             <div className="bg-green-500 text-white rounded-full p-0.5">
-                <IoMdAdd size={12} color="#fff" />
-             </div>
-          </div>
+            <style jsx global>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    `}</style>
         </div>
-      ))}
-    </div>
-  </div>
-
-  <style jsx global>{`
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  `}</style>
-</div>
-
-        </>
     );
 };
 
