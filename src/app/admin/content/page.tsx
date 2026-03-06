@@ -36,10 +36,10 @@ export default function ContentCMS() {
   return (
     <div className="px-4 mt-6">
       <PageHeader
-        title="CMS2 Pages"
+        title="CMS Pages"
         showBackButton={false}
         showAddButton={true}
-        addButtonText="+ Add CMS2"
+        addButtonText="+ Add CMS"
         addButtonRoute={`/admin/content/other`}
       />
 
