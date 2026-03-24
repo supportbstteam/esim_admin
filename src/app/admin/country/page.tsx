@@ -1,18 +1,18 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCountries, deleteCountry } from '@/store/slice/countrySlice';
-import Loader from '@/components/loader';
-import CountryTable from '@/components/tables/CountryTable';
-import AddCountryModal from '@/components/modals/AddCountryModal';
-import ConfirmDeleteModal from '@/components/modals/ConfirmDeleteModal';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCountries, deleteCountry } from "@/store/slice/countrySlice";
+import Loader from "@/components/loader";
+import CountryTable from "@/components/tables/CountryTable";
+import AddCountryModal from "@/components/modals/AddCountryModal";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
-import { useRouter } from 'next/navigation';
-import PageHeader from '@/components/common/PageHeader';
-import CommonTableSkeleton from '@/components/skeletons/CommonTableSkeleton';
+import { useRouter } from "next/navigation";
+import PageHeader from "@/components/common/PageHeader";
+import CommonTableSkeleton from "@/components/skeletons/CommonTableSkeleton";
 
 function Country() {
-  const router = useRouter();
+  const router: any = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: any = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -31,12 +31,11 @@ function Country() {
   useEffect(() => {
     const fetchCountry = async () => {
       await dispatch(fetchCountries());
-    }
+    };
     fetchCountry();
   }, [dispatch]);
 
   const handleDelete = async () => {
-
     if (!countryToDelete?.id) {
       toast.error("Invalid country id");
       return;
@@ -48,14 +47,12 @@ function Country() {
 
     // console.log("---- response ----", response);
 
-    if (response?.type === 'countries/delete/fulfilled') {
+    if (response?.type === "countries/delete/fulfilled") {
       setDeleteModalOpen(false);
       setCountryToDelete(null);
       toast.success(`${countryToDelete.name} deleted successfully`);
-    }
-    else {
+    } else {
       toast.error("Failed to delete country");
-
     }
 
     // dispatch(deleteCountry(countryToDelete.id))
@@ -67,11 +64,13 @@ function Country() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (country: any) => {
-    return router.push(`/admin/country/${country?.id}`);
+  const handleEdit = (country) => {
+    const slug = country.name.toLowerCase().replace(/\s+/g, "-");
+
+    router.push(`/admin/country/${slug}?countryId=${country.id}`);
   };
 
-  if (loading) return <CommonTableSkeleton />
+  if (loading) return <CommonTableSkeleton />;
 
   return (
     <div className="p-6">

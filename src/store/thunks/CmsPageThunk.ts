@@ -9,75 +9,84 @@ const PUBLIC_BASE_URL = "/admin/cms/pages";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 // cmsPage.thunks.ts
 export const savePage = createAsyncThunk(
-    "cms/savePage",
-    async (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        { page, sections, id }: { page: string; sections: any[], id: string },
-        { rejectWithValue }
-    ) => {
-        // console.log("-=-=- id in the save page -=-=", id);
-        // return;
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const res: any = await api({
-                url: `/admin/cms/pages/${page}`,
-                method: "PUT", // always PUT
-                data: { sections, id },
-            });
+  "cms/savePage",
+  async (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    {
+      page,
+      sections,
+      id,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+    }: {
+      page: string;
+      sections: any[];
+      id: string;
+      metaTitle?: string;
+      metaDescription?: string;
+      metaKeywords?: string[];
+    },
+    { rejectWithValue },
+  ) => {
+    // console.log("-=-=- id in the save page -=-=", id);
+    // return;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `/admin/cms/pages/${page}`,
+        method: "PUT", // always PUT
+        data: { sections, id, metaTitle, metaDescription, metaKeywords },
+      });
 
-            if (res.data) {
-                toast.success("CMS Uploaded Successfully")
-            }
-            return res.data;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            return rejectWithValue(
-                err?.response?.data?.message || err.message
-            );
-        }
+      if (res.data) {
+        toast.success("CMS Uploaded Successfully");
+      }
+      return res.data;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message || err.message);
     }
+  },
 );
 
 /* ---------------- GET PAGE (PUBLIC) ---------------- */
 export const fetchPageBySlug = createAsyncThunk(
-    "cms/fetchPage",
-    async (page: string, { rejectWithValue }) => {
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const res: any = await api({
-                url: `${PUBLIC_BASE_URL}/${page}`,
-                method: "GET",
-            });
+  "cms/fetchPage",
+  async (page: string, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `${PUBLIC_BASE_URL}/${page}`,
+        method: "GET",
+      });
 
+      console.log("-=-=-response in cms fetchPageBySlug -=-=",res);
 
-            return res;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            return rejectWithValue(
-                err?.response?.data?.message || err.message
-            );
-        }
+      return res;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message || err.message);
     }
+  },
 );
 
 /* ---------------- GET PAGE (PUBLIC) ---------------- */
 export const fetchAllPages = createAsyncThunk(
-    "cms/fetchAllPages",
-    async (_, { rejectWithValue }) => {
-        try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const res: any = await api({
-                url: `${PUBLIC_BASE_URL}`,
-                method: "GET",
-            });
+  "cms/fetchAllPages",
+  async (_, { rejectWithValue }) => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res: any = await api({
+        url: `${PUBLIC_BASE_URL}`,
+        method: "GET",
+      });
 
-            // console.log("-=-=-=--= response in the fetall pages -=-=--=-=-=", res);
-            return res;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            return rejectWithValue(
-                err?.response?.data?.message || err.message
-            );
-        }
+      // console.log("-=-=-=--= response in the fetall pages -=-=--=-=-=", res);
+      return res;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message || err.message);
     }
+  },
 );

@@ -16,6 +16,9 @@ interface CMSPageState {
   loading: boolean;
   error: string | null;
   success: boolean;
+  metaDescription?:string;
+  metaTitle?:string;
+  metakeywords?:string[];
 }
 
 const initialState: CMSPageState = {
@@ -72,6 +75,9 @@ const cmsPageSlice = createSlice({
         state.page = action.payload.page;
         state.id = action?.payload?.id;
         state.sections = action.payload.sections;
+        state.metaDescription = action?.payload?.metaDescription;
+        state.metaTitle = action?.payload?.metaTitle;
+        state.metakeywords = action?.payload?.metaKeywords;
       })
       .addCase(fetchPageBySlug.rejected, (state, action) => {
         state.loading = false;

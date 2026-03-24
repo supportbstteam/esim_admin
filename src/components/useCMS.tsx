@@ -1,10 +1,18 @@
 "use client";
 
-import { createContext, useContext, useState } from "react";
+import { useAppSelector } from "@/store";
+import { createContext, useContext, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+
+export interface SeoState {
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string[];
+}
 
 export type TemplateKey =
   | "templateBanner"
+  | "seo"
   | "template1"
   | "template2"
   | "template3"
@@ -23,13 +31,10 @@ export interface Section {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CMSContext = createContext<any>(null);
 
-
 /* ================= DEFAULT DATA ================= */
 
 const getInitialData = (template: TemplateKey) => {
-
   switch (template) {
-
     case "templateBanner":
       return {
         heading: "",
@@ -41,7 +46,7 @@ const getInitialData = (template: TemplateKey) => {
         heading: "",
         subHeading: "",
         description: {
-          paragraphs: [{ content: "" }]
+          paragraphs: [{ content: "" }],
         },
       };
 
@@ -54,7 +59,7 @@ const getInitialData = (template: TemplateKey) => {
         imageFile: null,
         imagePreview: "",
         description: {
-          paragraphs: [{ content: "" }]
+          paragraphs: [{ content: "" }],
         },
       };
 
@@ -105,9 +110,7 @@ const getInitialData = (template: TemplateKey) => {
     default:
       return {};
   }
-
 };
-
 
 /* ================= CREATE DEFAULT BANNER ================= */
 
@@ -117,188 +120,144 @@ const createBannerSection = (): Section => ({
   data: getInitialData("templateBanner"),
 });
 
-
 /* ================= PROVIDER ================= */
 
-export const CMSProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const CMSProvider = ({ children }: { children: React.ReactNode }) => {
+  const [page, setPage] = useState<string>("");
+  const { metaDescription, metaTitle, metakeywords, loading } = useAppSelector(
+    (state) => state?.cmsPages,
+  );
 
-  const [page, setPage] =
-    useState<string>("");
+  const [seo, setSeo] = useState<SeoState>({
+    metaTitle: "",
+    metaDescription: "",
+    metaKeywords: [],
+  });
+
+  useEffect(() => {
+    setSeo({
+      metaTitle,
+      metaDescription,
+      metaKeywords: metakeywords,
+    });
+  }, [loading]);
 
   /* ✅ Banner always first section */
-  const [sections, setSections] =
-    useState<Section[]>([
-      createBannerSection()
-    ]);
-
+  const [sections, setSections] = useState<Section[]>([createBannerSection()]);
 
   /* ================= HYDRATE ================= */
 
   const hydrate = (
     pageFromApi: string,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    sectionsFromApi: any[]
+    sectionsFromApi: any[],
+    seoFromApi?: any,
   ) => {
-
     setPage(pageFromApi);
 
+    setSeo({
+      metaTitle: seoFromApi?.metaTitle || "",
+      metaDescription: seoFromApi?.metaDescription || "",
+      metaKeywords: seoFromApi?.metaKeywords || [],
+    });
+
     if (!sectionsFromApi?.length) {
-      setSections([
-        createBannerSection()
-      ]);
+      setSections([createBannerSection()]);
       return;
     }
 
-    const banner =
-      sectionsFromApi.find(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (s: any) =>
-          s.template === "templateBanner"
-      );
+    const banner = sectionsFromApi.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (s: any) => s.template === "templateBanner",
+    );
 
-    const otherSections =
-      sectionsFromApi.filter(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (s: any) =>
-          s.template !== "templateBanner"
-      );
+    const otherSections = sectionsFromApi.filter(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (s: any) => s.template !== "templateBanner",
+    );
 
-    const hydratedBanner =
-      banner
-        ? {
-          id:
-            banner.id ||
-            "banner",
-          template:
-            "templateBanner",
+    const hydratedBanner = banner
+      ? {
+          id: banner.id || "banner",
+          template: "templateBanner",
           data: {
-            ...getInitialData(
-              "templateBanner"
-            ),
+            ...getInitialData("templateBanner"),
             ...banner.data,
           },
         }
-        : createBannerSection();
+      : createBannerSection();
 
-    const hydratedOthers =
-      otherSections.map(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (s: any) => ({
-          id:
-            s.id ||
-            uuid(),
-          template:
-            s.template,
-          data: {
-            ...getInitialData(
-              s.template
-            ),
-            ...s.data,
-            imageFile: null,
-            imagePreview:
-              s.data?.image ||
-              "",
-          },
-        })
-      );
+    const hydratedOthers = otherSections.map(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (s: any) => ({
+        id: s.id || uuid(),
+        template: s.template,
+        data: {
+          ...getInitialData(s.template),
+          ...s.data,
+          imageFile: null,
+          imagePreview: s.data?.image || "",
+        },
+      }),
+    );
 
-    setSections([
-      hydratedBanner,
-      ...hydratedOthers,
-    ]);
-
+    setSections([hydratedBanner, ...hydratedOthers]);
   };
-
 
   /* ================= ADD SECTION ================= */
 
-  const addSection = (
-    template: TemplateKey
-  ) => {
+  const addSection = (template: TemplateKey) => {
+    if (template === "templateBanner") return;
 
-    if (
-      template ===
-      "templateBanner"
-    ) return;
+    setSections((prev) => [
+      prev[0], // keep banner first
 
-    setSections(
-      (prev) => [
+      ...prev.slice(1),
 
-        prev[0], // keep banner first
-
-        ...prev.slice(1),
-
-        {
-          id: uuid(),
-          template,
-          data:
-            getInitialData(
-              template
-            ),
-        },
-
-      ]
-    );
-
+      {
+        id: uuid(),
+        template,
+        data: getInitialData(template),
+      },
+    ]);
   };
-
 
   /* ================= UPDATE ================= */
 
   const updateSection = (
     id: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any
+    data: any,
   ) => {
-
-    setSections(
-      (prev) =>
-        prev.map(
-          (s) =>
-            s.id === id
-              ? {
-                ...s,
-                data,
-              }
-              : s
-        )
+    setSections((prev) =>
+      prev.map((s) =>
+        s.id === id
+          ? {
+              ...s,
+              data,
+            }
+          : s,
+      ),
     );
-
   };
-
 
   /* ================= REMOVE ================= */
 
-  const removeSection = (
-    id: string
-  ) => {
+  const removeSection = (id: string) => {
+    if (id === "banner") return;
 
-    if (id === "banner")
-      return;
-
-    setSections(
-      (prev) =>
-        prev.filter(
-          (s) =>
-            s.id !== id
-        )
-    );
-
+    setSections((prev) => prev.filter((s) => s.id !== id));
   };
-
 
   /* ================= PROVIDER ================= */
 
   return (
-
     <CMSContext.Provider
       value={{
         page,
         setPage,
+
+        seo,
+        setSeo,
 
         sections,
         setSections,
@@ -309,15 +268,9 @@ export const CMSProvider = ({
         removeSection,
       }}
     >
-
       {children}
-
     </CMSContext.Provider>
-
   );
-
 };
 
-
-export const useCMS = () =>
-  useContext(CMSContext);
+export const useCMS = () => useContext(CMSContext);

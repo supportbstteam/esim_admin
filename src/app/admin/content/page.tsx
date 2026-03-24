@@ -38,7 +38,7 @@ export default function ContentCMS() {
       <PageHeader
         title="CMS Pages"
         showBackButton={false}
-        showAddButton={true}
+        showAddButton={false}
         addButtonText="+ Add CMS"
         addButtonRoute={`/admin/content/other`}
       />
