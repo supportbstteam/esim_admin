@@ -89,7 +89,6 @@ const CountryEditPage = () => {
       ...values,
       metaKeywords: values.metaKeywords || [],
     };
-
     // remove UI-only field
     delete payload.keywordInput;
 

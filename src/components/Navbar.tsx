@@ -80,7 +80,7 @@ export default function Navbar({ toggleSidebar, collapsed }: NavbarProps) {
           <h1
             className="
             text-xl font-extrabold 
-            text-white dark:text-gray-100 
+            text-white
             cursor-default select-none 
             drop-shadow-md
           "

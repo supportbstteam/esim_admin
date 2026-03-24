@@ -17,13 +17,12 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { checkAuth, logout } from "@/store/slice/userSlice";
+import { checkAuth } from "@/store/slice/userSlice";
 
 import { MdOutlineMobileFriendly, MdOutlinePermMedia } from "react-icons/md";
 import { FiAirplay } from "react-icons/fi";
-import { BsCardHeading } from "react-icons/bs";
 import { BiBlanket } from "react-icons/bi";
 import { FaQuoteLeft } from "react-icons/fa";
 import { AiFillApi } from "react-icons/ai";
@@ -42,10 +41,7 @@ export default function Sidebar({ collapsed }: SidebarProps) {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   useEffect(() => {
-    const fetchUser = async () => {
-      await dispatch(checkAuth());
-    };
-    fetchUser();
+    dispatch(checkAuth());
   }, []);
 
   const navItems = [
@@ -125,11 +121,11 @@ export default function Sidebar({ collapsed }: SidebarProps) {
   return (
     <aside
       className={`h-full bg-gray-800 shadow-lg flex flex-col 
-        transition-[width] duration-200 ease-in-out
+      transition-[width] duration-200 ease-in-out
       ${collapsed ? "w-16" : "w-64"}`}
     >
       {/* LOGO */}
-      <div className="pt-4 border-b dark:border-gray-700">
+      <div className="pt-4 border-b border-gray-700">
         <Image
           src="/FullLogo.png"
           alt="Logo"
@@ -144,11 +140,11 @@ export default function Sidebar({ collapsed }: SidebarProps) {
         {navItems.map((item) => (
           <div key={item.href}>
             <div
-              className={`flex items-center justify-between gap-3 p-2 rounded-lg cursor-pointer transition 
+              className={`flex items-center justify-between gap-3 p-2 rounded-lg cursor-pointer transition
                 ${
                   isActive(item.href)
-                    ? "bg-gray-100 dark:bg-gray-700"
-                    : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                    ? "bg-gray-500 text-white"
+                    : "text-white hover:bg-gray-700"
                 }`}
               onClick={() =>
                 item.subItems ? toggleMenu(item.href) : router.push(item.href)
@@ -156,7 +152,6 @@ export default function Sidebar({ collapsed }: SidebarProps) {
             >
               <div className="flex items-center gap-3">
                 {item.icon}
-
                 {!collapsed && <span>{item.label}</span>}
               </div>
 
@@ -181,8 +176,8 @@ export default function Sidebar({ collapsed }: SidebarProps) {
                     className={`flex items-center gap-2 p-2 rounded-lg text-sm transition
                       ${
                         isActive(sub.href)
-                          ? "bg-gray-200 dark:bg-gray-700"
-                          : "hover:bg-gray-100 dark:hover:bg-gray-700"
+                          ? "bg-gray-500 text-white"
+                          : "text-white hover:bg-gray-700"
                       }`}
                   >
                     {sub.icon} {sub.label}
