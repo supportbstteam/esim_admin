@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
@@ -9,11 +9,15 @@ import {
   flexRender,
   createColumnHelper,
   SortingState,
-} from '@tanstack/react-table';
-import { Toggle } from '../ui/Toggle';
-import { updateCountry } from '@/store/slice/countrySlice';
-import { useAppDispatch } from '@/store';
-import toast from 'react-hot-toast';
+} from "@tanstack/react-table";
+import { Toggle } from "../ui/Toggle";
+import {
+  fetchCountries,
+  updateCountry,
+  updateCountyStatus,
+} from "@/store/slice/countrySlice";
+import { useAppDispatch } from "@/store";
+import toast from "react-hot-toast";
 
 interface Country {
   id: string;
@@ -33,42 +37,46 @@ interface CountryTableProps {
 const columnHelper = createColumnHelper<Country>();
 const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
   const dispatch = useAppDispatch();
-  const [globalFilter, setGlobalFilter] = useState('');
+  const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const columns = useMemo(
     () => [
-      columnHelper.accessor('name', {
-        header: 'Country Name',
-        cell: info => <div className="font-medium text-white">{info.getValue()}</div>,
+      columnHelper.accessor("name", {
+        header: "Country Name",
+        cell: (info) => (
+          <div className="font-medium text-white">{info.getValue()}</div>
+        ),
       }),
-      columnHelper.accessor('isoCode', {
-        header: 'ISO Code',
-        cell: info => (
+      columnHelper.accessor("isoCode", {
+        header: "ISO Code",
+        cell: (info) => (
           <div className="px-2 py-1 bg-gray-700 rounded text-center text-white font-mono text-sm">
             {info.getValue()}
           </div>
         ),
       }),
-      columnHelper.accessor('iso3Code', {
-        header: 'ISO3 Code',
-        cell: info => (
+      columnHelper.accessor("iso3Code", {
+        header: "ISO3 Code",
+        cell: (info) => (
           <div className="px-2 py-1 bg-gray-700 rounded text-center text-white font-mono text-sm">
             {info.getValue()}
           </div>
         ),
       }),
-      columnHelper.accessor('currency', {
-        header: 'Currency',
-        cell: info => (
+      columnHelper.accessor("currency", {
+        header: "Currency",
+        cell: (info) => (
           <div className="px-2 py-1 bg-[#16325d] text-white rounded text-sm font-mono">
             {info.getValue()}
           </div>
         ),
       }),
-      columnHelper.accessor('phoneCode', {
-        header: 'Phone Code',
-        cell: info => <div className="text-[#37c74f] font-medium">{info.getValue()}</div>,
+      columnHelper.accessor("phoneCode", {
+        header: "Phone Code",
+        cell: (info) => (
+          <div className="text-[#37c74f] font-medium">{info.getValue()}</div>
+        ),
       }),
 
       // ✅ Toggle for Active Status
@@ -84,17 +92,21 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
                 onChange={async (newValue: boolean) => {
                   try {
                     const result = await dispatch(
-                      updateCountry({
+                      updateCountyStatus({
                         id: country.id,
-                        data: { isActive: newValue },
-                      })
+                        isActive: newValue,
+                      }),
                     ).unwrap();
+
+                    // console.log("result", result);
 
                     toast.success("Updated successfully");
                     // console.log("✅ Updated country:", result);
                   } catch (err) {
                     toast.error(
-                      typeof err === "string" ? err : "Failed to update country"
+                      typeof err === "string"
+                        ? err
+                        : "Failed to update country",
                     );
                     console.error("❌ Failed to update country:", err);
                   }
@@ -107,8 +119,8 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
 
       // ✅ Actions Column
       columnHelper.display({
-        id: 'actions',
-        header: 'Actions',
+        id: "actions",
+        header: "Actions",
         cell: ({ row }) => (
           <button
             onClick={() => onEdit(row.original)}
@@ -133,7 +145,7 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
         ),
       }),
     ],
-    [onEdit, dispatch]
+    [onEdit, dispatch],
   );
 
   const table = useReactTable({
@@ -171,8 +183,8 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
             </svg>
           </div>
           <input
-            value={globalFilter ?? ''}
-            onChange={e => setGlobalFilter(e.target.value)}
+            value={globalFilter ?? ""}
+            onChange={(e) => setGlobalFilter(e.target.value)}
             placeholder="Search countries..."
             className="w-full pl-10 pr-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#37c74f] focus:border-transparent"
           />
@@ -183,9 +195,9 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-gradient-to-r from-[#16325d] to-[#37c74f]">
-            {table.getHeaderGroups().map(headerGroup => (
+            {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
+                {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
                     className="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider cursor-pointer hover:bg-black/20 transition-colors"
@@ -194,7 +206,10 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
                     <div className="flex items-center cursor-pointer gap-2">
                       {header.isPlaceholder
                         ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                       {{
                         asc: (
                           <svg
@@ -235,15 +250,19 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
           </thead>
 
           <tbody className="divide-y divide-gray-700">
-            {table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="hover:bg-gray-800/50 transition-colors">
-                {row.getVisibleCells().map(cell => (
+            {table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="hover:bg-gray-800/50 transition-colors"
+              >
+                {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    className={`px-6 py-4 whitespace-nowrap text-sm ${cell.column.id === 'actions'
-                      ? 'cursor-pointer hover:bg-gray-800/70'
-                      : ''
-                      }`}
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${
+                      cell.column.id === "actions"
+                        ? "cursor-pointer hover:bg-gray-800/70"
+                        : ""
+                    }`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
@@ -257,12 +276,16 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
       {/* 🔢 Pagination */}
       <div className="px-6 py-3 border-t border-gray-700 flex items-center justify-between">
         <span className="text-sm text-gray-400">
-          Showing{' '}
-          {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
+          Showing{" "}
+          {table.getState().pagination.pageIndex *
+            table.getState().pagination.pageSize +
+            1}{" "}
+          to{" "}
           {Math.min(
-            (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
-            table.getFilteredRowModel().rows.length
-          )}{' '}
+            (table.getState().pagination.pageIndex + 1) *
+              table.getState().pagination.pageSize,
+            table.getFilteredRowModel().rows.length,
+          )}{" "}
           of {table.getFilteredRowModel().rows.length} entries
         </span>
         <div className="flex items-center gap-1">
@@ -274,7 +297,8 @@ const CountryTable: React.FC<CountryTableProps> = ({ countries, onEdit }) => {
             Prev
           </button>
           <span className="px-3 py-1 text-sm text-gray-400">
-            Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+            Page {table.getState().pagination.pageIndex + 1} of{" "}
+            {table.getPageCount()}
           </span>
           <button
             onClick={() => table.nextPage()}

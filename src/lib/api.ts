@@ -1,20 +1,18 @@
 "use client";
 
 import axios, { AxiosRequestConfig, AxiosError, Method } from "axios";
-import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 
 interface ApiOptions<T = unknown, P = unknown> extends AxiosRequestConfig {
-  method?: Method;        // default GET
+  method?: Method;
   url: string;
-  data?: T;               // request body type
-  params?: P;             // query params type
-  isAuth?: boolean;       // default true
+  data?: T;
+  params?: P;
+  isAuth?: boolean;
 }
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL , // Replace with your API base URL
-  // baseURL: "https://esim-backend-three.vercel.app/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -29,11 +27,20 @@ export async function api<T = unknown, P = unknown>({
   ...rest
 }: ApiOptions<T, P>): Promise<T> {
   try {
-    const headers: Record<string, string> = {};
+    // ✅ merge headers from request
+    const headers: Record<string, any> = {
+      ...(rest.headers || {}),
+    };
 
+    // ✅ attach auth token
     if (isAuth) {
       const token = Cookies.get("token");
       if (token) headers["Authorization"] = `Bearer ${token}`;
+    }
+
+    // ✅ IMPORTANT: handle FormData automatically
+    if (data instanceof FormData) {
+      headers["Content-Type"] = "multipart/form-data";
     }
 
     const res = await axiosInstance({
@@ -45,37 +52,9 @@ export async function api<T = unknown, P = unknown>({
       ...rest,
     });
 
-    // Handle success toast
-    // if (["POST", "PUT", "DELETE"].includes(method.toUpperCase())) {
-    //   toast.success("Action successful ✅");
-    // }
-
     return res.data;
   } catch (err) {
     const error = err as AxiosError<{ message?: string }>;
-    // console.log("")
-
-    // switch (status) {
-    //   case 400:
-    //     toast.error("Bad Request ❌");
-    //     break;
-    //   case 401:
-    //     toast.error("Unauthorized. Please login again ❌");
-    //     break;
-    //   case 403:
-    //     toast.error("Forbidden ❌");
-    //     break;
-    //   case 404:
-    //     toast.error("Not Found ❌");
-    //     break;
-    //   case 500:
-    //     toast.error("Internal Server Error ❌");
-    //     break;
-    //   default:
-    //     toast.error(message);
-    //     break;
-    // }
-
     throw error;
   }
 }

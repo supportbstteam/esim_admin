@@ -2,7 +2,8 @@
 
 import { api } from "@/lib/api";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-
+import axios from "axios";
+import Cookies from "js-cookie";
 const countryUrl: string = "/admin/countries";
 
 // Country Interface
@@ -74,28 +75,77 @@ export const createCountry = createAsyncThunk<Country, Omit<Country, "id">>(
 );
 
 // UPDATE country
+// export const updateCountry = createAsyncThunk<
+//   Country,
+//   { id: string; data: Partial<Country> }
+// >(
+//   "countries/update",
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   async ({ id, data }: any, thunkAPI) => {
+//     // console.log("---- update data response ----", { id, data });
+//     try {
+//       return await api<Country>({
+//         url: `${countryUrl}/update/${id}`,
+//         method: "PUT",
+//         data,
+//       });
+//       // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     } catch (err: any) {
+//       return thunkAPI.rejectWithValue(
+//         err.response?.data?.message || "Failed to update country",
+//       );
+//     }
+//   },
+// );
+
 export const updateCountry = createAsyncThunk<
   Country,
-  { id: string; data: Partial<Country> }
->(
-  "countries/update",
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async ({ id, data }: any, thunkAPI) => {
-    // console.log("---- update data response ----", { id, data });
-    try {
-      return await api<Country>({
-        url: `${countryUrl}/update/${id}`,
-        method: "PUT",
-        data,
-      });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Failed to update country",
-      );
-    }
-  },
-);
+  { id: string; data: FormData }
+>("countries/update", async ({ id, data }, thunkAPI) => {
+  try {
+    const token = Cookies.get("token");
+
+    const response = await axios.put(
+      `${process.env.NEXT_PUBLIC_API_URL}admin/countries/update/${id}`,
+      data,
+      {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    );
+
+    return response.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Failed to update country",
+    );
+  }
+});
+
+export const updateCountyStatus = createAsyncThunk<
+  Country,
+  { id: string; isActive: boolean }
+>("countries/updateStatus", async ({ id, isActive }, thunkAPI) => {
+  try {
+    const response = await api<any>({
+      url: `${countryUrl}/status/${id}`,
+      method: "PATCH",
+      data: {
+        isActive,
+      },
+    });
+
+    console.log("response in the update status country slice", response);
+
+    return response?.data;
+  } catch (err: any) {
+    return thunkAPI.rejectWithValue(
+      err.response?.data?.message || "Failed to update country status",
+    );
+  }
+});
 
 // DELETE country
 export const deleteCountry = createAsyncThunk<string, string>(
@@ -149,6 +199,17 @@ const countrySlice = createSlice({
     // UPDATE
     builder.addCase(
       updateCountry.fulfilled,
+      (state, action: PayloadAction<Country>) => {
+        const idx = state.countries.findIndex(
+          (c) => c.id === action.payload.id,
+        );
+        if (idx !== -1) state.countries[idx] = action.payload;
+      },
+    );
+
+    // UPDATE
+    builder.addCase(
+      updateCountyStatus.fulfilled,
       (state, action: PayloadAction<Country>) => {
         const idx = state.countries.findIndex(
           (c) => c.id === action.payload.id,

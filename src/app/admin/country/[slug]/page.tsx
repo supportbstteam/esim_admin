@@ -14,6 +14,8 @@ import toast from "react-hot-toast";
 import UploadImage from "@/components/ImageUploader";
 import { Toggle } from "@/components/ui/Toggle";
 import { FaArrowLeft } from "react-icons/fa";
+import UploadImageRaw from "@/components/ImageUploadRaw";
+import { CountryFormSkeleton } from "@/components/skeletons/CountrySkeleton";
 
 // ✅ Yup Validation
 const validationSchema = Yup.object({
@@ -24,7 +26,7 @@ const validationSchema = Yup.object({
   phoneCode: Yup.string().required("Phone code is required"),
   isActive: Yup.boolean().required(),
   description: Yup.string().nullable(),
-  imageUrl: Yup.string().url("Must be a valid image URL").nullable(),
+  image: Yup.mixed(),
 });
 
 const CountryEditPage = () => {
@@ -37,6 +39,9 @@ const CountryEditPage = () => {
 
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(true);
+
+
+  // console.log("countries",countries);
 
   // ✅ Fetch countries on mount
   useEffect(() => {
@@ -57,11 +62,12 @@ const CountryEditPage = () => {
     if (stored) country = JSON.parse(stored);
   }
 
+
+  console.log("country",country);
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64 text-gray-600">
-        Loading country data...
-      </div>
+      <CountryFormSkeleton/>
     );
   }
 
@@ -74,7 +80,7 @@ const CountryEditPage = () => {
     phoneCode: "",
     isActive: true,
     description: "",
-    imageUrl: "",
+    image: null,
 
     metaTitle: "",
     metaDescription: "",
@@ -84,46 +90,65 @@ const CountryEditPage = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
-  try {
-    const payload = {
-      ...values,
-      metaKeywords: values.metaKeywords || [],
-    };
-    // remove UI-only field
-    delete payload.keywordInput;
 
-    let response;
+    console.log("values",values);
+    // return;
+    try {
+      const formData = new FormData();
 
-    if (country) {
-      response = await dispatch(
-        updateCountry({
-          id: country.id,
-          data: payload,
-        })
-      );
-    } else {
-      response = await dispatch(createCountry(payload));
-    }
+      formData.append("name", values.name);
+      formData.append("isoCode", values.isoCode);
+      formData.append("iso3Code", values.iso3Code || "");
+      formData.append("currency", values.currency);
+      formData.append("phoneCode", values.phoneCode);
+      formData.append("description", values.description || "");
+      formData.append("isActive", values?.isActive);
 
-    if (response?.type?.includes("/fulfilled")) {
-      toast.success(
-        country
-          ? "Country Updated Successfully"
-          : "Country Added Successfully"
+      formData.append("metaTitle", values.metaTitle || "");
+      formData.append("metaDescription", values.metaDescription || "");
+
+      formData.append(
+        "metaKeywords",
+        JSON.stringify(values.metaKeywords || []),
       );
 
-      router.push("/admin/country");
-    } else {
-      toast.error("Failed to save country");
-    }
-  } catch (error) {
-    console.error("Error saving country:", error);
-    toast.error("Something went wrong");
-  } finally {
-    setSubmitting(false);
-  }
-};
+      // ✅ FIXED IMAGE CHECK
+      if (values.image && values.image.name) {
+        formData.append("image", values.image);
+      }
 
+      let response;
+
+      if (country) {
+        response = await dispatch(
+          updateCountry({
+            id: country.id,
+            data: formData,
+          }),
+        );
+      }
+
+      if (response?.type?.includes("/fulfilled")) {
+        toast.success(
+          country
+            ? "Country Updated Successfully"
+            : "Country Added Successfully",
+        );
+
+        router.push("/admin/country");
+      } else {
+        toast.error("Failed to save country");
+      }
+    } catch (error) {
+      console.error("Error saving country:", error);
+      toast.error("Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+
+  
 
   // const handleSubmit = async (values: Country, { setSubmitting }: any) => {
   //   try {
@@ -176,7 +201,14 @@ const CountryEditPage = () => {
         onSubmit={handleSubmit}
         enableReinitialize
       >
-        {({ isSubmitting, setFieldValue, values }) => (
+        {({ isSubmitting, setFieldValue, values }) => {
+          const imagePreview =
+  values.image instanceof File
+    ? URL.createObjectURL(values.image)
+    : values.image
+    ? `${process.env.NEXT_PUBLIC_API_URL}${values.image}`
+    : "";
+          return(
           <Form className="space-y-6">
             {/* Country Name */}
             <div>
@@ -293,10 +325,20 @@ const CountryEditPage = () => {
             </div>
 
             {/* Image Upload */}
-            <UploadImage
+            {/* <UploadImageRaw
               label="Country Flag / Image"
-              value={values.imageUrl}
-              onChange={(url) => setFieldValue("imageUrl", url)}
+              value={values.image}
+              onChange={(url) => {
+                // console.log(url);
+                 setFieldValue("image", url)
+              }}
+            /> */}
+            <UploadImageRaw
+              label="Country Flag / Image"
+              value={imagePreview}
+              onChange={(file) => {
+                setFieldValue("image", file);
+              }}
             />
 
             {/* Active Toggle */}
@@ -405,7 +447,6 @@ const CountryEditPage = () => {
                   )}
                 </div>
               </div>
-              
             </div>
 
             {/* Footer Buttons */}
@@ -454,7 +495,7 @@ const CountryEditPage = () => {
               </button>
             </div>
           </Form>
-        )}
+        )}}
       </Formik>
     </div>
   );
