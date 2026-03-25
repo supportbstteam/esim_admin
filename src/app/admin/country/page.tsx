@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCountries, deleteCountry } from "@/store/slice/countrySlice";
 import Loader from "@/components/loader";
 import CountryTable from "@/components/tables/CountryTable";
-import AddCountryModal from "@/components/modals/AddCountryModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -17,7 +16,6 @@ function Country() {
   const dispatch: any = useDispatch();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { countries, loading } = useSelector((state: any) => state?.countries);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // State for delete confirmation modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -93,19 +91,6 @@ function Country() {
       />
 
       {/* Add/Edit Country Modal */}
-      <AddCountryModal
-        isOpen={isAddModalOpen}
-        onClose={() => {
-          setIsAddModalOpen(false);
-          setEditCountry(null);
-        }}
-        onSuccess={() => {
-          setIsAddModalOpen(false);
-          setEditCountry(null);
-          dispatch(fetchCountries());
-        }}
-        country={editCountry} // Pass country for editing, undefined for add
-      />
 
       {/* Confirm Delete Modal */}
       <ConfirmDeleteModal
