@@ -206,7 +206,7 @@ const CountryEditPage = () => {
   values.image instanceof File
     ? URL.createObjectURL(values.image)
     : values.image
-    ? `${process.env.NEXT_PUBLIC_API_URL}${values.image}`
+    ? `${process.env.NEXT_PUBLIC_API_URL_IMAGE}${values.image}`
     : "";
           return(
           <Form className="space-y-6">
