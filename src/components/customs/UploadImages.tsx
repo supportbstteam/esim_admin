@@ -199,7 +199,7 @@ export default function UploadImage({
             const token = Cookies.get("token");
 
             const response = await axios.post(
-                `${process.env.NEXT_PUBLIC_API_URL}admin/image/upload`,
+                `${process.env.NEXT_PUBLIC_API_URL}admin/images/upload`,
                 formData,
                 {
                     headers: {
@@ -222,7 +222,7 @@ export default function UploadImage({
                 filePath: data.filePath,
                 url:
                     joinUrl(
-                        process.env.NEXT_PUBLIC_API_URL!,
+                        process.env.NEXT_PUBLIC_API_URL_IMAGE!,
                         data.filePath
                     ),
                 width: tempImage?.width,
