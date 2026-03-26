@@ -37,7 +37,7 @@ function Plans() {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(createPlansDb());
       if (response?.type === "plansDb/createPlans/fulfilled") {
-        toast.success("Plans added successfully ✅");
+        toast.success("Plans added successfully ");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -107,6 +107,9 @@ function Plans() {
         title="Plans"
         disable={loading}
         onClick={() => {
+          if(loading)
+            return;
+          
           handleAddPlan()
         }}
         showBackButton={false}

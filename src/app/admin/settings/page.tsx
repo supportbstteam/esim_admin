@@ -5,8 +5,8 @@ import { Loader2, LucideTrash2 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Formik, Field, Form, FieldArray, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { createSocials, getSocials, updateSocial } from '@/store/slice/socialSlice';
-import { createContacts, getContacts, updateContact } from '@/store/slice/contactSlice';
+import { createSocials, deleteSocial, getSocials, updateSocial } from '@/store/slice/socialSlice';
+import { createContacts, deleteContact, getContacts, updateContact } from '@/store/slice/contactSlice';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { CommunicationMailManagement } from '@/components/container/CommunicationMail';
@@ -52,24 +52,40 @@ function SocialMediaManagement() {
       validationSchema={socialSchema}
       enableReinitialize
       onSubmit={async (values) => {
-        const createList = values.socials.filter((s) => !s.id);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const updateList: any = values.socials.filter((s) => s.id);
+  const createList = values.socials.filter((s) => !s.id);
 
-        try {
-          if (createList.length) {
-            await dispatch(createSocials(createList));
-            toast.success(`${createList.length} social(s) created successfully ✅`);
-          }
-          for (const s of updateList) {
-            await dispatch(updateSocial({ id: s.id!, ...s }));
-            toast.success(`Social "${s.type}" updated successfully ✅`);
-          }
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-          toast.error(err?.message || "Something went wrong ❌");
-        }
-      }}
+  const updateList = values.socials.filter((s, index) => {
+    const original = socials.find((o) => o.id === s.id);
+
+    if (!original) return false;
+
+    return (
+      s.type !== original.type ||
+      s.link !== original.link
+    );
+  });
+
+  try {
+    if (createList.length) {
+      await dispatch(createSocials(createList));
+      toast.success(`${createList.length} social(s) created successfully `);
+    }
+
+    if (updateList.length) {
+      await Promise.all(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        updateList.map((s:any) =>
+          dispatch(updateSocial({ id: s.id!, ...s }))
+        )
+      );
+
+      toast.success("Social updated successfully ");
+    }
+
+  } catch (err: any) {
+    toast.error(err?.message || "Something went wrong ");
+  }
+}}
     >
       {({ values, isValid, dirty }) => (
         <Form>
@@ -108,7 +124,11 @@ function SocialMediaManagement() {
 
                       <button
                         type="button"
-                        onClick={() => remove(index)}
+                        onClick={async() =>{
+
+                          console.log(socials[index].id);
+                          await dispatch(deleteSocial(socials[index].id))
+                        }}
                         className="text-red-600 cursor-pointer  font-bold px-2 py-1 hover:bg-red-100 cursor-pointer rounded"
                       >
                         <LucideTrash2 />
@@ -170,7 +190,7 @@ const contactSchema = Yup.object().shape({
                   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val as string);
                 } else if (t === "phone") {
                   return /^\+?[0-9\s-]{10,15}$/.test(val as string);
-                } else if (t === "address" || t === "other") {
+                } else if (t === "address" || t === "other" || t === "chat") {
                   return (val as string).trim().length > 0;
                 }
 
@@ -214,6 +234,7 @@ const ContactUsManagement = () => {
       validationSchema={contactSchema}
       enableReinitialize
       onSubmit={async (values, { setSubmitting, validateForm }) => {
+        
         setLoading(true);
 
         const validationErrors = await validateForm(values);
@@ -242,7 +263,7 @@ const ContactUsManagement = () => {
                 "Failed to create contacts.";
               toast.error(errMsg);
             } else {
-              toast.success(`${createList.length} contact(s) created successfully ✅`);
+              toast.success(`${createList.length} contact(s) created successfully `);
             }
           }
 
@@ -258,7 +279,7 @@ const ContactUsManagement = () => {
                 `Failed to update contact "${c.type}".`;
               toast.error(errMsg);
             } else {
-              toast.success(`Contact "${c.type}" updated successfully ✅`);
+              toast.success(`Contact "${c.type}" updated successfully `);
             }
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -308,6 +329,7 @@ const ContactUsManagement = () => {
                             <option value="Email">Email</option>
                             <option value="Phone">Phone</option>
                             <option value="Address">Address</option>
+                            <option value="Chat">Chat</option>
                             <option value="Other">Other</option>
                           </Field>
                           <ErrorMessage
@@ -348,7 +370,9 @@ const ContactUsManagement = () => {
                         {/* Delete Button */}
                         <button
                           type="button"
-                          onClick={() => remove(index)}
+                          onClick={async() =>{
+                            dispatch(deleteContact(contacts[index].position))
+                          }}
                           className="mt-2 cursor-pointer   sm:mt-0"
                         >
                           <LucideTrash2 className="text-[#ff0000]" />

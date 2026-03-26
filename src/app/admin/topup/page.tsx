@@ -35,7 +35,7 @@ function Topup() {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const response: any = await dispatch(createTopupPlans());
             if (response?.type === "topupPlans/create/fulfilled") {
-                toast.success("✅ Plans added successfully");
+                toast.success(" Plans added successfully");
                 setIsModalOpen(false);
             } else {
                 toast.error("❌ Failed to add plans");
@@ -81,14 +81,19 @@ function Topup() {
         };
     }
 
+
+    console.log("import in the top op loading",loading);
+
     return (
         <div>
             <SubHeader
                 title="Top Up"
                 disable={loading}
                 onClick={() => {
-                    if (!loading)
-                        handleAddPlan()
+                    if (loading)
+                        return 
+
+                    handleAddPlan()
                 }}
                 showBackButton={false}
                 addButtonText={
