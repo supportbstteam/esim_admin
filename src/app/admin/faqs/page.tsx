@@ -1,25 +1,16 @@
-"use client";
-import PageHeader from '@/components/common/PageHeader';
-import FaqTable from '@/components/tables/FaqsTable';
-import TestimonialsTable from '@/components/tables/TestimonialsTable';
-import { useAppDispatch, useAppSelector } from '@/store';
-import { getAllFaqs } from '@/store/slice/faqSlice';
-import { getAllTestimonials } from '@/store/slice/testimonialsSlice';
-import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React from 'react'
+import FaqPage from './FaqPage'
+import { Metadata } from 'next';
 
-function Faqs() {
-    return (
-        <div>
-            <PageHeader
-                title="FAQs"
-                addButtonText="+ Add FAQ"
-                showBackButton={false}
-                addButtonRoute="/admin/faqs/manage?mode=create"
-            />
-            <FaqTable />
-        </div>
-    )
+
+export const metadata: Metadata = {
+  title: "Faqs",
+};
+
+const page = () => {
+  return (
+    <FaqPage/>
+  )
 }
 
-export default Faqs
+export default page

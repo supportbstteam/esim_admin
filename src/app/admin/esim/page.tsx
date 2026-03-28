@@ -29,6 +29,9 @@ export default function ESim() {
     await dispatch(fetchCountries());
   };
 
+
+  console.log("eSims",eSims);
+
   useEffect(() => {
     fetchSims();
   }, [user?.id]);
