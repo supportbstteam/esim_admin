@@ -8,6 +8,7 @@ import ThemeProvider from "@/providers/ThemeProvider";
 import ReduxProvider from "@/providers/ReduxProvider";
 import { useAppSelector } from "@/store";
 import { useState } from "react";
+import PageTitle from "@/components/PageTitle";
 
 export default function RootLayoutInner({
   children,
@@ -26,6 +27,7 @@ export default function RootLayoutInner({
 
   return (
     <div className="flex w-full h-full overflow-hidden">
+       <PageTitle />
       {/* Sidebar */}
       <aside
         className={`flex-shrink-0 duration-100

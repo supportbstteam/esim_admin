@@ -12,12 +12,14 @@ import { useAppDispatch } from "@/store";
 import { checkAuth } from "@/store/slice/userSlice";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { Metadata } from "next";
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().required("Username is required"),
   password: Yup.string().required("Password is required"),
   rememberMe: Yup.boolean(),
 });
+
 
 export default function AuthPage() {
   const router = useRouter();
