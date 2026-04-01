@@ -13,6 +13,7 @@ interface PageHeaderProps {
   disable?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onClick?: any;
+  extraButtons?: React.ReactNode;
 }
 
 const SubHeader: React.FC<PageHeaderProps> = ({
@@ -22,6 +23,7 @@ const SubHeader: React.FC<PageHeaderProps> = ({
   showAddButton = true,
   showBackButton = true,
   onClick,
+  extraButtons,
 }) => {
   const router = useRouter();
 
@@ -32,12 +34,12 @@ const SubHeader: React.FC<PageHeaderProps> = ({
 
       {/* Right side buttons */}
       <div className="flex items-center gap-3">
+        {extraButtons}
         {showAddButton && (
           <button
             disabled={disable}
-            className={`rounded px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none transition ${
-              disable ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-            }`}
+            className={`rounded px-5 py-2 text-white bg-[#37c74f] hover:bg-[#28a23a] focus:outline-none transition ${disable ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+              }`}
             onClick={onClick}
           >
             {addButtonText}
