@@ -10,7 +10,7 @@ import {
   createColumnHelper,
   SortingState,
 } from "@tanstack/react-table";
-import { MdOutlineVerified } from "react-icons/md";
+import { MdOutlineVerified, MdEdit, MdCheck, MdClose } from "react-icons/md";
 import { number } from "yup";
 
 interface Plan {
@@ -39,6 +39,7 @@ interface PlanTableProps {
   onToggle: (plan: Plan) => void;
   onDelete: (plan: Plan) => void;
   addFeature: (plan: Plan) => void;
+  onUpdatePrice: (planId: number, newPrice: string) => void;
 }
 
 const columnHelper = createColumnHelper<Plan>();
@@ -159,9 +160,26 @@ const PlanTable: React.FC<PlanTableProps> = ({
   onDelete,
   onToggle,
   addFeature,
+  onUpdatePrice,
 }) => {
   const [globalFilter, setGlobalFilter] = useState("");
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState<string>("");
+
+  const handleEditClick = (rowId: string, currentPrice: string) => {
+    setEditingId(rowId);
+    setEditValue(currentPrice);
+  };
+
+  const handleSaveClick = (plan: Plan) => {
+    onUpdatePrice(Number(plan.planId), editValue);
+    setEditingId(null);
+  };
+
+  const handleCancelClick = () => {
+    setEditingId(null);
+  };
 
   // console.log("----- plans ----", plans);
 
@@ -223,11 +241,60 @@ const PlanTable: React.FC<PlanTableProps> = ({
       }),
       columnHelper.accessor("price", {
         header: "Price",
-        cell: (info) => (
-          <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm font-mono">
-            {info.getValue()} {info.row.original.currency}
-          </span>
-        ),
+        cell: (info) => {
+          const isEditing = editingId === info.row.id;
+          return (
+            <div className="flex items-center gap-2 group">
+              {isEditing ? (
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    className="w-20 px-2 py-1 bg-gray-700 border border-[#37c74f] rounded text-white text-sm focus:outline-none"
+
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSaveClick(info.row.original);
+                    }}
+                    className="p-1 text-[#37c74f] hover:bg-gray-700 rounded transition-colors cursor-pointer"
+                    title="Save"
+                  >
+                    <MdCheck className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCancelClick();
+                    }}
+                    className="p-1 text-red-500 hover:bg-gray-700 rounded transition-colors cursor-pointer"
+                    title="Cancel"
+                  >
+                    <MdClose className="w-5 h-5" />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <span className="px-2 py-1 bg-[#16325d] text-white rounded text-sm font-mono">
+                    {info.getValue()} {info.row.original.currency}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditClick(info.row.id, info.row.original.price);
+                    }}
+                    className="p-1 text-gray-400 hover:text-[#37c74f] transition-all cursor-pointer"
+                    title="Edit Price"
+                  >
+                    <MdEdit className="w-5 h-5" />
+                  </button>
+                </>
+              )}
+            </div>
+          );
+        },
       }),
       columnHelper.display({
         id: "status",
@@ -242,7 +309,17 @@ const PlanTable: React.FC<PlanTableProps> = ({
         ),
       }),
     ],
-    [onToggle, onDelete, addFeature]
+    [
+      onToggle,
+      onDelete,
+      addFeature,
+      editingId,
+      editValue,
+      onUpdatePrice,
+      handleEditClick,
+      handleSaveClick,
+      handleCancelClick,
+    ]
   );
 
   const table = useReactTable({

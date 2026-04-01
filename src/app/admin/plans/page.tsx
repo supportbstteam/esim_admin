@@ -4,7 +4,7 @@ import { ModalPlanForm } from "@/components/modals/ModalPlanForm";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { fetchThirdPartyPlans } from "@/store/slice/ThirdPartyPlanAPi";
 import { fetchCountries } from "@/store/slice/countrySlice";
-import { addFeaturePlan, createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb } from "@/store/slice/apiPlanDbSlice";
+import { addFeaturePlan, createPlansDb, deletePlanDb, fetchPlansDb, togglePlanStatusDb, updatePlanDb } from "@/store/slice/apiPlanDbSlice";
 import toast from "react-hot-toast";
 import PlanTable from "@/components/tables/PlanTable";
 import { Loader2 } from "lucide-react";
@@ -90,6 +90,26 @@ function Plans() {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleUpdatePrice = async (planId: number, newPrice: string) => {
+    try {
+      // console.log("---- planId in the handleUpdatePrice ----", planId);
+      // console.log("---- newPrice in the handleUpdatePrice ----", newPrice);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const response: any = await dispatch(updatePlanDb({ planId, data: { price: newPrice } }));
+
+      if (response?.type === "plansDb/updatePlan/fulfilled") {
+        toast.success("Price updated successfully");
+        await dispatch(fetchPlansDb());
+      } else {
+        toast.error(response?.payload?.message || "Failed to update price");
+      }
+    } catch (err: any) {
+      console.error("Error updating price:", err);
+      toast.error("An error occurred while updating price");
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDeletePlan = async (plan: any) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const response: any = await dispatch(deletePlanDb(plan?.id));
@@ -107,9 +127,9 @@ function Plans() {
         title="Plans"
         disable={loading}
         onClick={() => {
-          if(loading)
+          if (loading)
             return;
-          
+
           handleAddPlan()
         }}
         showBackButton={false}
@@ -128,6 +148,7 @@ function Plans() {
             onToggle={handleToggleStatus}
             onDelete={handleDeletePlan}
             addFeature={handleFeaturePlan}
+            onUpdatePrice={handleUpdatePrice}
           />
         )
       }
