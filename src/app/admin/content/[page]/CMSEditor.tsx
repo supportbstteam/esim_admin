@@ -86,9 +86,8 @@ const SortableSection = ({
     <div
       ref={setNodeRef}
       style={style}
-      className={`relative border rounded-lg group bg-white transition-shadow ${
-        isDragging ? "shadow-2xl ring-2 ring-green-500 opacity-60" : "shadow-sm"
-      }`}
+      className={`relative border rounded-lg group bg-white transition-shadow ${isDragging ? "shadow-2xl ring-2 ring-green-500 opacity-60" : "shadow-sm"
+        }`}
     >
       {/* 🖐 DRAG HANDLE */}
       {!isBanner && (
@@ -402,7 +401,7 @@ const SeoFields = () => {
 const TemplateSelector = () => {
   const { addSection } = useCMS();
   const [isSticky, setIsSticky] = useState(false);
-  const [shrink, setShrink] = useState(false);
+  const [shrink, setShrink] = useState(true);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -428,19 +427,18 @@ const TemplateSelector = () => {
   const templates = [
     { key: "template8", title: "Rich Text", Preview: Template8Preview },
     { key: "template5", title: "Collapse", Preview: Template5Preview },
-    { key: "template1", title: "How it works", Preview: Template1Preview },
-    { key: "template2", title: "Step (Right)", Preview: Template2Preview },
-    { key: "template3", title: "Step (Left)", Preview: Template3Preview },
-    { key: "template4", title: "Features", Preview: Template4Preview },
-    { key: "template6", title: "Image", Preview: Template6Preview },
-    { key: "template7", title: "Blocks", Preview: Template7Preview },
+    // { key: "template1", title: "How it works", Preview: Template1Preview },
+    // { key: "template2", title: "Step (Right)", Preview: Template2Preview },
+    // { key: "template3", title: "Step (Left)", Preview: Template3Preview },
+    // { key: "template4", title: "Features", Preview: Template4Preview },
+    // { key: "template6", title: "Image", Preview: Template6Preview },
+    // { key: "template7", title: "Blocks", Preview: Template7Preview },
   ];
 
   return (
     <div
-      className={`sticky top-0 z-40 border-b bg-white max-w-full ${
-        isSticky ? "  py-2 shadow-md" : "  py-6"
-      }`}
+      className={`sticky top-0 z-40 border-b bg-white max-w-full ${isSticky ? "  py-2 shadow-md" : "  py-6"
+        }`}
     >
       <div className={`w-full    mx-auto px-6`}>
         {/* Header Row */}
@@ -472,11 +470,10 @@ const TemplateSelector = () => {
                 className={`
                             relative cursor-pointer shrink-0 snap-start
                             border rounded-xl flex flex-col items-center justify-center group
-                            ${
-                              isSticky
-                                ? "w-32 h-12 p-1 border-transparent hover:bg-green-50"
-                                : "w-44 p-3 border-gray-100 shadow-sm hover:border-green-500 hover:shadow-md bg-white"
-                            }
+                            ${isSticky
+                    ? "w-32 h-12 p-1 border-transparent hover:bg-green-50"
+                    : "w-44 p-3 border-gray-100 shadow-sm hover:border-green-500 hover:shadow-md bg-white"
+                  }
                         `}
               >
                 {!isSticky && (
@@ -492,11 +489,10 @@ const TemplateSelector = () => {
                 <h4
                   className={`
                                 font-bold text-black text-center truncate w-full px-2
-                                ${
-                                  isSticky
-                                    ? "text-[11px] uppercase tracking-tighter bg-gray-50 py-1.5 rounded-lg"
-                                    : "text-xs"
-                                }
+                                ${isSticky
+                      ? "text-[11px] uppercase tracking-tighter bg-gray-50 py-1.5 rounded-lg"
+                      : "text-xs"
+                    }
                             `}
                 >
                   {t.title}

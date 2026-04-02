@@ -2,16 +2,22 @@
 
 import { Formik, FieldArray } from "formik";
 import { FiTrash2 } from "react-icons/fi";
+import dynamic from "next/dynamic";
 
 import { useCMS } from "../useCMS";
 import FormikSync from "@/lib/formikSync";
 
 import { Toggle } from "../ui/Toggle";
 
-import HeadingInput from "@/components/common/HeadingInput";
-import ParagraphEditor from "@/components/common/ParagraphEditor";
-
-
+// Dynamically import RichTextEditor for CKEditor with source editing
+const RichTextEditor = dynamic(() => import("../common/RichTextEditor"), {
+  ssr: false,
+  loading: () => (
+    <div className="p-4 border border-dashed border-gray-200 rounded-lg text-center text-gray-400">
+      Loading Editor...
+    </div>
+  )
+});
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export default function Template5({
@@ -56,19 +62,19 @@ export default function Template5({
               ?.paragraphs
               ?.length
               ? section.data
-                  .description
-                  .paragraphs
+                .description
+                .paragraphs
               : [
-                  {
-                    content:
-                      "<p>New paragraph...</p>",
-                  },
-                ],
+                {
+                  content:
+                    "<p>New paragraph...</p>",
+                },
+              ],
         },
 
       }}
 
-      onSubmit={() => {}}
+      onSubmit={() => { }}
 
     >
 
@@ -102,17 +108,12 @@ export default function Template5({
               Section Heading
             </label>
 
-            <HeadingInput
-              value={
-                values.heading
-              }
-              onChange={(html) =>
-                setFieldValue(
-                  "heading",
-                  html
-                )
-              }
-            />
+            <div className="bg-white rounded-lg overflow-hidden border border-gray-300">
+              <RichTextEditor
+                value={values.heading}
+                onChange={(html) => setFieldValue("heading", html)}
+              />
+            </div>
 
           </div>
 
@@ -195,17 +196,17 @@ export default function Template5({
 
                       {/* Paragraph Editor */}
 
-                      <ParagraphEditor
-                        value={
-                          para.content
-                        }
-                        onChange={(html) =>
-                          setFieldValue(
-                            `description.paragraphs.${index}.content`,
-                            html
-                          )
-                        }
-                      />
+                      <div className="bg-white rounded-lg overflow-hidden border border-gray-300">
+                        <RichTextEditor
+                          value={para.content}
+                          onChange={(html) =>
+                            setFieldValue(
+                              `description.paragraphs.${index}.content`,
+                              html
+                            )
+                          }
+                        />
+                      </div>
 
 
 
@@ -217,19 +218,19 @@ export default function Template5({
                         .length >
                         1 && (
 
-                        <button
-                          type="button"
-                          onClick={() =>
-                            remove(
-                              index
-                            )
-                          }
-                          className="text-red-500 hover:text-red-600 cursor-pointer"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              remove(
+                                index
+                              )
+                            }
+                            className="text-red-500 hover:text-red-600 cursor-pointer"
+                          >
+                            <FiTrash2 size={18} />
+                          </button>
 
-                      )}
+                        )}
 
                     </div>
 
