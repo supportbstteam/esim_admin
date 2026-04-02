@@ -552,8 +552,8 @@ const CreateCMSInner = () => {
       <PageHeader title="CMS Editor" showBackButton showAddButton={false} />
       <PageInput />
       <TemplateSelector />
-      <SeoFields />
       <Renderer />
+      <SeoFields />
       <SaveAll />
     </div>
   );
