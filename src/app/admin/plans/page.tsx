@@ -38,10 +38,19 @@ function Plans() {
   const handleAddPlan = async () => {
     // setLoading(true)
     try {
+      console.log("---- plans ----", plans);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(createPlansDb());
-      if (response?.type === "plansDb/createPlans/fulfilled") {
-        toast.success("Plans added successfully ");
+      console.log("Add Plan Response:", response); // Log the response to the console
+      // if (response?.type === "plansDb/createPlans/fulfilled") {
+      //   toast.success("Plans added successfully ");
+      // }
+      const data = response?.payload;
+
+      if (data?.success) {
+        toast.success(data?.message);
+      } else {
+        toast.error(data?.message || "Failed to import plans");
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -74,6 +83,7 @@ function Plans() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFeaturePlan = async (plan: any) => {
     try {
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await dispatch(addFeaturePlan({ id: plan?.id, isFeatured: plan?.isFeatured }))
 
@@ -195,7 +205,7 @@ function Plans() {
           handleAddPlan()
         }}
         showBackButton={false}
-        showAddButton={false}
+        showAddButton={true}
         addButtonText={
           loading ? <Loader2 className="h-4 w-4 animate-spin text-white" /> : "Import Plans"
 

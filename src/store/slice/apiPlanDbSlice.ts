@@ -69,7 +69,7 @@ export const createPlansDb = createAsyncThunk<any>("plansDb/createPlans", async 
       method: "POST",
       // data: Array.isArray(plans) ? plans : [plans],
     });
-    return data.plans;
+    return data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     return rejectWithValue(err.response?.data || { message: err.message });
@@ -188,7 +188,11 @@ const plansDbSlice = createSlice({
       })
       .addCase(createPlansDb.fulfilled, (state, action: PayloadAction<Plan[]>) => {
         state.loading = false;
-        state.plans = [...state.plans, ...action.payload];
+        if (Array.isArray(action.payload)) {
+          state.plans = [...state.plans, ...action.payload];
+        } else {
+          console.warn("createPlansDb fulfilled with non-array payload:", action.payload);
+        }
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .addCase(createPlansDb.rejected, (state, action: any) => {
