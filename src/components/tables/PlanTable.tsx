@@ -331,7 +331,7 @@ const PlanTable: React.FC<PlanTableProps> = ({
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     initialState: {
-      pagination: { pageSize: 10 },
+      pagination: { pageSize: 25 },
     },
   });
 
