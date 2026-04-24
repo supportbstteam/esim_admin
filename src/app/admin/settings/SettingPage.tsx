@@ -343,6 +343,7 @@ const ContactUsManagement = () => {
                         <div className="flex-1">
                           <Field
                             name={`contacts[${index}].value`}
+                            as="textarea"
                             placeholder="Enter Value"
                             className="border border-black text-black px-2 py-1 rounded w-full"
                           />
